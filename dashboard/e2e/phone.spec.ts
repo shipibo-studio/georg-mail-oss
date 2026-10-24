@@ -154,7 +154,7 @@ test("More reaches Notifications on a phone", async ({ page }) => {
   await page.locator(".mobile-nav").getByRole("button", { name: "More" }).tap();
   await page.getByRole("dialog", { name: "More" }).getByRole("button", { name: "Notifications" }).tap();
   await expect(page).toHaveURL(/\/dashboard\/notifications$/);
-  await expect(page.locator("p.registered-email")).toHaveText("owner@example.com");
+  await expect(page.locator("p.registered-email")).toHaveText("owner@example.org");
 });
 
 test("Drafts are reachable on a phone and open in the composer", async ({ page }) => {

@@ -199,9 +199,11 @@ let uploadCounter = 0;
 const senderRules = new Map<string, "block" | "allow">();
 const DEFAULT_SETTINGS = { forwardEnabled: true, displayName: "Georg" };
 const settings = { ...DEFAULT_SETTINGS };
-const OWNER = "owner@example.com";
+const OWNER = "owner@example.org";
 /** False after POST /__mock/fresh: a self-hosted install that nobody owns yet (first-run setup). */
 let claimed = true;
+/** Who Access signed in on the first-run page; /__mock/fresh-same-domain uses the mailbox's domain. */
+let visitor = OWNER;
 
 /** Browser tests start every case from the same mailbox. */
 function resetMock() {
@@ -211,6 +213,7 @@ function resetMock() {
   drafts.clear();
   Object.assign(settings, DEFAULT_SETTINGS);
   claimed = true;
+  visitor = OWNER;
 }
 
 function summary(message: MockMessage) {
@@ -371,19 +374,27 @@ export function mockApi(): Plugin {
       } else if (request.url === "/arrive") arrive();
       else if (request.url === "/arrive-test") mockV1.arrive();
       else if (request.url === "/fresh") claimed = false;
-      else return send(response, 404);
+      else if (request.url === "/fresh-same-domain") {
+        claimed = false;
+        visitor = `someone@${ADDRESS.split("@")[1]}`;
+      } else return send(response, 404);
       return send(response, 204);
     });
 
     server.middlewares.use("/dashboard/api/setup", async (request, response) => {
       if (request.method === "GET") {
-        return send(response, 200, claimed ? { needed: false } : { needed: true, email: OWNER, addresses: [ADDRESS] });
+        const canForward = visitor.split("@")[1] !== ADDRESS.split("@")[1];
+        return send(
+          response,
+          200,
+          claimed ? { needed: false } : { needed: true, email: visitor, addresses: [ADDRESS], canForward },
+        );
       }
       if (request.method !== "POST") return send(response, 405);
       if (claimed) return send(response, 409, { error: { code: "conflict", message: "Already set up." } });
       const body = await readBody(request);
       claimed = true;
-      settings.forwardEnabled = body.forward !== false;
+      settings.forwardEnabled = body.forward !== false && visitor.split("@")[1] !== ADDRESS.split("@")[1];
       if (typeof body.displayName === "string" && body.displayName) settings.displayName = body.displayName;
       return send(response, 201, { address: ADDRESS, owner: OWNER });
     });

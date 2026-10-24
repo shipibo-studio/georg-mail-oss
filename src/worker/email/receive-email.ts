@@ -78,6 +78,8 @@ export interface InboundExtensions {
 }
 
 export interface ExtractionInput {
+  /** The inbox's account, whose settings decide whether and how extraction is completed. */
+  accountId: string;
   subject: string | null;
   visibleText: string | null;
   links: ExtractedLinkRecord[];
@@ -370,6 +372,7 @@ export async function receiveEmail(
   const { codes, links, extractedByAi } =
     !isPersonal && plan.pdfTextEnabled && extensions.completeExtraction
       ? await extensions.completeExtraction(env, {
+          accountId: inbox.accountId,
           subject: parsed.subject,
           visibleText: content.safeText,
           links: content.links,

@@ -11,7 +11,17 @@ import { Switch } from "./controls";
 
 const MAX_DISPLAY_NAME_LENGTH = 100;
 
-function SetupForm({ email, addresses, onDone }: { email: string; addresses: string[]; onDone(): void }) {
+function SetupForm({
+  email,
+  addresses,
+  canForward,
+  onDone,
+}: {
+  email: string;
+  addresses: string[];
+  canForward: boolean;
+  onDone(): void;
+}) {
   const { t } = useI18n();
   const [address, setAddress] = useState(addresses[0] ?? "");
   const [displayName, setDisplayName] = useState("");
@@ -19,7 +29,7 @@ function SetupForm({ email, addresses, onDone }: { email: string; addresses: str
   const complete = useMutation({ mutationFn: setupApi.complete, onSuccess: onDone });
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    complete.mutate({ address, displayName: displayName.trim() || undefined, forward });
+    complete.mutate({ address, displayName: displayName.trim() || undefined, forward: canForward && forward });
   };
   const taken = complete.error instanceof ApiError && complete.error.status === 409;
 
@@ -62,10 +72,21 @@ function SetupForm({ email, addresses, onDone }: { email: string; addresses: str
           <IconMailForward size={18} stroke={1.5} />
         </span>
         <div className="setting-text">
-          <label htmlFor="setup-forward">{t("settings.forward")}</label>
-          <p>{t("settings.forwardDescription", { address: email })}</p>
+          {canForward ? (
+            <>
+              <label htmlFor="setup-forward">{t("settings.forward")}</label>
+              <p>{t("settings.forwardDescription", { address: email })}</p>
+            </>
+          ) : (
+            <>
+              <span className="setting-label">{t("settings.forward")}</span>
+              <p>{t("setup.noForward", { email })}</p>
+            </>
+          )}
         </div>
-        <Switch id="setup-forward" label={t("settings.forward")} checked={forward} onChange={setForward} />
+        {canForward && (
+          <Switch id="setup-forward" label={t("settings.forward")} checked={forward} onChange={setForward} />
+        )}
       </div>
       {complete.isError && (
         <p className="setup-error" role="alert">
@@ -106,7 +127,12 @@ export function SetupGate({ fallback, onDone }: { fallback: ReactNode; onDone():
         </div>
         <h1 id="setup-title">{t("setup.title")}</h1>
         <p className="muted">{t("setup.intro", { email: status.data.email })}</p>
-        <SetupForm email={status.data.email} addresses={status.data.addresses} onDone={onDone} />
+        <SetupForm
+          email={status.data.email}
+          addresses={status.data.addresses}
+          canForward={status.data.canForward}
+          onDone={onDone}
+        />
       </motion.section>
     </main>
   );

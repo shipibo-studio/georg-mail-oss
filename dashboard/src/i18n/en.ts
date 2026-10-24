@@ -220,6 +220,8 @@ export const en = {
   "setup.displayName": "Your name",
   "setup.displayNamePlaceholder": "How your name shows on mail you send",
   "setup.displayNameHint": "Optional. People see it next to the address.",
+  "setup.noForward":
+    "No copy of new mail: {email} is on a domain this mail client receives, so a copy would come back here. To get one, sign in with an address on another domain.",
   "setup.create": "Create the mailbox",
   "setup.creating": "Creating…",
   "setup.taken": "Someone already set up this mail client. Ask its owner to add you.",
@@ -237,6 +239,7 @@ export const en = {
   "nav.projects": "Projects",
   "nav.keys": "API keys",
   "nav.mcp": "MCP",
+  "nav.ai": "AI extraction",
   "nav.notify": "Notify",
   "nav.account": "Account",
   "nav.notifications": "Notifications",
@@ -516,6 +519,7 @@ export const en = {
   "activity.action.notify_hook_updated": "Changed a notify hook",
   "activity.action.notify_hook_deleted": "Deleted a notify hook",
   "activity.action.notification_channel_updated": "Changed a notification channel",
+  "activity.action.ai_extraction_updated": "Changed the AI for extraction",
   "webhooks.title": "Webhooks",
   "webhooks.count.one": "{count} webhook",
   "webhooks.count.other": "{count} webhooks",
@@ -561,6 +565,52 @@ export const en = {
   "toast.secretRotated": "New secret ready: copy it now",
   "toast.secretCopied": "Secret copied",
   "nav.refresh": "Refresh",
+  "ai.title": "AI extraction",
+  "ai.intro":
+    "When the rules find no code or verification link in an email, a model can point at one in its visible text. Off unless you turn it on.",
+  "ai.cardTitle": "Which model may read your mail",
+  "ai.paidOnly":
+    "AI extraction is part of the Paid plan. On this plan it stays off, and the rules alone extract codes and links.",
+  "ai.choice": "AI for extraction",
+  "ai.mode.none": "Off",
+  "ai.modeHint.none": "No model sees your mail. The rules extract codes and links.",
+  "ai.mode.workers-ai": "Workers AI",
+  "ai.modeHint.workers-ai": "Cloudflare's model, where your mail already is. No key needed.",
+  "ai.mode.byok": "Your own provider",
+  "ai.modeHint.byok": "Anthropic or OpenAI, with your own API key and under your own contract.",
+  "ai.provider": "Provider",
+  "ai.provider.anthropic": "Anthropic",
+  "ai.provider.openai": "OpenAI",
+  "ai.model": "Model",
+  "ai.modelPlaceholder": "Model id, for example gpt-…",
+  "ai.apiKey": "API key",
+  "ai.apiKeyPlaceholder": "Paste the key",
+  "ai.apiKeyKeep": "Stored. Leave empty to keep it",
+  "ai.apiKeyHint": "Stored encrypted and never shown again. Use a key made only for Georg mail.",
+  "ai.privacy.none": "Nothing leaves Georg mail.",
+  "ai.privacy.workers-ai":
+    "Only when the rules find nothing, the visible text and the links go to Workers AI, on Cloudflare.",
+  "ai.privacy.byok":
+    "Only when the rules find nothing, the visible text and the links go to the provider you chose, with your key. Its terms apply.",
+  "ai.save": "Save",
+  "ai.saved": "AI extraction saved",
+  "ai.health.ok": "Last answer {date}.",
+  "ai.health.unused": "Not used yet: it runs only when the rules find nothing.",
+  "ai.health.failing":
+    "The provider failed {count} times in a row: {reason}. Emails are still stored, without its help.",
+  "ai.failure.unauthorized": "the key was rejected",
+  "ai.failure.rate_limited": "the key hit its rate limit",
+  "ai.failure.timeout": "it took longer than 4 seconds",
+  "ai.failure.unavailable": "the provider was unavailable",
+  "ai.failure.bad_request": "the request was refused (check the model)",
+  "ai.failure.bad_answer": "its answer could not be used",
+  "ai.guaranteesTitle": "Whatever you choose",
+  "ai.guarantee.pointsOnly": "The model only points at a code or a link already in the email; it cannot invent one.",
+  "ai.guarantee.visibleOnly":
+    "It sees the visible text only, never hidden text, and the email is marked as untrusted data.",
+  "ai.guarantee.noTraining":
+    "Georg mail trains no models with your mail. With your own provider, its terms decide what it keeps.",
+  "ai.guarantee.personal": "Personal mail never goes to any model.",
 } as const;
 
 export type MessageKey = keyof typeof en;

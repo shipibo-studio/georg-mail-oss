@@ -204,6 +204,13 @@
       "when": 1792806548175,
       "tag": "0028_self_hosted_plan",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "6",
+      "when": 1792809997382,
+      "tag": "0029_ai_extraction_settings",
+      "breakpoints": true
     }
   ]
 }

@@ -450,7 +450,7 @@ test("settings say what is shared, show who is signed in and offer to sign out",
   await expect(dialog.locator(".label", { hasText: "Appearance" })).toContainText("Mail and workspace");
   await expect(dialog.getByRole("switch")).toHaveCount(0);
   await expect(dialog.getByText("Delivery")).toHaveCount(0);
-  await expect(dialog.locator(".signed-in .registered-email")).toHaveText("owner@example.com");
+  await expect(dialog.locator(".signed-in .registered-email")).toHaveText("owner@example.org");
   const signOut = dialog.getByRole("link", { name: "Sign out" });
   await expect(signOut).toHaveAttribute("href", "/cdn-cgi/access/logout");
   await expect(signOut).toHaveClass(/btn/);
@@ -460,7 +460,7 @@ test("Notifications show the registered email and switch the forwarded copy", as
   await openInbox(page);
   await page.locator(".sidebar").getByRole("button", { name: "Notifications" }).click();
   await expect(page).toHaveURL(/\/dashboard\/notifications$/);
-  await expect(page.locator("p.registered-email")).toHaveText("owner@example.com");
+  await expect(page.locator("p.registered-email")).toHaveText("owner@example.org");
   const forward = page.getByRole("switch", { name: "Forward a copy" });
   await expect(forward).toHaveAttribute("aria-checked", "true");
   await forward.click();
@@ -570,7 +570,7 @@ test("a fresh self-hosted install asks its first visitor to create the mailbox, 
   await page.goto("/dashboard/inbox");
   const setup = page.getByRole("region", { name: "Set up your mailbox" });
   await expect(setup).toBeVisible();
-  await expect(setup.getByText("You are signed in as owner@example.com.")).toBeVisible();
+  await expect(setup.getByText("You are signed in as owner@example.org.")).toBeVisible();
   await expect(setup.locator("output.setup-address")).toHaveText("hello@example.com");
   await setup.getByLabel("Your name").fill("Andalaosa");
   const forward = setup.getByRole("switch", { name: "Forward a copy" });
@@ -593,4 +593,18 @@ test("setup says when someone else got there first", async ({ page }) => {
   await page.request.post("/dashboard/api/setup", { data: { address: "hello@example.com", forward: true } });
   await setup.getByRole("button", { name: "Create the mailbox" }).click();
   await expect(setup.getByRole("alert")).toHaveText(/Someone already set up this mail client/);
+});
+
+test("setup offers no copy when the visitor signed in on the mailbox's own domain", async ({ page }) => {
+  await page.request.post("/dashboard/api/__mock/fresh-same-domain");
+  await page.goto("/dashboard/inbox");
+  const setup = page.getByRole("region", { name: "Set up your mailbox" });
+  await expect(
+    setup.getByText(/No copy of new mail: someone@example\.com is on a domain this mail client receives/),
+  ).toBeVisible();
+  await expect(setup.getByRole("switch")).toHaveCount(0);
+  await setup.getByRole("button", { name: "Create the mailbox" }).click();
+  await expect(page.locator("button.msg").first()).toBeVisible();
+  await page.locator(".sidebar").getByRole("button", { name: "Notifications" }).click();
+  await expect(page.getByRole("switch", { name: "Forward a copy" })).toHaveAttribute("aria-checked", "false");
 });

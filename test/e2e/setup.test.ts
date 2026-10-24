@@ -11,7 +11,8 @@ import { ACCESS_CERTS_URL, accessJwk, accessToken, DASHBOARD_ORIGIN } from "../a
 import { BASE_URL, json } from "../mail-helpers";
 
 const db = createDatabase(env.DB);
-const OWNER = "owner@example.test";
+// Signed in with an address outside the mailbox's domain, so the copy can go there.
+const OWNER = "owner@elsewhere.test";
 // Storage lasts for the whole file, so every test gets addresses no earlier test took.
 let hello = "";
 let team = "";
@@ -75,6 +76,7 @@ describe("first-run setup", () => {
       needed: true,
       email: OWNER,
       addresses: [hello, team],
+      canForward: true,
     });
   });
 
@@ -99,6 +101,18 @@ describe("first-run setup", () => {
       projectId: null,
     });
     expect(await json(await setup())).toEqual({ needed: false });
+  });
+
+  test("never forwards the copy back into the mailbox's own domain, which would loop through Email Routing", async () => {
+    for (const member of [hello, `someone@${hello.split("@")[1]}`, `x@mail.${hello.split("@")[1]}`]) {
+      await db.delete(dashboardMembers);
+      expect(await json(await setup({ member }))).toMatchObject({ needed: true, canForward: false });
+    }
+    const member = `someone@${hello.split("@")[1]}`;
+    const response = await create({ address: hello, forward: true }, { member });
+    expect(response.status).toBe(201);
+    const [mailbox] = await db.select().from(inboxes).where(eq(inboxes.address, hello));
+    expect(mailbox).toMatchObject({ forwardTo: null, forwardEnabled: false });
   });
 
   test("the owner's mailbox opens right after, with the self-hosted plan's limits", async () => {

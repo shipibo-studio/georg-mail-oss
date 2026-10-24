@@ -6,19 +6,30 @@
 //   /dashboard/projects/{projectId?}/{inboxId?}/{messageId?}     projects and their test inboxes
 //   /dashboard/keys/{keyId|new?}                                 API keys
 //   /dashboard/mcp                                               connecting an agent over MCP
+//   /dashboard/ai                                                the AI that helps extraction (none by default)
 //   /dashboard/webhooks/{webhookId|new?}                         webhooks and their deliveries
 //   /dashboard/notify/{hookId|new?}                              notify hooks and their notices
 //   /dashboard/activity                                          audit trail
 //   /dashboard/notifications                                     the account's notification channels
 export const FOLDERS = ["inbox", "sent", "drafts", "archive", "spam", "trash"] as const;
 export type Folder = (typeof FOLDERS)[number];
-export type Section = "mail" | "projects" | "keys" | "mcp" | "webhooks" | "notify" | "activity" | "notifications";
+export type Section =
+  | "mail"
+  | "projects"
+  | "keys"
+  | "mcp"
+  | "ai"
+  | "webhooks"
+  | "notify"
+  | "activity"
+  | "notifications";
 
 export type Route =
   | { section: "mail"; folder: Folder; messageId: string | null; query?: string }
   | { section: "projects"; projectId: string | null; inboxId: string | null; messageId: string | null }
   | { section: "keys"; keyId: string | null }
   | { section: "mcp" }
+  | { section: "ai" }
   | { section: "notifications" }
   | { section: "webhooks"; webhookId: string | null }
   | { section: "notify"; hookId: string | null }
@@ -54,6 +65,7 @@ export function parseRoute(pathname: string, hash = ""): Route {
   if (first === "notify") return { section: "notify", hookId: second === NEW_KEY ? NEW_KEY : idOf("nhk", second) };
   if (first === "activity") return { section: "activity" };
   if (first === "mcp") return { section: "mcp" };
+  if (first === "ai") return { section: "ai" };
   if (first === "notifications") return { section: "notifications" };
   const query = first === "search" ? queryOf(hash) : null;
   if (query) return { section: "mail", folder: "inbox", messageId: idOf("msg", second), query };
@@ -83,6 +95,8 @@ export function routePath(route: Route): string {
       return `${BASE}/activity`;
     case "mcp":
       return `${BASE}/mcp`;
+    case "ai":
+      return `${BASE}/ai`;
     case "notifications":
       return `${BASE}/notifications`;
   }
@@ -103,6 +117,7 @@ export function hasSelection(route: Route): boolean {
       return route.hookId !== null;
     case "activity":
     case "mcp":
+    case "ai":
     case "notifications":
       return false;
   }

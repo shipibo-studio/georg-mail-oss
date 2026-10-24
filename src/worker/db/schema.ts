@@ -26,6 +26,7 @@ export const AUDIT_ACTIONS = [
   "notify_hook_updated",
   "notify_hook_deleted",
   "notification_channel_updated",
+  "ai_extraction_updated",
 ] as const;
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
 
@@ -652,3 +653,38 @@ export type TrustedSender = typeof trustedSenders.$inferSelect;
 export type AccountEvent = typeof events.$inferSelect;
 export type Webhook = typeof webhooks.$inferSelect;
 export type WebhookDelivery = typeof webhookDeliveries.$inferSelect;
+
+// How an account's Paid plan completes the codes and links the rules miss: no row means no model
+// sees its mail (the default). "workers-ai" uses Cloudflare's model; "byok" calls the provider the
+// owner chose, with the owner's own API key (docs/plan.md, "AI provider per account").
+export const AI_EXTRACTION_MODES = ["workers-ai", "byok"] as const;
+export type AiExtractionMode = (typeof AI_EXTRACTION_MODES)[number];
+export const AI_BYOK_PROVIDERS = ["anthropic", "openai"] as const;
+export type AiByokProvider = (typeof AI_BYOK_PROVIDERS)[number];
+/** Why a provider gave no answer, in words the owner can act on; never the provider's own message. */
+export const AI_FAILURE_CODES = [
+  "unauthorized",
+  "rate_limited",
+  "timeout",
+  "unavailable",
+  "bad_request",
+  "bad_answer",
+] as const;
+export type AiFailureCode = (typeof AI_FAILURE_CODES)[number];
+
+export const accountAiSettings = sqliteTable("account_ai_settings", {
+  accountId: text("account_id")
+    .primaryKey()
+    .references(() => accounts.id, { onDelete: "cascade" }),
+  mode: text("mode", { enum: AI_EXTRACTION_MODES }).notNull(),
+  // "byok" only: the provider, the model it is asked for, and the owner's API key (AES-GCM, never returned).
+  provider: text("provider", { enum: AI_BYOK_PROVIDERS }),
+  model: text("model"),
+  apiKeyEncrypted: text("api_key_encrypted"),
+  // The provider's health as the owner sees it in the dashboard: counts and codes, never content.
+  consecutiveFailures: integer("consecutive_failures").notNull().default(0),
+  lastFailureCode: text("last_failure_code", { enum: AI_FAILURE_CODES }),
+  lastFailureAt: integer("last_failure_at"),
+  lastSuccessAt: integer("last_success_at"),
+  updatedAt: integer("updated_at").notNull(),
+});

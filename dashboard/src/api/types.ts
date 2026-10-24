@@ -142,7 +142,15 @@ export interface SendResult {
 }
 
 /** First run of a self-hosted install: who Access signed in, and the addresses it may claim. */
-export type SetupStatus = { needed: false } | { needed: true; email: string; addresses: string[] };
+export type SetupStatus =
+  | { needed: false }
+  | {
+      needed: true;
+      email: string;
+      addresses: string[];
+      /** False when the sign-in address is on a domain this install receives: a copy would loop. */
+      canForward: boolean;
+    };
 
 export interface SetupRequest {
   address: string;

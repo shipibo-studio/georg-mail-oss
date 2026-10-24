@@ -43,6 +43,23 @@ async function availableAddresses(context: Context<MailEnv>): Promise<string[]> 
   return configured.filter((address) => !used.has(address));
 }
 
+const domainOf = (address: string) => address.slice(address.lastIndexOf("@") + 1).toLowerCase();
+
+/**
+ * Whether the copy of new mail may go to the owner's sign-in address. Not when it is on a domain
+ * this install receives (the mailbox's own, MAIL_DOMAIN or a subdomain of them): Email Routing would
+ * bring the copy back to this Worker, a loop, and the owner would lose the one place mail reaches
+ * them when the mailbox cannot be opened.
+ */
+export function canForwardCopy(ownerEmail: string, receivingDomains: string[]): boolean {
+  const ownerDomain = domainOf(ownerEmail);
+  return !receivingDomains.some((domain) => ownerDomain === domain || ownerDomain.endsWith(`.${domain}`));
+}
+
+function receivingDomains(env: Env): string[] {
+  return [env.MAIL_DOMAIN.toLowerCase(), ...[...personalMailboxAddresses(env)].map(domainOf)];
+}
+
 const alreadySetUp = () =>
   new ApiError("conflict", "This mail client is already set up.", {
     hint: "Ask its owner to add your email to the dashboard members.",
@@ -52,7 +69,12 @@ export const setupRoutes = new Hono<MailEnv>()
   .get("/", async (context) => {
     const email = await accessIdentity(context);
     if (await isClaimed(context.env.DB)) return context.json({ needed: false });
-    return context.json({ needed: true, email, addresses: await availableAddresses(context) });
+    return context.json({
+      needed: true,
+      email,
+      addresses: await availableAddresses(context),
+      canForward: canForwardCopy(email, receivingDomains(context.env)),
+    });
   })
 
   .post("/", validate("json", setupSchema), async (context) => {
@@ -66,6 +88,8 @@ export const setupRoutes = new Hono<MailEnv>()
       });
     }
     const displayName = body.displayName || null;
+    // Without a safe address there is no copy at all, and Settings shows the switch as unavailable.
+    const forwardTo = canForwardCopy(email, receivingDomains(context.env)) ? email : null;
     const accountId = createId("acc");
     const now = Date.now();
     const db = context.env.DB;
@@ -82,8 +106,8 @@ export const setupRoutes = new Hono<MailEnv>()
         .bind(
           createId("inb"),
           accountId,
-          email,
-          body.forward ? 1 : 0,
+          forwardTo,
+          forwardTo && body.forward ? 1 : 0,
           address,
           displayName,
           now,

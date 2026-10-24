@@ -28,7 +28,7 @@ test("⌘K offers no workspace destination or action", async ({ page }) => {
 
 test("Notifications show the registered email and no Slack", async ({ page }) => {
   await page.goto("/dashboard/notifications");
-  await expect(page.locator("p.registered-email")).toHaveText("owner@example.com");
+  await expect(page.locator("p.registered-email")).toHaveText("owner@example.org");
   await expect(page.getByRole("switch", { name: "Forward a copy" })).toBeVisible();
   await expect(page.getByText("Slack", { exact: false })).toHaveCount(0);
 });

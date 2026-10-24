@@ -23,7 +23,8 @@ It takes about 30 minutes. Everything fits Cloudflare's and Resend's free plans.
 - **A GitHub account** if you use the Deploy button.
 - **Moving mail is a switch, not a merge.** Email Routing replaces the domain's MX records, so the day you enable it, new mail stops reaching your current provider (Google Workspace, Zoho, Fastmail…) for that domain. Export your old mail first if you want it here (see [Bring your old mail](#bring-your-old-mail)), and plan the switch for a quiet moment.
 - Decide your mailbox address (for example `hello@example.com`) and the subdomain the app will live on (for example `mail.example.com`).
-- The email you will sign in with (for example your personal Gmail). It must be able to receive a one-time code, or use Google sign-in in Access.
+- The email you will sign in with, **on another domain** (for example your personal Gmail). Access sends its one-time code there, so it must not be the mailbox you are installing: once mail for your domain comes to this app, a code sent to `hello@example.com` would land in the mailbox you cannot open without it. For the same reason the app never forwards its copy of new mail to an address on your own domain.
+- Your Cloudflare account's login email should also be outside the domain, or protected with an authenticator app and saved backup codes: Cloudflare's recovery emails must reach you even when this mailbox is down.
 
 ## Deploy
 

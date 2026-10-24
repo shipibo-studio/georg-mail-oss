@@ -1625,7 +1625,8 @@ pre.raw {
   display: grid;
   gap: 2px;
 }
-.setting-text label {
+.setting-text label,
+.setting-text .setting-label {
   font-weight: 500;
 }
 .setting-text p {
