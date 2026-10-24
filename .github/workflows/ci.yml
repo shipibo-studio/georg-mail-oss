@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, types and tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec biome ci .
+      - run: pnpm lint:unicode
+      - run: pnpm typecheck
+      # The Worker serves the dashboard from dist/; its tests and wrangler need the build in place.
+      - run: pnpm dashboard:build
+      # Unit and end-to-end tests inside the Workers runtime (workerd) with local D1 and R2.
+      # Fails if coverage drops below the 85% minimum set in vitest.config.ts.
+      - run: pnpm test:coverage
+
+  dashboard:
+    name: Dashboard in the browser
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      # Chromium only: the desktop and phone projects both run on it.
+      - run: pnpm exec playwright install --with-deps chromium
+      # Builds the dashboard and serves it under the Worker's Content-Security-Policy with the
+      # in-memory API, then drives it on a desktop and a phone viewport.
+      - run: pnpm test:dashboard
+      - name: Keep traces of failed tests
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dashboard-traces
+          path: dashboard/test-results/
+          retention-days: 7
+

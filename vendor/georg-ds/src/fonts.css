@@ -1,0 +1,9 @@
+/*
+ * georg design system fonts for prototypes (Google Fonts).
+ * In bundled apps, use the @fontsource packages instead (see README.md).
+ *
+ * Stack Sans Notch · display (headings and wordmark) · variable 200–700 · OFL-1.1
+ * Geist            · interface                       · OFL-1.1
+ * Geist Mono       · data, codes, addresses          · OFL-1.1
+ */
+@import url("https://fonts.googleapis.com/css2?family=Stack+Sans+Notch:wght@400..700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap");

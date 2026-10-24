@@ -1,0 +1,13 @@
+node_modules/
+.wrangler/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+.dev.vars*
+!.dev.vars.example
+test-results/
+playwright-report/
+# Copied from the georg-ds package by dashboard/vite.config.ts
+dashboard/public/georg-theme.js

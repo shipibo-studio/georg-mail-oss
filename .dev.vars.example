@@ -1,0 +1,9 @@
+# Secrets of the Worker. In production set them with `pnpm wrangler secret put <NAME>`; for
+# `pnpm dev`, copy this file to .dev.vars (git ignores it). See docs/self-hosting.md.
+
+# Cloudflare Access team domain, for example https://your-team.cloudflareaccess.com
+ACCESS_TEAM_DOMAIN=
+# Audience (AUD) tag of the Access application that protects the mail client
+ACCESS_AUD=
+# Resend API key with sending access to your domain (re_…), when MAIL_PROVIDER is "resend"
+RESEND_API_KEY=

@@ -1,0 +1,1 @@
+ALTER TABLE `messages` ADD `extracted_by_ai` integer DEFAULT false NOT NULL;

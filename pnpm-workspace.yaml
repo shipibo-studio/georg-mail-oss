@@ -1,0 +1,10 @@
+# Only these packages may run install scripts (they download platform binaries).
+allowBuilds:
+  esbuild: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - miniflare@5.20261012.1-beta
+  - wrangler@4.151.1
+  - '@cloudflare/vitest-plugin@1.4.4'
+  # First-party design system, published by us.
+  - '@shipibo-studio/georg-ds@0.3.0'

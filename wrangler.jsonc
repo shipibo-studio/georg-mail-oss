@@ -1,0 +1,40 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "georg-mail",
+  "main": "src/worker/mail-index.ts",
+  "compatibility_date": "2026-08-22",
+  "observability": { "enabled": true },
+  // Serve the mail client on its own subdomain (for example mail.example.com): add it as a custom
+  // domain of this Worker, then put it behind Cloudflare Access. See docs/self-hosting.md.
+  "vars": {
+    // The domain whose mail this Worker receives. Email Routing for it must send to this Worker.
+    "MAIL_DOMAIN": "example.com",
+    // Public origin of the mail client, used to check that dashboard requests come from it.
+    "PUBLIC_BASE_URL": "https://mail.example.com",
+    // The mailboxes this install keeps, comma-separated. Mail to any other address is refused.
+    "PERSONAL_MAILBOX_ADDRESSES": "hello@example.com",
+    // Outbound provider: "resend" (RESEND_API_KEY secret, free plan available), "mailtrap"
+    // (MAILTRAP_API_KEY secret) or "cloudflare" (the EMAIL binding; needs Workers Paid).
+    "MAIL_PROVIDER": "resend"
+  },
+  // Cloudflare Email Sending. Used only when MAIL_PROVIDER is "cloudflare".
+  "send_email": [{ "name": "EMAIL" }],
+  // The dashboard, built into dist/dashboard by `pnpm dashboard:build`. The Worker runs first on
+  // every request and serves it only under /dashboard, behind Cloudflare Access.
+  "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": true, "html_handling": "none" },
+  // Created on the first deploy when no database_id is given.
+  "d1_databases": [{ "binding": "DB", "database_name": "georg-mail", "migrations_dir": "migrations" }],
+  "r2_buckets": [{ "binding": "MAIL_STORAGE", "bucket_name": "georg-mail" }],
+  // Counters are per Cloudflare location and eventually consistent: they stop floods, they are not
+  // exact quotas. Namespace ids only need to be unique within your account.
+  "ratelimits": [
+    // Per client IP before the dashboard session is checked.
+    { "name": "IP_RATE_LIMITER", "namespace_id": "4104", "simple": { "limit": 300, "period": 60 } },
+    // Inbound email per mailbox, per account, and per sender domain per mailbox.
+    { "name": "INBOUND_RATE_LIMITER", "namespace_id": "4102", "simple": { "limit": 30, "period": 60 } },
+    { "name": "ACCOUNT_INBOUND_RATE_LIMITER", "namespace_id": "4105", "simple": { "limit": 120, "period": 60 } },
+    { "name": "SENDER_RATE_LIMITER", "namespace_id": "4106", "simple": { "limit": 10, "period": 60 } }
+  ],
+  // Hourly: empty Trash and Spam after their retention period, and delete files never sent.
+  "triggers": { "crons": ["0 * * * *"] }
+}

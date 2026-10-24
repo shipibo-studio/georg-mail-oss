@@ -1,0 +1,35 @@
+{
+  "name": "@shipibo-studio/georg-ds",
+  "version": "0.3.0",
+  "description": "georg design system: tokens, typography, theme, accents and interaction patterns",
+  "license": "MIT",
+  "author": "Jorge Epuñan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shipibo-studio/georg-ds.git"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "style": "./src/georg.css",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    "./georg.css": "./src/georg.css",
+    "./tailwind.css": "./src/tailwind.css",
+    "./fonts.css": "./src/fonts.css",
+    "./georg-theme.js": "./src/georg-theme.js",
+    "./tokens.json": "./src/tokens.json",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "*.css",
+    "./src/georg-theme.js"
+  ],
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "name": "georg-mail-oss",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A self-hosted mail client for your own domain, on Cloudflare Workers Free",
+  "license": "MIT",
+  "author": "Shipibo Studio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shipibo-studio/georg-mail-oss.git"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.4.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "pnpm dashboard:build && wrangler d1 migrations apply DB --remote && wrangler deploy",
+    "typegen": "wrangler types --strict-vars=false --env-interface Env src/worker/worker-configuration.d.ts",
+    "typecheck": "tsc --noEmit && tsc -p dashboard --noEmit",
+    "lint": "biome check . && node scripts/check-invisible-characters.mjs",
+    "lint:unicode": "node scripts/check-invisible-characters.mjs",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
+    "dashboard:dev": "vite --config dashboard/vite.config.ts",
+    "dashboard:build": "vite build --config dashboard/vite.config.ts",
+    "dashboard:mock": "GEORG_MOCK_API=1 vite --config dashboard/vite.config.ts",
+    "dashboard:preview": "pnpm dashboard:build && GEORG_MOCK_API=1 vite preview --config dashboard/vite.config.ts",
+    "test:dashboard": "playwright test --config dashboard/playwright.config.ts",
+    "build": "pnpm dashboard:build"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "5.3.0",
+    "@fontsource-variable/geist-mono": "5.3.0",
+    "@fontsource-variable/stack-sans-notch": "5.3.0",
+    "@hono/zod-validator": "0.9.1",
+    "@radix-ui/react-tooltip": "^1.4.1",
+    "@tabler/icons-react": "3.49.0",
+    "@tanstack/react-query": "5.104.2",
+    "dompurify": "3.4.17",
+    "drizzle-orm": "0.45.4",
+    "fflate": "0.8.3",
+    "hono": "4.13.13",
+    "jose": "6.2.12",
+    "morphicons": "2.0.0",
+    "motion": "14.3.0",
+    "postal-mime": "4.0.7",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@cloudflare/vitest-plugin": "1.4.4",
+    "@dicebear/core": "10.7.0",
+    "@dicebear/styles": "10.6.0",
+    "@playwright/test": "1.64.1",
+    "@shipibo-studio/georg-ds": "file:./vendor/georg-ds",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "^25.9.9",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "@vitest/coverage-istanbul": "5.0.5",
+    "drizzle-kit": "0.31.11",
+    "esbuild": "0.28.2",
+    "jsdom": "30.1.3",
+    "tailwindcss": "4.3.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.5",
+    "wrangler": "4.151.1"
+  },
+  "cloudflare": {
+    "label": "georg mail",
+    "products": [
+      "Workers",
+      "D1",
+      "R2",
+      "Email Routing"
+    ],
+    "categories": [
+      "email"
+    ],
+    "docs_url": "https://github.com/shipibo-studio/georg-mail-oss/blob/main/docs/self-hosting.md",
+    "bindings": {
+      "MAIL_DOMAIN": {
+        "description": "The domain whose mail this Worker receives, for example example.com."
+      },
+      "PUBLIC_BASE_URL": {
+        "description": "Where the mail client will live, for example https://mail.example.com."
+      },
+      "PERSONAL_MAILBOX_ADDRESSES": {
+        "description": "The mailbox's address, for example hello@example.com. Mail to any other address is refused."
+      },
+      "MAIL_PROVIDER": {
+        "description": "How mail is sent: resend (free plan available), mailtrap, or cloudflare (needs Workers Paid)."
+      },
+      "ACCESS_TEAM_DOMAIN": {
+        "description": "Your Cloudflare Access team domain, for example https://your-team.cloudflareaccess.com."
+      },
+      "ACCESS_AUD": {
+        "description": "The Application Audience (AUD) tag of the Access application protecting the mail client."
+      },
+      "RESEND_API_KEY": {
+        "description": "A Resend API key with sending access to your domain (re_…)."
+      }
+    }
+  }
+}

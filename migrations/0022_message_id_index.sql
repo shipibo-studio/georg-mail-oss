@@ -1,0 +1,1 @@
+CREATE INDEX `messages_inbox_message_id_idx` ON `messages` (`inbox_id`,`message_id_header`);

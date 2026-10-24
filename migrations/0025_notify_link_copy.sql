@@ -1,0 +1,1 @@
+ALTER TABLE `notify_hooks` ADD `token_encrypted` text;

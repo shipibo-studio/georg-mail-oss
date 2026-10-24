@@ -1,0 +1,83 @@
+/*
+ * georg design system · bridge for Tailwind CSS v4 (and shadcn/ui)
+ *
+ * In the app's CSS entry point:
+ *   @import "tailwindcss";
+ *   @import "@shipibo-studio/georg-ds/georg.css";
+ *   @import "@shipibo-studio/georg-ds/tailwind.css";
+ *
+ * Exposes the tokens as utilities: bg-bg, bg-elev, text-text-2, border-border,
+ * bg-accent, text-on-accent, ring-accent-ring, rounded-2, shadow-2, font-display, ease-spring, etc.
+ * Values remain CSS variables, so theme and accent changes apply live.
+ */
+
+/* dark: driven by data-theme="dark" on <html>, not by the media query */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-elev: var(--bg-elev);
+  --color-sunken: var(--bg-sunken);
+  --color-hover: var(--bg-hover);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ring: var(--accent-ring);
+  --color-on-accent: var(--on-accent);
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --radius-1: var(--r-1);
+  --radius-2: var(--r-2);
+  --radius-3: var(--r-3);
+
+  --shadow-1: var(--shadow-1);
+  --shadow-2: var(--shadow-2);
+  --shadow-3: var(--shadow-3);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font);
+  --font-mono: var(--mono);
+
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-md: var(--text-md);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+
+  --ease-out: var(--ease-out);
+  --ease-spring: var(--ease-spring);
+}
+
+/*
+ * Maps shadcn/ui variables to georg tokens so its components follow the design system.
+ * `--accent` is intentionally NOT remapped: in georg it is the brand color, while shadcn
+ * uses it for menu hover backgrounds. Replace `bg-accent` with `bg-hover` in copied components.
+ */
+:root, [data-theme="dark"] {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--bg-elev);
+  --card-foreground: var(--text);
+  --popover: var(--bg-elev);
+  --popover-foreground: var(--text);
+  --primary: var(--text);
+  --primary-foreground: var(--bg);
+  --secondary: var(--bg-sunken);
+  --secondary-foreground: var(--text);
+  --muted: var(--bg-sunken);
+  --muted-foreground: var(--text-3);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--accent-ring);
+  --radius: var(--r-2);
+}
