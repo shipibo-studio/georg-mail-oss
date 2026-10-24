@@ -730,3 +730,27 @@ test("aliases: add one in Settings, reply from the alias the mail reached, and r
   await expect(page.getByText("contact@example.com no longer receives mail")).toBeVisible();
   await expect(settings.locator(".alias-row")).toHaveCount(1);
 });
+
+test("sender avatars are faces by default, and initials once chosen in Settings, until changed back", async ({
+  page,
+}) => {
+  await openInbox(page);
+  const camila = row(page, "Propuesta para el sitio de Georg").first();
+  await expect(camila.locator("img.avatar-sender")).toBeVisible();
+
+  await page.getByRole("button", { name: "Settings" }).click();
+  const settings = page.getByRole("dialog", { name: "Settings" });
+  await expect(settings.getByLabel("Sender avatars")).toHaveValue("faces");
+  await settings.getByLabel("Sender avatars").selectOption("initials");
+  await settings.getByRole("button", { name: "Close settings" }).click();
+  await expect(camila.locator(".avatar-initials")).toHaveText("CR");
+  await expect(camila.locator("img.avatar-sender")).toHaveCount(0);
+
+  // Kept in this browser.
+  await page.reload();
+  await expect(row(page, "Propuesta para el sitio de Georg").first().locator(".avatar-initials")).toHaveText("CR");
+
+  await page.getByRole("button", { name: "Settings" }).click();
+  await settings.getByLabel("Sender avatars").selectOption("faces");
+  await expect(row(page, "Propuesta para el sitio de Georg").first().locator("img.avatar-sender")).toBeVisible();
+});

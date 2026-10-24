@@ -196,3 +196,11 @@ test("aliases can be added from the Settings sheet on a phone", async ({ page })
   const viewport = page.viewportSize();
   expect(box && viewport && box.x + box.width <= viewport.width).toBe(true);
 });
+
+test("sender avatars switch to initials from the Settings sheet on a phone", async ({ page }) => {
+  await openInbox(page);
+  await goTo(page, "Settings");
+  await page.getByRole("dialog", { name: "Settings" }).getByLabel("Sender avatars").selectOption("initials");
+  await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Close settings" }).tap();
+  await expect(page.locator("button.msg .avatar-initials").first()).toBeVisible();
+});

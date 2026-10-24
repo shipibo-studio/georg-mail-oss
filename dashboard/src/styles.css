@@ -410,6 +410,21 @@ svg {
   place-items: center;
   flex: none;
 }
+/* Initials, when the owner prefers them to faces: a tint of each sender's own hue. */
+.avatar-initials {
+  --avatar-hue: 250;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: hsl(var(--avatar-hue) 60% 94%);
+  color: hsl(var(--avatar-hue) 45% 32%);
+  border: 1px solid hsl(var(--avatar-hue) 40% 86%);
+}
+[data-theme="dark"] .avatar-initials {
+  background: hsl(var(--avatar-hue) 30% 18%);
+  color: hsl(var(--avatar-hue) 70% 82%);
+  border-color: hsl(var(--avatar-hue) 25% 26%);
+}
 /* DiceBear faces (owner and senders) sit on the same near-black as the avatar palette. */
 .avatar-owner,
 .avatar-sender {

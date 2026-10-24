@@ -61,6 +61,28 @@ export function formatBytes(bytes: number, locale: Locale): string {
   return `${new Intl.NumberFormat(locale, { maximumFractionDigits: digits }).format(value)} ${UNITS[unit]}`;
 }
 
+/** One or two letters for an avatar, from a display name or, failing that, an address. */
+export function initials(name: string | null | undefined, address: string | null | undefined): string {
+  const source = (name ?? "").replace(/["'<>]/g, "").trim();
+  if (source) {
+    const words = source.split(/\s+/).filter((word) => /\p{L}|\p{N}/u.test(word));
+    const letters = words.length > 1 ? [words[0], words[words.length - 1]] : [words[0] ?? source];
+    return letters
+      .map((word) => Array.from(word ?? "")[0] ?? "")
+      .join("")
+      .toUpperCase();
+  }
+  const local = (address ?? "").split("@")[0] ?? "";
+  return (Array.from(local)[0] ?? "?").toUpperCase();
+}
+
+/** A stable hue (0–359) per sender, so each correspondent keeps the same avatar tint. */
+export function avatarHue(seed: string): number {
+  let hash = 0;
+  for (const character of seed) hash = (hash * 31 + (character.codePointAt(0) ?? 0)) % 360;
+  return hash;
+}
+
 const MINUTE_MS = 60_000;
 const HOUR_MS = 60 * MINUTE_MS;
 const RELATIVE_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [

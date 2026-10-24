@@ -4,7 +4,8 @@ import { MorphIcon } from "morphicons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { avatarSeed, senderAvatarUri } from "../lib/avatar";
-import { expiryLevel } from "../lib/format";
+import { useAvatarStyle } from "../lib/avatar-style";
+import { avatarHue, expiryLevel, initials } from "../lib/format";
 import { CHECK_ICON, COPY_ICON } from "./morph-icons";
 import { Tip } from "./Tooltip";
 
@@ -162,9 +163,25 @@ export function OwnerAvatar({ size = 28 }: { size?: number }) {
   return <img className="avatar avatar-owner" src={OWNER_AVATAR_URL} alt="" width={size} height={size} />;
 }
 
-/** A sender's avatar: their own DiceBear face, the same every time (see lib/avatar.ts). */
+/**
+ * A sender's avatar, the same every time: their DiceBear face (see lib/avatar.ts) or, if the owner
+ * prefers, their initials on a tint of their own.
+ */
 export function Avatar({ name, address, size = 28 }: { name: string | null; address: string | null; size?: number }) {
-  const uri = useMemo(() => senderAvatarUri(avatarSeed(name, address)), [name, address]);
+  const style = useAvatarStyle();
+  const seed = avatarSeed(name, address);
+  const uri = useMemo(() => (style === "faces" ? senderAvatarUri(seed) : null), [seed, style]);
+  if (!uri) {
+    return (
+      <span
+        className="avatar avatar-initials"
+        aria-hidden="true"
+        style={{ width: size, height: size, ["--avatar-hue" as string]: String(avatarHue(seed)) }}
+      >
+        {initials(name, address)}
+      </span>
+    );
+  }
   return <img className="avatar avatar-sender" src={uri} alt="" width={size} height={size} aria-hidden="true" />;
 }
 

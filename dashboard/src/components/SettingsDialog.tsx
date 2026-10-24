@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import type { Mailbox } from "../api/types";
 import { useI18n } from "../i18n/I18nProvider";
 import { LOCALE_NAMES, LOCALES, type Locale } from "../i18n/translate";
+import { AVATAR_STYLES, type AvatarStyle, setAvatarStyle, useAvatarStyle } from "../lib/avatar-style";
 import { CLOCKS, type Clock, sampleTime } from "../lib/format";
 import { isSwipeDown, useIsPhone } from "../lib/media";
 import { AliasSettings } from "./AliasSettings";
@@ -21,6 +22,7 @@ export function SettingsDialog({
   onImport(): void;
 }) {
   const { t, locale, setLocale, clock, setClock } = useI18n();
+  const avatarStyle = useAvatarStyle();
   const panel = useRef<HTMLDivElement>(null);
   const isPhone = useIsPhone();
 
@@ -94,6 +96,23 @@ export function SettingsDialog({
               {LOCALES.map((option) => (
                 <option key={option} value={option}>
                   {LOCALE_NAMES[option]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="setting compact">
+            <label className="setting-text" htmlFor="avatar-select">
+              {t("appearance.avatars")}
+            </label>
+            <select
+              id="avatar-select"
+              className="select"
+              value={avatarStyle}
+              onChange={(event) => setAvatarStyle(event.target.value as AvatarStyle)}
+            >
+              {AVATAR_STYLES.map((option) => (
+                <option key={option} value={option}>
+                  {t(option === "faces" ? "appearance.avatarFaces" : "appearance.avatarInitials")}
                 </option>
               ))}
             </select>
