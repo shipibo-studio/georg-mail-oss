@@ -122,7 +122,7 @@ export function SetupGate({ fallback, onDone }: { fallback: ReactNode; onDone():
         <div className="brand">
           <div className="logo">g</div>
           <div className="brand-name">
-            georg <span>mail</span>
+            Georg <span>mail</span>
           </div>
         </div>
         <h1 id="setup-title">{t("setup.title")}</h1>

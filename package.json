@@ -78,7 +78,7 @@
     "wrangler": "4.151.1"
   },
   "cloudflare": {
-    "label": "georg mail",
+    "label": "Georg mail",
     "products": [
       "Workers",
       "D1",

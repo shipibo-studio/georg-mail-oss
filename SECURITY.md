@@ -13,7 +13,7 @@ Please include:
 - Its potential impact
 - Suggested mitigations, if any
 
-We acknowledge reports within **48 business hours** and reply with a remediation timeline. Fixes are released here and in the hosted georg mail at the same time.
+We acknowledge reports within **48 business hours** and reply with a remediation timeline. Fixes are released here and in the hosted Georg mail at the same time.
 
 We appreciate good-faith reports. Please do not access, modify or extract other people's mail during your research, and do not disclose the finding publicly until a fix is available.
 

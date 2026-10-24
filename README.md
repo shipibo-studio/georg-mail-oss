@@ -1,4 +1,4 @@
-# georg mail
+# Georg mail
 
 A mail client for your own domain that you host on your Cloudflare account, and that runs on the **free Workers plan**. Mail arrives through Cloudflare Email Routing, is kept in D1 and R2, and you read and send it from a fast web app behind Cloudflare Access.
 
@@ -53,10 +53,10 @@ pnpm test:dashboard    # the app in a browser, on a desktop and a phone (Playwri
 
 ## How this repository is made
 
-This mail client is the open-source part of **georg mail**, a hosted product by Shipibo Studio that also gives AI agents disposable inboxes. It is built in that product's repository and published here with every release, so pull requests are welcome but are applied there and come back with the next release. Bugs and ideas: open an issue.
+This mail client is the open-source part of **Georg mail**, a hosted product by Shipibo Studio that also gives AI agents disposable inboxes. It is built in that product's repository and published here with every release, so pull requests are welcome but are applied there and come back with the next release. Bugs and ideas: open an issue.
 
 ## License
 
 [MIT](LICENSE). The design system in `vendor/georg-ds` is also MIT ([its license](vendor/georg-ds/LICENSE)).
 
-The license covers the code, not the name: "georg" and the georg logo identify Shipibo Studio's products. If you publish a modified version, give it another name.
+The license covers the code, not the name: "Georg" and the Georg logo identify Shipibo Studio's products. If you publish a modified version, give it another name.

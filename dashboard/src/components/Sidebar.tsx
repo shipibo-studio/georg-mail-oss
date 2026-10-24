@@ -149,7 +149,7 @@ export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSea
       <div className="brand">
         <div className="logo">g</div>
         <div className="brand-name">
-          georg <span>mail</span>
+          Georg <span>mail</span>
         </div>
       </div>
 
