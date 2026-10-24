@@ -402,7 +402,21 @@ test("imports a Zoho export zip with dates kept, and skips what is already here"
   await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).click();
   let dialog = await importZip();
   await expect(dialog.getByText("Done: 2 messages imported.")).toBeVisible();
-  await expect(dialog.getByText("2 of 2 · 2 imported · 0 already here · 0 failed")).toBeVisible();
+  const bar = dialog.getByRole("progressbar");
+  await expect(bar).toHaveAttribute("aria-valuetext", "2 of 2 · 2 imported · 0 already here · 0 failed");
+  await expect(bar).toHaveAttribute("aria-valuenow", "100");
+  // Finished cleanly: a full, success-colored bar, the per-outcome counts, and no Stop.
+  await expect(dialog.locator(".import-progress")).toHaveAttribute("data-tone", "done");
+  await expect(dialog.locator(".import-percent")).toHaveText("100%");
+  await expect(dialog.locator(".import-stat")).toHaveText(["2 imported", "0 already here", "0 failed"]);
+  await expect(dialog.getByRole("button", { name: "Stop" })).toHaveCount(0);
+  // The bar springs to full width.
+  await expect
+    .poll(
+      async () =>
+        ((await bar.locator(".progress-bar").boundingBox())?.width ?? 0) / ((await bar.boundingBox())?.width ?? 1),
+    )
+    .toBeGreaterThan(0.98);
   await dialog.getByRole("button", { name: "Close" }).last().click();
   await expect(row(page, "Cotización 2020")).toBeVisible();
   await expect(row(page, "Cotización 2020").locator("time")).toHaveText("3/3/20");
@@ -412,7 +426,11 @@ test("imports a Zoho export zip with dates kept, and skips what is already here"
   await page.keyboard.type("import mail");
   await page.keyboard.press("Enter");
   dialog = await importZip();
-  await expect(dialog.getByText("2 of 2 · 0 imported · 2 already here · 0 failed")).toBeVisible();
+  await expect(dialog.getByRole("progressbar")).toHaveAttribute(
+    "aria-valuetext",
+    "2 of 2 · 0 imported · 2 already here · 0 failed",
+  );
+  await expect(dialog.locator(".import-stat")).toHaveText(["0 imported", "2 already here", "0 failed"]);
   await expect(page.locator("button.msg", { hasText: "Cotización 2020" })).toHaveCount(1);
 });
 
@@ -607,4 +625,108 @@ test("setup offers no copy when the visitor signed in on the mailbox's own domai
   await expect(page.locator("button.msg").first()).toBeVisible();
   await page.locator(".sidebar").getByRole("button", { name: "Notifications" }).click();
   await expect(page.getByRole("switch", { name: "Forward a copy" })).toHaveAttribute("aria-checked", "false");
+});
+
+/** An mbox of `count` messages, each with its own Message-ID. */
+function mbox(count: number, prefix: string): Buffer {
+  const lines: string[] = [];
+  for (let index = 0; index < count; index++) {
+    lines.push(
+      `From sender${index}@example.com Mon Jan  6 10:00:00 2020`,
+      `From: Sender ${index} <sender${index}@example.com>`,
+      "To: hello@example.com",
+      `Subject: ${prefix} ${index}`,
+      `Message-ID: <${prefix}-${index}@example.com>`,
+      "",
+      `Body ${index}`,
+      "",
+    );
+  }
+  return Buffer.from(lines.join("\n"));
+}
+
+async function startImport(page: import("@playwright/test").Page, file: Buffer, name: string) {
+  await openInbox(page);
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).click();
+  const dialog = page.getByRole("dialog", { name: "Import mail" });
+  await dialog.getByTestId("import-input").setInputFiles({ name, mimeType: "application/mbox", buffer: file });
+  await dialog.getByRole("button", { name: "Start import" }).click();
+  return dialog;
+}
+
+test("an import held back by the rate limit pauses, says when it resumes, and loses nothing", async ({ page }) => {
+  let refusals = 2;
+  await page.route("**/dashboard/api/mailbox/imports", async (route) => {
+    if (refusals-- > 0) {
+      return route.fulfill({
+        status: 429,
+        headers: { "Retry-After": "2", "Content-Type": "application/json" },
+        body: JSON.stringify({ error: { code: "rate_limited", message: "Too many requests." } }),
+      });
+    }
+    return route.continue();
+  });
+  const dialog = await startImport(page, mbox(4, "Paced"), "paced.mbox");
+  await expect(dialog.getByText(/Paused by the server's rate limit · resumes in \d s/)).toBeVisible();
+  await expect(dialog.locator(".import-progress")).toHaveAttribute("data-tone", "done", { timeout: 15_000 });
+  await expect(dialog.locator(".import-stat")).toHaveText(["4 imported", "0 already here", "0 failed"]);
+});
+
+test("an import that ends with failures says so with an X and how to retry them", async ({ page }) => {
+  let calls = 0;
+  await page.route("**/dashboard/api/mailbox/imports", async (route) => {
+    if (calls++ === 1) {
+      return route.fulfill({
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: { code: "internal_error", message: "Boom." } }),
+      });
+    }
+    return route.continue();
+  });
+  const dialog = await startImport(page, mbox(3, "Partial"), "partial.mbox");
+  const result = dialog.locator(".import-progress");
+  await expect(result).toHaveAttribute("data-state", "done");
+  await expect(result).toHaveAttribute("data-tone", "warn");
+  await expect(dialog.locator(".import-stat.failed")).toHaveText("1 failed");
+  await expect(dialog.getByText(/Import the same files again to retry the ones that failed/)).toBeVisible();
+  // Centered, and the Close button no longer spans the dialog.
+  const close = dialog.getByRole("button", { name: "Close" }).last();
+  const closeBox = await close.boundingBox();
+  const dialogBox = await dialog.boundingBox();
+  expect(closeBox && dialogBox && closeBox.width < dialogBox.width / 2).toBe(true);
+  expect(
+    closeBox && dialogBox && Math.abs(closeBox.x + closeBox.width / 2 - (dialogBox.x + dialogBox.width / 2)) < 4,
+  ).toBe(true);
+});
+
+test("aliases: add one in Settings, reply from the alias the mail reached, and remove it", async ({ page }) => {
+  await openInbox(page);
+  await page.getByRole("button", { name: "Settings" }).click();
+  const settings = page.getByRole("dialog", { name: "Settings" });
+  await expect(settings.locator(".alias-row")).toHaveCount(1);
+  await expect(settings.locator(".alias-row").first()).toContainText("hello@example.com");
+  await expect(settings.locator(".alias-row").first()).toContainText("Main");
+  await settings.getByLabel("Address to add as an alias").selectOption("contact@example.com");
+  await settings.getByRole("button", { name: "Add alias" }).click();
+  await expect(page.getByText("contact@example.com now delivers here")).toBeVisible();
+  await expect(settings.locator(".alias-row")).toHaveCount(2);
+  await settings.getByRole("button", { name: "Close settings" }).click();
+
+  // "Propuesta" reached contact@: the reply goes out from it.
+  await row(page, "Propuesta para el sitio de Georg").first().click();
+  await page.getByRole("button", { name: "Reply" }).first().click();
+  const composer = page.getByRole("dialog", { name: "Reply" });
+  const from = composer.getByLabel("From");
+  await expect(from).toHaveValue("contact@example.com");
+  await from.selectOption("hello@example.com");
+  await from.selectOption("contact@example.com");
+  await composer.getByRole("button", { name: "Send" }).click();
+  await expect(page.getByText("Message sent")).toBeVisible();
+
+  await page.getByRole("button", { name: "Settings" }).click();
+  await settings.getByRole("button", { name: "Remove contact@example.com" }).click();
+  await expect(page.getByText("contact@example.com no longer receives mail")).toBeVisible();
+  await expect(settings.locator(".alias-row")).toHaveCount(1);
 });

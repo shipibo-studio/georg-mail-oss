@@ -183,3 +183,16 @@ test("first-run setup fits a phone", async ({ page }) => {
   await setup.getByRole("button", { name: "Create the mailbox" }).tap();
   await expect(page.locator(".mobile-nav")).toBeVisible();
 });
+
+test("aliases can be added from the Settings sheet on a phone", async ({ page }) => {
+  await openInbox(page);
+  await goTo(page, "Settings");
+  const settings = page.getByRole("dialog", { name: "Settings" });
+  await settings.getByRole("button", { name: "Add alias" }).tap();
+  await expect(settings.locator(".alias-row")).toHaveCount(2);
+  const added = settings.locator(".alias-row").nth(1);
+  await expect(added).toContainText("contact@example.com");
+  const box = await added.boundingBox();
+  const viewport = page.viewportSize();
+  expect(box && viewport && box.x + box.width <= viewport.width).toBe(true);
+});

@@ -211,6 +211,13 @@
       "when": 1792809997382,
       "tag": "0029_ai_extraction_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1792881407495,
+      "tag": "0030_mailbox_aliases",
+      "breakpoints": true
     }
   ]
 }

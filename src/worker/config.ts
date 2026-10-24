@@ -105,6 +105,8 @@ export const PERSONAL_ATTACHMENTS_MAX_FILES = 10;
 export const PERSONAL_PENDING_UPLOADS_MAX = 20;
 /** Drafts one personal mailbox keeps; more means something is creating them in a loop. */
 export const PERSONAL_DRAFTS_MAX = 200;
+/** Extra addresses one personal mailbox answers to. */
+export const PERSONAL_ALIASES_MAX = 10;
 /** Files uploaded but never sent are deleted after this long, unless a draft holds them. */
 export const PERSONAL_UPLOAD_TTL_MS = 24 * 60 * 60 * 1000;
 /** A sender retrying a message it already delivered (same Message-ID) within this window is not stored twice. */

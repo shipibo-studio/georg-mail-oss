@@ -6,6 +6,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import { LOCALE_NAMES, LOCALES, type Locale } from "../i18n/translate";
 import { CLOCKS, type Clock, sampleTime } from "../lib/format";
 import { isSwipeDown, useIsPhone } from "../lib/media";
+import { AliasSettings } from "./AliasSettings";
 import { AccentControl, ThemeControl } from "./Sidebar";
 
 const ACCESS_LOGOUT_PATH = "/cdn-cgi/access/logout";
@@ -116,6 +117,13 @@ export function SettingsDialog({
               ))}
             </select>
           </div>
+        </section>
+        <section className="settings-section">
+          <div className="label">
+            {t("aliases.section")} <span className="scope">{t("settings.scopeMail")}</span>
+          </div>
+          <p className="muted small">{t("aliases.description")}</p>
+          <AliasSettings mailbox={mailbox} />
         </section>
         <section className="settings-section">
           <div className="label">

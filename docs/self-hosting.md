@@ -123,6 +123,18 @@ Open `https://mail.example.com/dashboard`. Access asks you to sign in; then the 
 
 **Create the mailbox**, and it is yours: the first-run page closes for good, for everyone. Send yourself a message from another account to check that mail arrives.
 
+## More addresses for the same mailbox
+
+The mailbox can answer to more than one address, such as `contact@` and `support@` beside `hello@`. For each one:
+
+1. Add it to `PERSONAL_MAILBOX_ADDRESSES` (comma-separated) and deploy again.
+2. In Email Routing, create a custom address rule for it that sends to the Worker.
+3. In the app, open **Settings → Addresses**, choose it and press **Add alias**.
+
+Mail to an alias lands in the same inbox and keeps the address it was sent to. A reply goes out from that alias, and the composer's **From** lets you pick any of the mailbox's addresses. Removing an alias stops its mail; what it already received stays. Up to 10 aliases.
+
+The app is one mailbox for one owner. It does not give separate mailboxes to different people.
+
 ## Bring your old mail
 
 **Settings → Import** takes a Zoho Mail export (the `.zip` it emails you), `.mbox` files (Google Takeout, Thunderbird, Apple Mail) and `.eml` files. Your browser unpacks the file and sends one message at a time, so a large mailbox takes a while but each request stays inside the free plan's limits. Dates are kept, messages already here are skipped, and imported mail arrives already read.

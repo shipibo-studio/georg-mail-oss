@@ -26,6 +26,8 @@ interface MockMessage {
   /** The folder it was moved to; null while it sits in Inbox or Sent. */
   box: "archive" | "trash" | "spam" | null;
   spamReason: "blocked_sender" | "failed_authentication" | "high_risk" | "reported" | null;
+  /** The mailbox address it was sent to, when not the main one (an alias). */
+  to?: string;
   /** Imported mail only: how a second import of the same message is recognized. */
   messageIdHeader?: string | null;
   attachments: {
@@ -104,6 +106,7 @@ function seedMessages(): MockMessage[] {
     received({
       fromName: "Camila Rojas",
       fromAddress: "camila@estudio.cl",
+      to: "contact@example.com",
       subject: "Propuesta para el sitio de Georg",
       text: "Hola Jorge,\n\nTe dejo la propuesta que conversamos. Incluye el cronograma y el detalle de los entregables.\n\n¿Lo vemos el jueves?\n\nSaludos,\nCamila",
       html: `<div style="font-family:Georgia,serif;font-size:15px;line-height:1.6;color:#1f2933"><p>Hola Jorge,</p><p>Te dejo la propuesta que conversamos. Incluye el cronograma y el detalle de los entregables.</p><p>¿Lo vemos el jueves?</p><p>Saludos,<br>Camila</p></div>`,
@@ -200,6 +203,9 @@ const senderRules = new Map<string, "block" | "allow">();
 const DEFAULT_SETTINGS = { forwardEnabled: true, displayName: "Georg" };
 const settings = { ...DEFAULT_SETTINGS };
 const OWNER = "owner@example.org";
+/** Addresses the install accepts besides the main one; the owner adds them as aliases. */
+const CONFIGURED_ALIASES = ["contact@example.com", "support@example.com"];
+const aliases: string[] = [];
 /** False after POST /__mock/fresh: a self-hosted install that nobody owns yet (first-run setup). */
 let claimed = true;
 /** Who Access signed in on the first-run page; /__mock/fresh-same-domain uses the mailbox's domain. */
@@ -214,6 +220,7 @@ function resetMock() {
   Object.assign(settings, DEFAULT_SETTINGS);
   claimed = true;
   visitor = OWNER;
+  aliases.length = 0;
 }
 
 function summary(message: MockMessage) {
@@ -246,7 +253,7 @@ function full(message: MockMessage) {
   return {
     ...summary(message),
     contentTrust: "untrusted",
-    to: ADDRESS,
+    to: message.to ?? ADDRESS,
     links: message.links.map((link) => ({
       ...link,
       isVerification: false,
@@ -295,6 +302,8 @@ function matchesSearch(message: MockMessage, query: string) {
 function mailbox() {
   return {
     address: ADDRESS,
+    aliases: [...aliases],
+    claimableAliases: CONFIGURED_ALIASES.filter((address) => !aliases.includes(address)),
     owner: OWNER,
     forwardTo: OWNER,
     ...settings,
@@ -550,6 +559,21 @@ export function mockApi(): Plugin {
           .sort((a, b) => b.receivedAt - a.receivedAt);
         return send(response, 200, { messages: list.map(summary), nextCursor: null });
       }
+      if (url.pathname === "/aliases" && method === "POST") {
+        const { address } = (await readBody(request)) as { address?: string };
+        if (!address || !CONFIGURED_ALIASES.includes(address) || aliases.includes(address)) {
+          return send(response, 400, { error: { code: "validation_failed", message: "Not an address you can add." } });
+        }
+        aliases.push(address);
+        return send(response, 201, { address });
+      }
+      const aliasPath = /^\/aliases\/(.+)$/.exec(url.pathname);
+      if (aliasPath && method === "DELETE") {
+        const index = aliases.indexOf(decodeURIComponent(aliasPath[1] ?? ""));
+        if (index < 0) return send(response, 404, { error: { code: "not_found", message: "No such alias." } });
+        aliases.splice(index, 1);
+        return send(response, 204);
+      }
       if (url.pathname === "/messages" && method === "POST") {
         const body = (await readBody(request)) as {
           to: string[];
@@ -558,7 +582,13 @@ export function mockApi(): Plugin {
           text: string;
           attachments?: string[];
           draftId?: string;
+          from?: string;
         };
+        if (body.from && body.from !== ADDRESS && !aliases.includes(body.from)) {
+          return send(response, 400, {
+            error: { code: "validation_failed", message: "Not an address of this mailbox." },
+          });
+        }
         if (body.draftId) drafts.delete(body.draftId);
         const files = (body.attachments ?? []).map((id) => uploads.get(id));
         if (files.some((file) => !file)) {
@@ -569,7 +599,12 @@ export function mockApi(): Plugin {
         for (const id of body.attachments ?? []) uploads.delete(id);
         const recipients = [...new Set([...body.to, ...(body.cc ?? [])])];
         messages.unshift({
-          ...received({ fromAddress: ADDRESS, subject: body.subject, text: body.text, receivedAt: Date.now() }),
+          ...received({
+            fromAddress: body.from ?? ADDRESS,
+            subject: body.subject,
+            text: body.text,
+            receivedAt: Date.now(),
+          }),
           direction: "sent",
           fromName: "Georg",
           readAt: Date.now(),

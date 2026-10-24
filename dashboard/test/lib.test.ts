@@ -243,6 +243,8 @@ describe("reply", () => {
       inReplyTo: "msg_1",
       // A reply never carries the original's files.
       files: [],
+      // Without aliases, it goes out from the mailbox's own address.
+      from: null,
     });
     const sent = { ...message, direction: "sent", recipients: ["b@y.com", "c@z.com"] } as FullMessage;
     expect(replyDraft(sent, "h").to).toEqual(["b@y.com", "c@z.com"]);

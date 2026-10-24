@@ -62,6 +62,8 @@ describe("drafts", () => {
       subject: "Re: x",
       text: "Hola",
       inReplyTo: "msg_1",
+      // Drafts are kept without their From.
+      from: null,
       files: [{ key: "upl_1", name: "plano.pdf", sizeBytes: 42, uploadId: "upl_1", status: "ready", error: null }],
     });
   });

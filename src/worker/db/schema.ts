@@ -541,6 +541,22 @@ export const senderRules = sqliteTable(
   (table) => [primaryKey({ columns: [table.inboxId, table.address] })],
 );
 
+// More addresses of a personal mailbox (contact@, support@ beside hello@): mail to them lands in the
+// same inbox, and the owner can send from them. Each must also be in PERSONAL_MAILBOX_ADDRESSES, so
+// the operator still decides which addresses the install accepts.
+export const mailboxAliases = sqliteTable(
+  "mailbox_aliases",
+  {
+    // Lowercased; unique across every inbox and alias.
+    address: text("address").primaryKey(),
+    inboxId: text("inbox_id")
+      .notNull()
+      .references(() => inboxes.id, { onDelete: "cascade" }),
+    createdAt: integer("created_at").notNull(),
+  },
+  (table) => [index("mailbox_aliases_inbox_idx").on(table.inboxId)],
+);
+
 // Messages the owner is still writing, saved as they type so they survive a closed tab and show on
 // every device. Recipients are kept as typed: they are checked only when the draft is sent.
 export const mailDrafts = sqliteTable(
@@ -646,6 +662,7 @@ export type Project = typeof projects.$inferSelect;
 export type ApiKey = typeof apiKeys.$inferSelect;
 export type Inbox = typeof inboxes.$inferSelect;
 export type Message = typeof messages.$inferSelect;
+export type MailboxAlias = typeof mailboxAliases.$inferSelect;
 export type Attachment = typeof attachments.$inferSelect;
 export type AuditEvent = typeof auditEvents.$inferSelect;
 export type OutboundRecord = typeof outboundMessages.$inferSelect;

@@ -1,11 +1,9 @@
 // First run of a self-hosted mail client: the person Cloudflare Access lets in creates the account,
 // their mailbox and their dashboard membership in one step. It works only while the install has no
 // dashboard member, so the first owner closes it; who may try is decided by the Access policy.
-import { inArray } from "drizzle-orm";
 import { type Context, Hono } from "hono";
 import { z } from "zod";
 import { PERSONAL_MAILBOX_EXPIRES_AT } from "../config";
-import { inboxes } from "../db/schema";
 import { normalizeAddress } from "../email/email-address";
 import { personalMailboxAddresses } from "../email/receive-email";
 import { ApiError } from "../errors";
@@ -13,6 +11,7 @@ import type { MailEnv } from "../http/mail-env";
 import { validate } from "../http/validation";
 import { createId } from "../ids";
 import { accessIdentity } from "./dashboard-session";
+import { unclaimedAddresses } from "./mail-aliases";
 
 /** The plan of every self-hosted account (migration 0028). */
 export const SELF_HOSTED_PLAN_ID = "self-hosted";
@@ -30,17 +29,9 @@ async function isClaimed(db: D1Database): Promise<boolean> {
   return (await db.prepare("SELECT 1 FROM dashboard_members LIMIT 1").first()) !== null;
 }
 
-/** Configured mailbox addresses that no inbox uses yet. */
-async function availableAddresses(context: Context<MailEnv>): Promise<string[]> {
-  const configured = [...personalMailboxAddresses(context.env)];
-  if (configured.length === 0) return [];
-  const taken = await context
-    .get("db")
-    .select({ address: inboxes.address })
-    .from(inboxes)
-    .where(inArray(inboxes.address, configured));
-  const used = new Set(taken.map((row) => row.address));
-  return configured.filter((address) => !used.has(address));
+/** Configured mailbox addresses that no inbox or alias uses yet. */
+function availableAddresses(context: Context<MailEnv>): Promise<string[]> {
+  return unclaimedAddresses(context.env, context.get("db"));
 }
 
 const domainOf = (address: string) => address.slice(address.lastIndexOf("@") + 1).toLowerCase();

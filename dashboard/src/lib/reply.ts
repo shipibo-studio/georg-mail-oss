@@ -11,9 +11,11 @@ export interface Draft {
   text: string;
   inReplyTo: string | null;
   files: DraftFile[];
+  /** One of the mailbox's aliases to send from; null sends from the mailbox's own address. */
+  from: string | null;
 }
 
-export const EMPTY_DRAFT: Draft = { to: [], cc: [], subject: "", text: "", inReplyTo: null, files: [] };
+export const EMPTY_DRAFT: Draft = { to: [], cc: [], subject: "", text: "", inReplyTo: null, files: [], from: null };
 
 export function replySubject(subject: string | null): string {
   const base = (subject ?? "").trim();
@@ -26,7 +28,16 @@ export function quoteText(text: string | null, header: string): string {
   return `\n\n${header}\n${lines.map((line) => `> ${line}`).join("\n")}`;
 }
 
-export function replyDraft(message: FullMessage, quoteHeader: string): Draft {
+/**
+ * Answers from the address the original reached (or, for sent mail, went out from) when that is one
+ * of the mailbox's aliases, so a conversation keeps one address.
+ */
+export function replyFrom(message: FullMessage, aliases: string[]): string | null {
+  const address = (message.direction === "sent" ? message.from.address : message.to)?.trim().toLowerCase();
+  return address && aliases.includes(address) ? address : null;
+}
+
+export function replyDraft(message: FullMessage, quoteHeader: string, aliases: string[] = []): Draft {
   const to = message.direction === "sent" ? (message.recipients ?? []) : [message.from.address ?? ""];
   return {
     to: to.filter(Boolean),
@@ -35,5 +46,6 @@ export function replyDraft(message: FullMessage, quoteHeader: string): Draft {
     text: quoteText(message.text, quoteHeader),
     inReplyTo: message.id,
     files: [],
+    from: replyFrom(message, aliases),
   };
 }

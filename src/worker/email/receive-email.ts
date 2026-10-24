@@ -11,7 +11,7 @@ import {
 } from "../config";
 import { createDatabase, type Database } from "../db/client";
 import type { ExtractedLinkRecord, Inbox, MessageRisk, RiskLevel, SenderAuthentication } from "../db/schema";
-import { accounts, attachments, inboxes, messages, plans } from "../db/schema";
+import { accounts, attachments, inboxes, mailboxAliases, messages, plans } from "../db/schema";
 import { createId } from "../ids";
 import { searchColumns } from "../messages/text-folding";
 import { PERSONAL_ROOT_PREFIX, RAW_ROOT_PREFIX, rawMessageKey } from "../storage/raw-messages";
@@ -116,8 +116,19 @@ export interface InboundEmail {
   forward?(rcptTo: string): Promise<unknown>;
 }
 
+/** The mailbox address an alias belongs to, or the recipient itself when it is not an alias. */
+async function aliasedMailboxAddress(db: Database, recipient: string): Promise<string> {
+  const [alias] = await db
+    .select({ address: inboxes.address })
+    .from(mailboxAliases)
+    .innerJoin(inboxes, eq(inboxes.id, mailboxAliases.inboxId))
+    .where(eq(mailboxAliases.address, recipient))
+    .limit(1);
+  return alias?.address ?? recipient;
+}
+
 /** Addresses of personal mailboxes, from configuration, so mail to unknown names costs no query. */
-export function personalMailboxAddresses(env: Env): Set<string> {
+export function personalMailboxAddresses(env: Pick<Env, "PERSONAL_MAILBOX_ADDRESSES">): Set<string> {
   return new Set(
     (env.PERSONAL_MAILBOX_ADDRESSES ?? "")
       .split(",")
@@ -285,6 +296,8 @@ export async function receiveEmail(
 
   const db = createDatabase(env.DB);
   const now = Date.now();
+  // An alias delivers into its mailbox; the message keeps the address it was sent to.
+  const inboxAddress = isPersonal ? await aliasedMailboxAddress(db, recipient) : recipient;
   const [target] = await db
     .select({ inbox: inboxes, plan: plans, storedBytes: accounts.storedBytes })
     .from(inboxes)
@@ -292,7 +305,7 @@ export async function receiveEmail(
     .innerJoin(plans, eq(plans.id, accounts.planId))
     .where(
       and(
-        eq(inboxes.address, recipient),
+        eq(inboxes.address, inboxAddress),
         gt(inboxes.expiresAt, now),
         eq(inboxes.kind, isPersonal ? "personal" : "disposable"),
       ),

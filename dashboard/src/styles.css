@@ -2893,3 +2893,283 @@ select:focus-visible {
     box-shadow: var(--accent-glow), var(--shadow-2);
   }
 }
+
+/* ── Import progress: a bar that fills as messages go in, with a sheen while it works ── */
+.settings-section.import-progress {
+  gap: 14px;
+  padding: 6px 20px 20px;
+}
+.import-headline {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.import-percent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.import-of {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.import-eta {
+  margin-left: auto;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+.progress {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  box-shadow: inset 0 0 0 1px var(--border);
+  overflow: hidden;
+}
+.progress-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  border-radius: inherit;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow-color);
+  overflow: hidden;
+}
+.progress.active .progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.4), transparent);
+  transform: translateX(-100%);
+  animation: progress-sheen 1.4s var(--ease-out) infinite;
+}
+.progress.indeterminate .progress-bar {
+  width: 35%;
+  animation: progress-indeterminate 1.2s ease-in-out infinite;
+}
+@keyframes progress-sheen {
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes progress-indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(290%);
+  }
+}
+.import-progress[data-tone="done"] .progress-bar {
+  background: var(--success);
+  box-shadow: none;
+}
+.import-progress[data-tone="warn"] .progress-bar {
+  background: var(--warn);
+  box-shadow: none;
+}
+.import-progress[data-tone="done"] .import-percent {
+  color: var(--success);
+}
+.import-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.import-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.import-stat::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+.import-stat strong {
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.import-stat.imported::before {
+  background: var(--success);
+}
+.import-stat.failed.nonzero::before {
+  background: var(--danger);
+}
+.import-stat.failed.nonzero strong {
+  color: var(--danger);
+}
+.import-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--warn);
+  font-size: var(--text-sm);
+}
+.import-alert svg {
+  flex: none;
+  margin-top: 2px;
+}
+.import-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+@media (prefers-reduced-motion: reduce) {
+  .progress.active .progress-bar::after,
+  .progress.indeterminate .progress-bar {
+    animation: none;
+  }
+}
+
+/* ── Mailbox addresses: the main one and its aliases (Settings), and From in the composer ── */
+.alias-settings {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+.alias-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r-2);
+  overflow: hidden;
+}
+.alias-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 6px 0 10px;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  overflow: hidden;
+}
+.alias-row + .alias-row {
+  border-top: 1px solid var(--border);
+}
+.alias-row .mono {
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.alias-main {
+  padding: 1px 8px;
+  margin-right: 4px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+.alias-add {
+  display: flex;
+  gap: 8px;
+}
+.alias-add .select {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  font-size: 12.5px;
+}
+.from-select {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.from-field:focus-within .field-label {
+  color: var(--accent);
+}
+
+/* The import's icon: a download arrow while it runs, a check or an X when it ends (morphicons). */
+.import-badge {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  align-self: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  transition:
+    width var(--dur-2) var(--ease-out),
+    height var(--dur-2) var(--ease-out),
+    background var(--dur-2),
+    color var(--dur-2);
+}
+.import-eta.paused {
+  color: var(--warn);
+}
+.import-progress[data-state="done"] {
+  justify-items: center;
+  text-align: center;
+}
+.import-progress[data-state="done"] .import-headline {
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.import-progress[data-state="done"] .import-badge {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 4px;
+}
+.import-progress[data-state="done"][data-tone="done"] .import-badge {
+  background: color-mix(in srgb, var(--success) 16%, transparent);
+  color: var(--success);
+}
+.import-progress[data-state="done"][data-tone="warn"] .import-badge {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  color: var(--danger);
+}
+.import-progress[data-state="done"] .progress {
+  justify-self: stretch;
+}
+.import-progress[data-state="done"] .import-eta {
+  margin-left: 0;
+}
+.import-progress[data-state="done"] .import-stats,
+.import-progress[data-state="done"] .import-actions {
+  justify-content: center;
+}
+.import-summary {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.import-retry {
+  color: var(--text-3);
+}
+.import-close {
+  min-width: 112px;
+  justify-content: center;
+}

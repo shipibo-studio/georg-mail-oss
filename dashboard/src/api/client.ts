@@ -29,12 +29,15 @@ const FILENAME_HEADER = "X-Filename";
 export class ApiError extends Error {
   readonly status: number;
   readonly code: string | null;
+  /** From a 429's Retry-After: how long to wait before trying again. */
+  readonly retryAfterMs: number | null;
 
-  constructor(message: string, status: number, code: string | null) {
+  constructor(message: string, status: number, code: string | null, retryAfterMs: number | null = null) {
     super(message);
     this.name = "ApiError";
     this.status = status;
     this.code = code;
+    this.retryAfterMs = retryAfterMs;
   }
 }
 
@@ -53,6 +56,12 @@ export interface RequestOptions {
   file?: File;
   raw?: { bytes: Uint8Array; contentType: string };
   headers?: Record<string, string>;
+}
+
+/** Retry-After in seconds (the only form the Worker sends), as milliseconds; null when absent. */
+export function retryAfterMs(header: string | null): number | null {
+  const seconds = Number(header);
+  return header !== null && header.trim() !== "" && Number.isFinite(seconds) && seconds >= 0 ? seconds * 1000 : null;
 }
 
 /** A request to the dashboard's API: path under /dashboard/api, CSRF header on writes. */
@@ -87,7 +96,12 @@ export async function apiRequest<T>(url: string, options: RequestOptions = {}): 
     | (T & { error?: { message?: string; code?: string } })
     | null;
   if (!response.ok) {
-    throw new ApiError(data?.error?.message ?? response.statusText, response.status, data?.error?.code ?? null);
+    throw new ApiError(
+      data?.error?.message ?? response.statusText,
+      response.status,
+      data?.error?.code ?? null,
+      retryAfterMs(response.headers.get("Retry-After")),
+    );
   }
   return data as T;
 }
@@ -105,6 +119,8 @@ export const api = {
   mailbox: () => request<Mailbox>(""),
   updateSettings: (settings: Pick<Mailbox, "forwardEnabled">) =>
     request<Mailbox>("", { method: "PATCH", body: settings }),
+  addAlias: (address: string) => request<{ address: string }>("/aliases", { method: "POST", body: { address } }),
+  removeAlias: (address: string) => request<void>(`/aliases/${encodeURIComponent(address)}`, { method: "DELETE" }),
   messages: (folder: Folder, cursor: string | null) => {
     const query = new URLSearchParams({ folder, limit: "40" });
     if (cursor) query.set("cursor", cursor);

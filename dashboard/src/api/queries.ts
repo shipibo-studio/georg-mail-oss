@@ -143,6 +143,16 @@ export function useUpdateSettings() {
   });
 }
 
+/** Adds or removes one of the mailbox's aliases, then reloads the mailbox. */
+export function useAliasChange() {
+  const client = useQueryClient();
+  const onSuccess = () => client.invalidateQueries({ queryKey: keys.mailbox });
+  return {
+    add: useMutation({ mutationFn: api.addAlias, onSuccess }),
+    remove: useMutation({ mutationFn: api.removeAlias, onSuccess }),
+  };
+}
+
 export function useDrafts() {
   return useQuery({ queryKey: keys.drafts, queryFn: api.drafts });
 }

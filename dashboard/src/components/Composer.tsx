@@ -356,6 +356,7 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
           subject: draft.subject.trim(),
           text: draft.text,
           ...(draft.inReplyTo ? { inReplyTo: draft.inReplyTo } : {}),
+          ...(draft.from ? { from: draft.from } : {}),
           ...(draft.files.length > 0 ? { attachments: uploadIds(draft.files) } : {}),
           ...(autosave.draftId() ? { draftId: autosave.draftId() ?? undefined } : {}),
         },
@@ -416,10 +417,27 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
           </Tip>
         </header>
 
-        <div className="field static">
-          <span className="field-label">{t("compose.from")}</span>
-          <span className="mono">{mailbox?.address}</span>
-        </div>
+        {mailbox && mailbox.aliases.length > 0 ? (
+          <label className="field from-field">
+            <span className="field-label">{t("compose.from")}</span>
+            <select
+              className="from-select mono"
+              value={draft.from ?? mailbox.address}
+              onChange={(event) => update({ from: event.target.value === mailbox.address ? null : event.target.value })}
+            >
+              {[mailbox.address, ...mailbox.aliases].map((address) => (
+                <option key={address} value={address}>
+                  {address}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
+          <div className="field static">
+            <span className="field-label">{t("compose.from")}</span>
+            <span className="mono">{mailbox?.address}</span>
+          </div>
+        )}
         <div className="recipient-row">
           <RecipientField
             label={t("compose.to")}

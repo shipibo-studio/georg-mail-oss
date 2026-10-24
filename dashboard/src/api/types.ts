@@ -13,6 +13,10 @@ export type RiskReason =
 
 export interface Mailbox {
   address: string;
+  /** More addresses of the mailbox: mail to them lands here, and it can send from them. */
+  aliases: string[];
+  /** Addresses the install accepts that the owner can still add as aliases. */
+  claimableAliases: string[];
   displayName: string | null;
   owner: string;
   forwardTo: string | null;
@@ -103,6 +107,8 @@ export interface SendRequest {
   subject: string;
   text: string;
   inReplyTo?: string;
+  /** One of the mailbox's aliases; the mailbox's own address when absent. */
+  from?: string;
   /** Ids of files uploaded first, in order. */
   attachments?: string[];
   /** The draft this message was written in; sending deletes it. */

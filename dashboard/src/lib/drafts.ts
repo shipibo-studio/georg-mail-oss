@@ -43,6 +43,8 @@ export function fromSavedDraft(saved: SavedDraft): Draft {
     subject: saved.subject,
     text: saved.text,
     inReplyTo: saved.inReplyTo,
+    // Drafts are kept without their From: a reopened one sends from the mailbox's own address.
+    from: null,
     files: saved.attachments.map((file) => ({
       key: file.id,
       name: file.filename,

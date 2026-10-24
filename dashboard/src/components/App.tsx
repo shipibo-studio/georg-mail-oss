@@ -153,10 +153,10 @@ export function App() {
     (original: FullMessage) => {
       const sender = original.from.name || original.from.address || "";
       const header = t("compose.quoteHeader", { date: formatFullDate(original.receivedAt, locale, clock), sender });
-      setComposer(newComposerState(replyDraft(original, header)));
+      setComposer(newComposerState(replyDraft(original, header, mailbox.data?.aliases ?? [])));
       setComposerOpen(true);
     },
-    [clock, locale, t],
+    [clock, locale, mailbox.data?.aliases, t],
   );
   const closeComposer = useCallback(() => setComposerOpen(false), []);
   const discardComposer = useCallback(() => {

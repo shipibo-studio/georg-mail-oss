@@ -41,6 +41,7 @@ import { listAttachments, presentMessage, presentMessageSummary, summaryColumns 
 import { searchColumns } from "../messages/text-folding";
 import { createMailSender } from "../sending/create-mail-sender";
 import type { OutboundAttachment } from "../sending/mail-sender";
+import { addAlias, listAliases, mailboxAddresses, removeAlias, unclaimedAddresses } from "./mail-aliases";
 import { deletePersonalMessage, folderCondition, MAIL_FOLDERS, moveMessage } from "./mail-boxes";
 import {
   createDraft,
@@ -90,6 +91,8 @@ const sendSchema = z
       .refine((subject) => !LINE_BREAK.test(subject), "The subject must be a single line."),
     text: z.string().min(1).max(MAX_PERSONAL_TEXT_CHARS),
     inReplyTo: z.string().max(64).optional(),
+    // One of the mailbox's addresses (its own or an alias); its own when absent.
+    from: z.string().trim().max(320).optional(),
     // The draft this message was written in: sending deletes it.
     draftId: z.string().max(64).optional(),
     // Files uploaded first to /uploads, in the order they are attached.
@@ -104,6 +107,8 @@ const sendSchema = z
 const settingsSchema = z
   .strictObject({ forwardEnabled: z.boolean().optional() })
   .refine((body) => Object.keys(body).length > 0, "Send forwardEnabled.");
+
+const aliasSchema = z.strictObject({ address: z.string().trim().max(320) });
 
 const listQuerySchema = pageQuerySchema.extend({ folder: z.enum(MAIL_FOLDERS).default("inbox") });
 const searchSchema = z.strictObject({
@@ -280,11 +285,15 @@ async function reservePersonalSend(
   }
 }
 
-/** The mailbox and its delivery settings, as the dashboard shows them. */
-function presentMailbox(context: AppContext, mailbox: Inbox) {
+/** The mailbox, its addresses and its delivery settings, as the dashboard shows them. */
+async function presentMailbox(context: AppContext, mailbox: Inbox) {
   const session = context.get("dashboard");
+  const db = context.get("db");
   return {
     address: mailbox.address,
+    aliases: await listAliases(db, mailbox.id),
+    // Configured addresses the owner may still add as aliases.
+    claimableAliases: await unclaimedAddresses(context.env, db),
     displayName: mailbox.displayName,
     owner: session.email,
     forwardTo: mailbox.forwardTo,
@@ -294,6 +303,18 @@ function presentMailbox(context: AppContext, mailbox: Inbox) {
     attachmentsMaxBytes: PERSONAL_ATTACHMENTS_MAX_BYTES,
     attachmentsMaxFiles: PERSONAL_ATTACHMENTS_MAX_FILES,
   };
+}
+
+/** The address a message goes out from: the mailbox's own, or one of its aliases when asked. */
+async function senderAddress(db: Database, mailbox: Inbox, requested: string | undefined): Promise<string> {
+  if (!requested) return mailbox.address;
+  const address = requested.toLowerCase();
+  if (!(await mailboxAddresses(db, mailbox)).includes(address)) {
+    throw new ApiError("validation_failed", `${requested} is not an address of this mailbox.`, {
+      hint: "Send from the mailbox's address or one of its aliases.",
+    });
+  }
+  return address;
 }
 
 function readIdempotencyKey(context: AppContext): string {
@@ -323,7 +344,7 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
         .from(messages)
         .where(and(eq(messages.inboxId, mailbox.id), folderCondition("inbox"), sql`${messages.readAt} IS NULL`));
       return context.json({
-        ...presentMailbox(context, mailbox),
+        ...(await presentMailbox(context, mailbox)),
         unread: Number(unread?.total ?? 0),
       });
     })
@@ -334,7 +355,19 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
       // Forwarding needs an address; without one the switch stays off.
       const forwardEnabled = mailbox.forwardTo ? (changes.forwardEnabled ?? mailbox.forwardEnabled) : false;
       await context.get("db").update(inboxes).set({ forwardEnabled }).where(eq(inboxes.id, mailbox.id));
-      return context.json(presentMailbox(context, { ...mailbox, forwardEnabled }));
+      return context.json(await presentMailbox(context, { ...mailbox, forwardEnabled }));
+    })
+
+    .post("/aliases", validate("json", aliasSchema), async (context) => {
+      const mailbox = await personalMailbox(context);
+      const address = await addAlias(context.env, context.get("db"), mailbox, context.req.valid("json").address);
+      return context.json({ address }, 201);
+    })
+
+    .delete("/aliases/:address", async (context) => {
+      const mailbox = await personalMailbox(context);
+      await removeAlias(context.get("db"), mailbox, context.req.param("address"));
+      return context.body(null, 204);
     })
 
     .get("/messages", validate("query", listQuerySchema), async (context) => {
@@ -375,6 +408,7 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
       const to = body.to.map(normalizeAddress);
       const cc = body.cc.map(normalizeAddress);
       const recipients = [...new Set([...to, ...cc])];
+      const from = await senderAddress(db, mailbox, body.from);
       const parent = body.inReplyTo ? await findMailboxMessage(context, mailbox, body.inReplyTo) : null;
       const uploads = await findUploads(db, mailbox, body.attachments);
       if (!uploads) {
@@ -434,7 +468,7 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
       try {
         const files = await readFiles(context.env.MAIL_STORAGE, uploads);
         await createMailSender(context.env).send({
-          from: { email: mailbox.address, ...(mailbox.displayName ? { name: mailbox.displayName } : {}) },
+          from: { email: from, ...(mailbox.displayName ? { name: mailbox.displayName } : {}) },
           to: to.map((email) => ({ email })),
           ...(cc.length > 0 ? { cc: cc.map((email) => ({ email })) } : {}),
           subject: body.subject,
@@ -461,11 +495,11 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
           recipients,
           messageIdHeader: null,
           inReplyTo: parentMessageId,
-          fromAddress: mailbox.address,
+          fromAddress: from,
           fromName: mailbox.displayName,
-          ...searchColumns({ fromAddress: mailbox.address, subject: body.subject }),
+          ...searchColumns({ fromAddress: from, subject: body.subject }),
           toAddress: to[0] ?? "",
-          envelopeFrom: mailbox.address,
+          envelopeFrom: from,
           subject: body.subject,
           textBody: body.text,
           htmlBody: null,

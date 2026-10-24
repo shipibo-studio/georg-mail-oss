@@ -368,6 +368,9 @@ describe("mailbox API", () => {
     const mailbox = await json(await dashboard(owner, ""));
     expect(mailbox).toEqual({
       address: owner.address,
+      aliases: [],
+      // What the install's configuration still lets the owner add; aliases.test.ts covers it.
+      claimableAliases: expect.any(Array),
       displayName: "Owner",
       owner: owner.member,
       forwardTo: "owner@gmail.test",
