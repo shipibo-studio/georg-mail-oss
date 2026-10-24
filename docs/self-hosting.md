@@ -150,7 +150,7 @@ Read the release notes before upgrading: they say when a release needs a new var
 | Originals kept in R2 | 2 GB | R2's free tier is 10 GB |
 | Attachments when sending | 5 MB per message, 10 files | |
 | Sends | 40 a day | |
-| Trash and Spam | Emptied after 30 days | |
+| Trash and Spam | Emptied after 30 days | Checked at most once an hour, when the app is used or mail arrives: no cron trigger needed (Workers Free allows five per account) |
 | Workers Free | 100,000 requests a day | Reading mail all day is a few thousand |
 
 ## Troubleshooting

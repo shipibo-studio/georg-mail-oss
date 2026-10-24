@@ -4,6 +4,8 @@
   "main": "src/worker/mail-index.ts",
   "compatibility_date": "2026-08-22",
   "observability": { "enabled": true },
+  // Every branch would otherwise get its own public preview URL of the mail client.
+  "preview_urls": false,
   // Serve the mail client on its own subdomain (for example mail.example.com): add it as a custom
   // domain of this Worker, then put it behind Cloudflare Access. See docs/self-hosting.md.
   "vars": {
@@ -42,7 +44,8 @@
     { "name": "INBOUND_RATE_LIMITER", "namespace_id": "4102", "simple": { "limit": 30, "period": 60 } },
     { "name": "ACCOUNT_INBOUND_RATE_LIMITER", "namespace_id": "4105", "simple": { "limit": 120, "period": 60 } },
     { "name": "SENDER_RATE_LIMITER", "namespace_id": "4106", "simple": { "limit": 10, "period": 60 } }
-  ],
-  // Hourly: empty Trash and Spam after their retention period, and delete files never sent.
-  "triggers": { "crons": ["0 * * * *"] }
+  ]
+  // No cron trigger: Workers Free allows five per account, and the mail client's own traffic runs its
+  // hourly housekeeping (src/worker/dashboard/mail-maintenance.ts). If you have one to spare, adding
+  // "triggers": { "crons": ["0 * * * *"] } runs it on schedule too.
 }
