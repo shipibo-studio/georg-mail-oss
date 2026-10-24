@@ -45,7 +45,7 @@ pnpm wrangler d1 create georg-mail        # prints a database_id
 pnpm wrangler r2 bucket create georg-mail
 ```
 
-Add the printed `database_id` to the `d1_databases` entry in `wrangler.jsonc`, set the variables (next section), then:
+Replace the placeholder `database_id` in the `d1_databases` entry of `wrangler.jsonc` with the one it printed, set the variables (next section), then:
 
 ```sh
 pnpm run deploy    # builds the app, applies migrations to D1, deploys the Worker

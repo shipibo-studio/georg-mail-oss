@@ -22,8 +22,16 @@
   // The dashboard, built into dist/dashboard by `pnpm dashboard:build`. The Worker runs first on
   // every request and serves it only under /dashboard, behind Cloudflare Access.
   "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": true, "html_handling": "none" },
-  // Created on the first deploy when no database_id is given.
-  "d1_databases": [{ "binding": "DB", "database_name": "georg-mail", "migrations_dir": "migrations" }],
+  // A placeholder id: the Deploy button creates the database and writes its real id here. Deploying
+  // from the command line, replace it with the id `wrangler d1 create` prints (docs/self-hosting.md).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "georg-mail",
+      "database_id": "d8ede158-630c-4ca5-8ee3-75150133a120",
+      "migrations_dir": "migrations"
+    }
+  ],
   "r2_buckets": [{ "binding": "MAIL_STORAGE", "bucket_name": "georg-mail" }],
   // Counters are per Cloudflare location and eventually consistent: they stop floods, they are not
   // exact quotas. Namespace ids only need to be unique within your account.

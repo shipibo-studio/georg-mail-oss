@@ -86,7 +86,7 @@
       "Email Routing"
     ],
     "categories": [
-      "email"
+      "storage"
     ],
     "docs_url": "https://github.com/shipibo-studio/georg-mail-oss/blob/main/docs/self-hosting.md",
     "bindings": {
