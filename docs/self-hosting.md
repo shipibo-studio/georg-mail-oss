@@ -20,7 +20,7 @@ It takes about 30 minutes. Everything fits Cloudflare's and Resend's free plans.
 ## Before you start
 
 - **A Cloudflare account** (free) **with your domain on it.** In the Cloudflare dashboard: **Add a domain**, keep the DNS records it imports, and change the nameservers at your registrar to the two Cloudflare shows. The domain is ready when Cloudflare says it is **Active**, which can take from minutes to a day: do it before anything else.
-- **A GitHub account** if you use the Deploy button.
+- **A GitHub or GitLab account** if you use the Deploy button: it copies this repository there.
 - **Moving mail is a switch, not a merge.** Email Routing replaces the domain's MX records, so the day you enable it, new mail stops reaching your current provider (Google Workspace, Zoho, Fastmail…) for that domain. Export your old mail first if you want it here (see [Bring your old mail](#bring-your-old-mail)), and plan the switch for a quiet moment.
 - Decide your mailbox address (for example `hello@example.com`) and the subdomain the app will live on (for example `mail.example.com`).
 - The email you will sign in with, **on another domain** (for example your personal Gmail). Access sends its one-time code there, so it must not be the mailbox you are installing: once mail for your domain comes to this app, a code sent to `hello@example.com` would land in the mailbox you cannot open without it. For the same reason the app never forwards its copy of new mail to an address on your own domain.
@@ -143,15 +143,46 @@ To export from Zoho: **Settings → Import/Export → Export**, choose the folde
 
 ## Upgrading
 
-New versions are published to this repository. If you deployed with the button, open your copy on GitHub and press **Sync fork**: Cloudflare builds and deploys it, applying new migrations first. From the command line:
+New versions are published as [releases](https://github.com/shipibo-studio/georg-mail-oss/releases) of this repository. The mail client looks for them (at most every six hours) and says **Version X is available** in the sidebar and in **Settings → Updates**, with a link to the release notes. Read them before updating: they say when a release needs a new variable or secret.
+
+### From the app
+
+The Deploy button made a copy of this repository in your GitHub or GitLab account, and Cloudflare deploys every push to its `main` branch. Give the app a token that may write to that copy, and it updates it for you.
+
+1. Create the token, for your copy only:
+   - **GitHub:** **Settings → Developer settings → Fine-grained tokens → Generate new token**. Repository access: **Only select repositories** → your copy. Permissions: **Contents: Read and write**. It expires: set a reminder to renew it.
+   - **GitLab:** your project → **Settings → Access tokens → Add new token**. Role **Maintainer** (or Developer, if `main` is not protected), scope **api**.
+2. Give it to the Worker, with your copy's address:
+
+   ```sh
+   pnpm wrangler secret put UPDATE_REPOSITORY   # github.com/you/your-copy or gitlab.com/you/your-copy
+   pnpm wrangler secret put UPDATE_TOKEN
+   pnpm wrangler secret put UPDATE_BRANCH       # only if Cloudflare deploys a branch other than main
+   ```
+
+   or in **Workers & Pages → georg-mail → Settings → Variables and Secrets**, as secrets (plain variables there are replaced by the next deploy).
+3. When a version is out, press **Update…**. The app compares the release with your copy and says what changes. Nothing is written until you press **Update to X**: then it copies the release's files and makes one commit on the branch, and Cloudflare builds and deploys it, applying new database migrations first. It takes a few minutes; mail keeps arriving meanwhile.
+
+What an update never does:
+
+- **Touch your settings.** `wrangler.jsonc` stays yours, and `package.json` keeps your copy's name. When a release changes `wrangler.jsonc`, the app asks you to update by hand.
+- **Overwrite your own changes.** If you edited a file the release also changes, the app lists those files and asks you to update by hand.
+- **Take anything but a release of this repository**, and only newer ones. Each file is checked against the release's manifest (`release-manifest.json`, every file with its git blob id) before it is written.
+- **Show or log the token.** It is a Worker secret, used only in requests to GitHub or GitLab. Anyone the Access policy lets in can start an update: keep that policy to people you trust.
+
+### By hand
+
+In your copy, with the version you want (here 0.2.0):
 
 ```sh
-git pull
-pnpm install
-pnpm run deploy
+git fetch --no-tags https://github.com/shipibo-studio/georg-mail-oss.git tag v0.2.0
+git checkout v0.2.0 -- . ':(exclude)wrangler.jsonc'
+# put your copy's own "name" back in package.json, then:
+git commit -am "chore: update Georg mail to 0.2.0"
+git push        # Cloudflare deploys it
 ```
 
-Read the release notes before upgrading: they say when a release needs a new variable or secret.
+The release notes list files a release removes; delete them too. If you deploy from the command line, run `pnpm install` and `pnpm run deploy` instead of pushing.
 
 ## Limits
 
@@ -181,6 +212,8 @@ Every error the app returns has a `code`. The common ones:
 **Mail does not arrive.** In **Email Routing → Overview**, check the activity log: "Rejected" with "unknown recipient" means the address is missing from `PERSONAL_MAILBOX_ADDRESSES` or has no mailbox yet; "Dropped" means no routing rule matched. The Worker's logs (**Workers & Pages → georg-mail → Logs**) show refusals without the content of the mail.
 
 **Sending fails.** Check that the Resend domain is verified, that `RESEND_API_KEY` is set and that `MAIL_PROVIDER` is `resend`.
+
+**An update stops.** It says why, and nothing changes in your copy until its last step. "Refused UPDATE_TOKEN": the token expired or cannot write the repository's contents. "Not found": check `UPDATE_REPOSITORY`, `UPDATE_BRANCH` and that the token can see the copy. "Changed while updating": someone pushed meanwhile; review the update again. A release without a manifest (the ones before in-app updates) has to be applied by hand once.
 
 **Letting someone else in.** The app has one owner. To give another email access to the same mailbox, add it to Access's policy and run:
 

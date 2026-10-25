@@ -1,0 +1,1085 @@
+{
+  "version": "0.1.0",
+  "files": {
+    ".dev.vars.example": {
+      "sha": "61d5cc29e956c6899fb6bc45e4b89a7596da81aa",
+      "mode": "100644"
+    },
+    ".editorconfig": {
+      "sha": "8c52ff9378d3af25a3cbe171ea37c8c3d56d5203",
+      "mode": "100644"
+    },
+    ".georg-mail-oss": {
+      "sha": "95eacc07b6c74301559eb7466c9bd2746f719fd6",
+      "mode": "100644"
+    },
+    ".github/workflows/ci.yml": {
+      "sha": "cd1d0ab086cf7293254b07bbe485a6dd7d2f1186",
+      "mode": "100644"
+    },
+    ".gitignore": {
+      "sha": "4703ed0a5f3463fa5c559f3f1be49ddad427a814",
+      "mode": "100644"
+    },
+    ".nvmrc": {
+      "sha": "a45fd52cc5891570d6299fab38643103c3955474",
+      "mode": "100644"
+    },
+    "LICENSE": {
+      "sha": "84b23dd89e853fcab174b20dc8cf96e9e97ec646",
+      "mode": "100644"
+    },
+    "README.md": {
+      "sha": "5fbd163b40997ebbf8c76dbbdd7ee0e78dad593c",
+      "mode": "100644"
+    },
+    "SECURITY.md": {
+      "sha": "ae543d84bae823d16c0ec74ead7c9f1ca933bace",
+      "mode": "100644"
+    },
+    "biome.json": {
+      "sha": "4ecb2f398ca8bc94c74d7803d524da1cdd0a78a0",
+      "mode": "100644"
+    },
+    "dashboard/e2e/edition.spec.ts": {
+      "sha": "6a60932b1671f30e570157fa7c70253b4b1596b2",
+      "mode": "100644"
+    },
+    "dashboard/e2e/fixtures.ts": {
+      "sha": "ab3efa805a5e2051a01ee4d4c7636c4dfdd84c99",
+      "mode": "100644"
+    },
+    "dashboard/e2e/mail.spec.ts": {
+      "sha": "546c0a298bfe3d4be53d241f97c6c62bfacc87df",
+      "mode": "100644"
+    },
+    "dashboard/e2e/phone-edition.spec.ts": {
+      "sha": "b2529c5824f361213058fecfb4c6b51241ae8dab",
+      "mode": "100644"
+    },
+    "dashboard/e2e/phone.spec.ts": {
+      "sha": "ecaae7210bcbeb913f1b0df1d545aed42ce0d41e",
+      "mode": "100644"
+    },
+    "dashboard/index.html": {
+      "sha": "d865931f45bb2b11528e3e5b61626b0ba3fdd83d",
+      "mode": "100644"
+    },
+    "dashboard/mock/mock-api.ts": {
+      "sha": "1031dff5e4994e4e535fb5bd5acb59660b658de6",
+      "mode": "100644"
+    },
+    "dashboard/mock/mock-v1.ts": {
+      "sha": "3089015363a63aaace5797d1e9b431a6f75d0b7f",
+      "mode": "100644"
+    },
+    "dashboard/playwright.config.ts": {
+      "sha": "e23955601ab03269be1a6b4da3d1a1fb88adf43a",
+      "mode": "100644"
+    },
+    "dashboard/public/avatar-georg.svg": {
+      "sha": "8c3d24a9fb675a5a75bc740fc8cda06e59dfd1fe",
+      "mode": "100644"
+    },
+    "dashboard/public/favicon.svg": {
+      "sha": "bcb9dfb01c4183f1b219ccf0e6888569b2fabb3e",
+      "mode": "100644"
+    },
+    "dashboard/src/api/client.ts": {
+      "sha": "d54f3690d4f7436b88310199617c53c6cd553bbd",
+      "mode": "100644"
+    },
+    "dashboard/src/api/queries.ts": {
+      "sha": "7e2502887b09d02e0405ba4e18b02de711dd04fd",
+      "mode": "100644"
+    },
+    "dashboard/src/api/types.ts": {
+      "sha": "1dbef02c6f7b6f0b6f202945a0c9c0d981d46547",
+      "mode": "100644"
+    },
+    "dashboard/src/components/AliasSettings.tsx": {
+      "sha": "90d36e5632a9eaa0aa818839d0c1a4edc5591929",
+      "mode": "100644"
+    },
+    "dashboard/src/components/App.tsx": {
+      "sha": "491facbc59faa20a8e6ca0d7a9d146d603e8c715",
+      "mode": "100644"
+    },
+    "dashboard/src/components/CommandPalette.tsx": {
+      "sha": "81bd089d033af9f6ba7a6f2ec0d1025108bbff9b",
+      "mode": "100644"
+    },
+    "dashboard/src/components/Composer.tsx": {
+      "sha": "179df2e87683799786d0e0e8e1ca1cc9c9ad8ae0",
+      "mode": "100644"
+    },
+    "dashboard/src/components/DraftsView.tsx": {
+      "sha": "e6de6e91f76f79e358daff81b3a7fa64e6cbbd4e",
+      "mode": "100644"
+    },
+    "dashboard/src/components/EmailFrame.tsx": {
+      "sha": "6612f28881087c47623885376b9f27259731fb88",
+      "mode": "100644"
+    },
+    "dashboard/src/components/ImportDialog.tsx": {
+      "sha": "ffc245e1102637d46ff0fc5a224ae431f1f44894",
+      "mode": "100644"
+    },
+    "dashboard/src/components/MailView.tsx": {
+      "sha": "0722767fc3ad26a663980a2c2ce2ac5aa159aef0",
+      "mode": "100644"
+    },
+    "dashboard/src/components/MessageDetail.tsx": {
+      "sha": "fbdde6780f233cd65ab1a14e65caab610f17beb1",
+      "mode": "100644"
+    },
+    "dashboard/src/components/MessageList.tsx": {
+      "sha": "64ae6b22d7292f4133cfadb1126dc6f2ed8744bf",
+      "mode": "100644"
+    },
+    "dashboard/src/components/MobileNav.tsx": {
+      "sha": "df06b562b58b4524d011b718dc38cfc7fa525255",
+      "mode": "100644"
+    },
+    "dashboard/src/components/NotificationsView.tsx": {
+      "sha": "b9cd1115b2fb0eb83228f478b97897c6bd000524",
+      "mode": "100644"
+    },
+    "dashboard/src/components/PreferenceSync.tsx": {
+      "sha": "ddd8a0cbf8a404a4e2a4b6dc4a2820b0832bc634",
+      "mode": "100644"
+    },
+    "dashboard/src/components/RefreshButton.tsx": {
+      "sha": "7efc52c5ced1eedbafc251f8dff3839e837a87e8",
+      "mode": "100644"
+    },
+    "dashboard/src/components/SettingsDialog.tsx": {
+      "sha": "a9f18db5382356ac8195bab032efedf80b4679e7",
+      "mode": "100644"
+    },
+    "dashboard/src/components/SetupView.tsx": {
+      "sha": "896249deb711448b5baf72bb8fab7f472fdfe463",
+      "mode": "100644"
+    },
+    "dashboard/src/components/Sidebar.tsx": {
+      "sha": "00e382074cf2c024fd42ca922a6fe8fa8e21e2f4",
+      "mode": "100644"
+    },
+    "dashboard/src/components/Toasts.tsx": {
+      "sha": "b435a163123a171c4765a303335c3cba9c56c23b",
+      "mode": "100644"
+    },
+    "dashboard/src/components/Tooltip.tsx": {
+      "sha": "70a13a63346d23aa1c656b9f5dc92b7be1b31646",
+      "mode": "100644"
+    },
+    "dashboard/src/components/UpdateDialog.tsx": {
+      "sha": "20af5a13af5494a9d6083e4295768e7e35a189e2",
+      "mode": "100644"
+    },
+    "dashboard/src/components/controls.tsx": {
+      "sha": "0e0b20041852a088287fd786533349b506571843",
+      "mode": "100644"
+    },
+    "dashboard/src/components/keyboard.ts": {
+      "sha": "5ac7931ccca89a8e27650af6396325048d5a246b",
+      "mode": "100644"
+    },
+    "dashboard/src/components/morph-icons.ts": {
+      "sha": "82b3143b424f60a57ceda4e05e5d37fd57bbce31",
+      "mode": "100644"
+    },
+    "dashboard/src/components/nav-items.ts": {
+      "sha": "f26e5dca82c9ca67c91af43e81d8a23fa6abed90",
+      "mode": "100644"
+    },
+    "dashboard/src/components/palette-item.ts": {
+      "sha": "df933f5a132b88417aa97bd6bcbff71f76f7401c",
+      "mode": "100644"
+    },
+    "dashboard/src/editions/workspace.tsx": {
+      "sha": "9e1d78c07229ba0dfc4ef536d51420e593fdfc24",
+      "mode": "100644"
+    },
+    "dashboard/src/i18n/I18nProvider.tsx": {
+      "sha": "ae65de88f362aedd82aae69096625ce379bde51f",
+      "mode": "100644"
+    },
+    "dashboard/src/i18n/en.ts": {
+      "sha": "243a754b8bedd8c0f6d02da417a0c315b40a8abe",
+      "mode": "100644"
+    },
+    "dashboard/src/i18n/es-419.ts": {
+      "sha": "e3260ea72000c9f2d897ae1487e0d5fcedfb0ab0",
+      "mode": "100644"
+    },
+    "dashboard/src/i18n/pt-BR.ts": {
+      "sha": "ea8d609b2b8adcc3b8d0248c7c499513130d9a92",
+      "mode": "100644"
+    },
+    "dashboard/src/i18n/translate.ts": {
+      "sha": "ad1ab01b7dc8f84af8768ebe26bbe449d8c2eeb8",
+      "mode": "100644"
+    },
+    "dashboard/src/incubating/georg-ds-tooltip.css": {
+      "sha": "50e6e7951b58ca5a38b4cabe5fd62a98d34726d7",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/attachments.ts": {
+      "sha": "f03d22c4126e47b9f8771fb73595e97bfef15e4e",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/avatar-options.json": {
+      "sha": "406a08fb4cf88b071accafabf7b790ae61119103",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/avatar-style.ts": {
+      "sha": "dcb4f9ecbc1ebbf76174f3c6fa8791159cefe169",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/avatar.ts": {
+      "sha": "b8fac850293b0c3fc753f6cff0fe06c756edfeb0",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/drafts.ts": {
+      "sha": "24dd9817d400fda4e8f62f709995b443413b8f25",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/email-html.ts": {
+      "sha": "fda95f878e5c2c21f1d514040564493357fd1e87",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/format.ts": {
+      "sha": "8969c0fe6f47a16cf08337345475bbd98ddfe34a",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/mail-archive.ts": {
+      "sha": "860187cc341e170bad1e661244cb71dc4596786b",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/media.ts": {
+      "sha": "163ad21a1f98360428b3cab7b4130038d1777d82",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/preferences.ts": {
+      "sha": "27bd339f7a548dece80a9c2044b18e2e36b17641",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/recipients.ts": {
+      "sha": "a91c3fd63cff03025d066e22ab15e54152469b97",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/reply.ts": {
+      "sha": "f66862844a43733fd8723f9ba48de170b6e5c53b",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/route.ts": {
+      "sha": "cd6e0907bb88c95ef69b383375ae7442878b2651",
+      "mode": "100644"
+    },
+    "dashboard/src/lib/theme.ts": {
+      "sha": "3b00573389d14771ef6d032b34339d5224aa2724",
+      "mode": "100644"
+    },
+    "dashboard/src/main.tsx": {
+      "sha": "d3e45a2a7f8661c7f9e1af5eee267c2d379a5b3c",
+      "mode": "100644"
+    },
+    "dashboard/src/styles.css": {
+      "sha": "b4f6469fb8eaf6062a33b54b0a55002eaa99d675",
+      "mode": "100644"
+    },
+    "dashboard/test/aliases-and-retry.test.ts": {
+      "sha": "009038b65c57c1ffa7bb7502a64f39acb8dd118d",
+      "mode": "100644"
+    },
+    "dashboard/test/attachments.test.ts": {
+      "sha": "73c1794b17d53711b92c4196e9e2708a895c4df3",
+      "mode": "100644"
+    },
+    "dashboard/test/avatar-style.test.ts": {
+      "sha": "0885a17a9faf687d2c35c84cbf9cca66a8ee545e",
+      "mode": "100644"
+    },
+    "dashboard/test/avatar.test.ts": {
+      "sha": "3e3c596fb4f3c1eb281461bece307ee6a4d66f7d",
+      "mode": "100644"
+    },
+    "dashboard/test/drafts.test.ts": {
+      "sha": "d2e52cad5bfa74272a5a4539bad2148ee6f7b96c",
+      "mode": "100644"
+    },
+    "dashboard/test/email-html.test.ts": {
+      "sha": "681ea999bafe33704b59e540e431be960600d30c",
+      "mode": "100644"
+    },
+    "dashboard/test/i18n.test.ts": {
+      "sha": "45d47b54e0f9b3e3ecd3112568ce30cc34e29c78",
+      "mode": "100644"
+    },
+    "dashboard/test/import-progress.test.ts": {
+      "sha": "65856275bc93da3d4223d389d03c8d1ed8c8350b",
+      "mode": "100644"
+    },
+    "dashboard/test/lib.test.ts": {
+      "sha": "9f2a6f304cae6bf57a37fb427fa9f7128cd843b2",
+      "mode": "100644"
+    },
+    "dashboard/test/mail-archive.test.ts": {
+      "sha": "e1446f12dae213f9ea7bde61a09c301a4bd58d58",
+      "mode": "100644"
+    },
+    "dashboard/test/media.test.ts": {
+      "sha": "d11d5048312739710713f284b1e7b146ec19c33a",
+      "mode": "100644"
+    },
+    "dashboard/test/neon-tokens.test.ts": {
+      "sha": "956fa5d7574f552f891f347724eb961012403f0e",
+      "mode": "100644"
+    },
+    "dashboard/test/preferences.test.ts": {
+      "sha": "a5181ae38a9ef648268e3f16e146482cfb14f2f4",
+      "mode": "100644"
+    },
+    "dashboard/test/theme.test.ts": {
+      "sha": "99f3036a6bb9701d2030fd75c3e1d9c1b144dff1",
+      "mode": "100644"
+    },
+    "dashboard/tsconfig.json": {
+      "sha": "376644998db472b8c95cbf19811504d08f8d3697",
+      "mode": "100644"
+    },
+    "dashboard/vite.config.ts": {
+      "sha": "65d61242a3c6bb8be8e342df97c2505f332a042f",
+      "mode": "100644"
+    },
+    "docs/self-hosting.md": {
+      "sha": "4f6957bc1517137c0135b517b68cd885aa9d9466",
+      "mode": "100644"
+    },
+    "drizzle.config.ts": {
+      "sha": "5ac5b9f1a782fbe52d12254d019397b348fa4ff8",
+      "mode": "100644"
+    },
+    "migrations/0000_init.sql": {
+      "sha": "a9ed30f2ac59ba92aca6169140b8c1faecfe6ad1",
+      "mode": "100644"
+    },
+    "migrations/0001_seed_plans.sql": {
+      "sha": "9ff71a2ec79da386a983e2f518b7b2b50029649f",
+      "mode": "100644"
+    },
+    "migrations/0002_storage_limits_and_sender.sql": {
+      "sha": "668bc25faadeb5b813fbbe3daa293433beba285b",
+      "mode": "100644"
+    },
+    "migrations/0003_paid_plan_512kb.sql": {
+      "sha": "849de3b7bbbaedf632f3fef87cd4f550ff789e06",
+      "mode": "100644"
+    },
+    "migrations/0004_projects.sql": {
+      "sha": "c54c389b39076b5a4ac04e3d10de444e2ba84634",
+      "mode": "100644"
+    },
+    "migrations/0005_agent_safe_reading.sql": {
+      "sha": "e89f4f7addc452eecd3824bbbdcdaa8325400811",
+      "mode": "100644"
+    },
+    "migrations/0006_p1_audit_quota_risk_trust.sql": {
+      "sha": "681ad9599425400ea00cec5657f6d56d081a59c9",
+      "mode": "100644"
+    },
+    "migrations/0007_can_manage.sql": {
+      "sha": "15805783abacb9253cc5d1eb363266866bca3cc8",
+      "mode": "100644"
+    },
+    "migrations/0008_counters_and_quotas.sql": {
+      "sha": "397a98a7a959175364eab78bae8c1c6605f3c50e",
+      "mode": "100644"
+    },
+    "migrations/0009_internal_sending.sql": {
+      "sha": "05433805a60335f1ca2efe10250e9d311d7a699b",
+      "mode": "100644"
+    },
+    "migrations/0010_personal_mailbox.sql": {
+      "sha": "e333fea30854f77dd2d88eb9cc47a38b588ac6b6",
+      "mode": "100644"
+    },
+    "migrations/0011_dashboard_members.sql": {
+      "sha": "6a0fe4659dac11273ab941b275ec6ec63f1351df",
+      "mode": "100644"
+    },
+    "migrations/0012_notification_switches.sql": {
+      "sha": "bc00d7d9b20d2bad8b1a7897fdceb24da92527bf",
+      "mode": "100644"
+    },
+    "migrations/0013_personal_raw_storage.sql": {
+      "sha": "fa252c161d66fa08ee5a902c674856c5920d9e82",
+      "mode": "100644"
+    },
+    "migrations/0014_folded_search_columns.sql": {
+      "sha": "6dbecf1106611169bb1386d9b007c6604dd0ed9a",
+      "mode": "100644"
+    },
+    "migrations/0015_job_cursors.sql": {
+      "sha": "8d0d3e8ceeb1bdda56349e9be177209fbb5acc34",
+      "mode": "100644"
+    },
+    "migrations/0016_events_and_webhooks.sql": {
+      "sha": "f2a93ce5cc0c53e8909dd3a84f5353a969932996",
+      "mode": "100644"
+    },
+    "migrations/0017_extracted_by_ai.sql": {
+      "sha": "7658b4325b7bd98c61c1457d36dcba03e9487b21",
+      "mode": "100644"
+    },
+    "migrations/0018_mail_boxes.sql": {
+      "sha": "cb0558bf74c4b5530f2768d58dfa12373abcf5e6",
+      "mode": "100644"
+    },
+    "migrations/0019_spam.sql": {
+      "sha": "828d35d53f73002116b4fc25ddd2088664ff201d",
+      "mode": "100644"
+    },
+    "migrations/0020_search.sql": {
+      "sha": "ef8efc76b27dec4eac2e800a2c918b22b436f503",
+      "mode": "100644"
+    },
+    "migrations/0021_outgoing_attachments.sql": {
+      "sha": "77c1b7f9ada7121fc9675f87bf87ce3f14073bf6",
+      "mode": "100644"
+    },
+    "migrations/0022_message_id_index.sql": {
+      "sha": "4de7b5d4c343b3c6507e3530b416089f9db5ef36",
+      "mode": "100644"
+    },
+    "migrations/0023_drop_personal_slack.sql": {
+      "sha": "0aa6857b1cfe74b2e1377b7796584628186bab95",
+      "mode": "100644"
+    },
+    "migrations/0024_notify_hooks.sql": {
+      "sha": "786e1ef44f0d0e021f591bc6f6fb2112996ea8cd",
+      "mode": "100644"
+    },
+    "migrations/0025_notify_link_copy.sql": {
+      "sha": "97dd3c28f15d04a0713f06f8b6f9b7e7eeec1343",
+      "mode": "100644"
+    },
+    "migrations/0026_account_channels.sql": {
+      "sha": "9d94ac8c1e0c568210e7ff3f4ff0fff2680fa978",
+      "mode": "100644"
+    },
+    "migrations/0027_mail_drafts.sql": {
+      "sha": "6fd92f49e11045774020ac93db258b2a9d9fdf6a",
+      "mode": "100644"
+    },
+    "migrations/0028_self_hosted_plan.sql": {
+      "sha": "cd4709bb000b81128c0cd0a96db9ce67977880c6",
+      "mode": "100644"
+    },
+    "migrations/0029_ai_extraction_settings.sql": {
+      "sha": "1b546fc5c5f487367cfda009c2b89fdad8f21a1e",
+      "mode": "100644"
+    },
+    "migrations/0030_mailbox_aliases.sql": {
+      "sha": "0705ae0d3dedc78d310fa0fc658426b0e488c331",
+      "mode": "100644"
+    },
+    "migrations/0031_member_preferences.sql": {
+      "sha": "a6e558bd2432e036b34f36459be5e5a79a0ae0c1",
+      "mode": "100644"
+    },
+    "migrations/meta/0000_snapshot.json": {
+      "sha": "89751bfed61254d9d16e5852814fa115f063819c",
+      "mode": "100644"
+    },
+    "migrations/meta/0001_snapshot.json": {
+      "sha": "941e568c4052424a72fe203a0ac379d128e8a076",
+      "mode": "100644"
+    },
+    "migrations/meta/0002_snapshot.json": {
+      "sha": "085278b4b6b5e243ee1bf8a29a8fe2fae61f02d4",
+      "mode": "100644"
+    },
+    "migrations/meta/0003_snapshot.json": {
+      "sha": "3cc298888e6cb2b3d1962437b499682e4cec6838",
+      "mode": "100644"
+    },
+    "migrations/meta/0004_snapshot.json": {
+      "sha": "38d145aa10938a67b8d69c18ebb0b517d1074f8a",
+      "mode": "100644"
+    },
+    "migrations/meta/0005_snapshot.json": {
+      "sha": "9f3f1318952ef61f886aa1a2355e631a336ba6f0",
+      "mode": "100644"
+    },
+    "migrations/meta/0006_snapshot.json": {
+      "sha": "4488400eaec2de1d1391b98e03f437a2a1903c3d",
+      "mode": "100644"
+    },
+    "migrations/meta/0007_snapshot.json": {
+      "sha": "2f858b7c5d0ec56738d3f7a7427b4fc6d96d4462",
+      "mode": "100644"
+    },
+    "migrations/meta/0008_snapshot.json": {
+      "sha": "0a793155d1127512fdf36c205ac5d98c3f96fac9",
+      "mode": "100644"
+    },
+    "migrations/meta/0009_snapshot.json": {
+      "sha": "8aa5b66ab8eaaf4da500b419a6156f2d63047dbf",
+      "mode": "100644"
+    },
+    "migrations/meta/0010_snapshot.json": {
+      "sha": "940c7dafb916a08d443a61f49fb539ea4dc477d8",
+      "mode": "100644"
+    },
+    "migrations/meta/0011_snapshot.json": {
+      "sha": "45e5a79f79fe1f8cb2293d492fe89fe4460a77ca",
+      "mode": "100644"
+    },
+    "migrations/meta/0012_snapshot.json": {
+      "sha": "268d05d87ba09df565eae811d9d9660c93c0ace1",
+      "mode": "100644"
+    },
+    "migrations/meta/0013_snapshot.json": {
+      "sha": "a56758806550db6aaf68c15d1737edb14f5f09e2",
+      "mode": "100644"
+    },
+    "migrations/meta/0014_snapshot.json": {
+      "sha": "0af2f01e8723640409a2990e6999ea5c05feaa77",
+      "mode": "100644"
+    },
+    "migrations/meta/0015_snapshot.json": {
+      "sha": "0255884f3caa1dd4c2e15d74551ca0748c619f5c",
+      "mode": "100644"
+    },
+    "migrations/meta/0016_snapshot.json": {
+      "sha": "751b8ad628266fa000643cf9b4c957c44d712b17",
+      "mode": "100644"
+    },
+    "migrations/meta/0017_snapshot.json": {
+      "sha": "b09cc0251aad30793f46c70d4e791e012ae33711",
+      "mode": "100644"
+    },
+    "migrations/meta/0018_snapshot.json": {
+      "sha": "b5bb26f7a0ea4a25b132a5a7f67d6e9bc3f9df2f",
+      "mode": "100644"
+    },
+    "migrations/meta/0019_snapshot.json": {
+      "sha": "624c5c6674659940aba679a7dfabcdc87ce4ba7b",
+      "mode": "100644"
+    },
+    "migrations/meta/0020_snapshot.json": {
+      "sha": "6f06b4029320f68de018aaba008670051e30d89b",
+      "mode": "100644"
+    },
+    "migrations/meta/0021_snapshot.json": {
+      "sha": "eddbe7d97d472b285a7ab6810f85e1326b5caa7f",
+      "mode": "100644"
+    },
+    "migrations/meta/0022_snapshot.json": {
+      "sha": "be9bef6a5a3f07ba20406b47aaf7124f3caa82a5",
+      "mode": "100644"
+    },
+    "migrations/meta/0023_snapshot.json": {
+      "sha": "5e0862433538bcb5da17bb0e2ae18c6e9c34dcc7",
+      "mode": "100644"
+    },
+    "migrations/meta/0024_snapshot.json": {
+      "sha": "6a2b15055ed0a147a520e6d89e427c0792cb8224",
+      "mode": "100644"
+    },
+    "migrations/meta/0025_snapshot.json": {
+      "sha": "31770f5c3aeeb33c53ee6217545dc1c0990ec80f",
+      "mode": "100644"
+    },
+    "migrations/meta/0026_snapshot.json": {
+      "sha": "cb95f00575444dc98494c65f2daf92e720d69340",
+      "mode": "100644"
+    },
+    "migrations/meta/0027_snapshot.json": {
+      "sha": "2481bffd4e83be89f9a38ba514109c99a2bc027b",
+      "mode": "100644"
+    },
+    "migrations/meta/0028_snapshot.json": {
+      "sha": "93b3dbd1207dec318362f8fdc9b70dca47625eec",
+      "mode": "100644"
+    },
+    "migrations/meta/0029_snapshot.json": {
+      "sha": "c39cc6b98f2543f14a7a542c40a230e833691242",
+      "mode": "100644"
+    },
+    "migrations/meta/0030_snapshot.json": {
+      "sha": "2da6218e111c6370e5a5e8c7302dfa435a68c4a3",
+      "mode": "100644"
+    },
+    "migrations/meta/0031_snapshot.json": {
+      "sha": "8f2e7e1faa84b43ea5a6a7470dc9d6b19ca153ef",
+      "mode": "100644"
+    },
+    "migrations/meta/_journal.json": {
+      "sha": "0c3765a20c1aaed361522e998c006c5da8d86dba",
+      "mode": "100644"
+    },
+    "package.json": {
+      "sha": "5730d65a9cd52c5d65c0f9bf44738f442951cc8f",
+      "mode": "100644"
+    },
+    "pnpm-lock.yaml": {
+      "sha": "810763251b71756b95e4666ee18a1e827bc8d281",
+      "mode": "100644"
+    },
+    "pnpm-workspace.yaml": {
+      "sha": "12ac3a7024350885e5ea5a1900ebfcfab7f7dcfe",
+      "mode": "100644"
+    },
+    "scripts/check-invisible-characters.mjs": {
+      "sha": "d9d917b86f3d16b27a44db08b39eb1335fdb61af",
+      "mode": "100644"
+    },
+    "src/worker/config.ts": {
+      "sha": "788ca87da73eee695dd1167e82b6bdfb4bc00366",
+      "mode": "100644"
+    },
+    "src/worker/crypto.ts": {
+      "sha": "f518655837eef9d96e40979c8adf8aae7ed3ece0",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/content-security-policy.ts": {
+      "sha": "9bd32e540f9b492c6b0505c0bc23f7e34fd5d6fe",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/dashboard-assets.ts": {
+      "sha": "d02b93ec7fded109edf3d17b6ce4f434eb9f8c5e",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/dashboard-session.ts": {
+      "sha": "ec683942fa1b1ca94965e5054475ebfab38ab5e8",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mail-aliases.ts": {
+      "sha": "555d0a7f5e2dc0104fcf849029fb702485e49a97",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mail-boxes.ts": {
+      "sha": "8486ab1d80e3f6c73a92502fa53bbfcb8172a288",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mail-drafts.ts": {
+      "sha": "7add0005031ddbc3a8b730578196f453e957e5cd",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mail-import.ts": {
+      "sha": "5d9db48107969754df97c559c332e48626473ac6",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mail-maintenance.ts": {
+      "sha": "ead08ea3b436651c0e90faae2d6a1705deefe2a2",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mail-search.ts": {
+      "sha": "22a2d9a9a3815158a86b296267e827b1b822e51d",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mail-uploads.ts": {
+      "sha": "e9602c569a3ae3663ce4af8966e5ccdf5fc66b5b",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/mailbox-routes.ts": {
+      "sha": "b1da0b86fd5c0ad96abd8f5d421f2db83f41f9e8",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/preferences.ts": {
+      "sha": "c2f7f7a6d16ac721e159eecbe426955231dd7d45",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/setup-routes.ts": {
+      "sha": "61d432b60113777b0cee8948f85a703839d5dc55",
+      "mode": "100644"
+    },
+    "src/worker/dashboard/update-routes.ts": {
+      "sha": "80ccb6cd2c770752dead94079b2c81914cae2d90",
+      "mode": "100644"
+    },
+    "src/worker/db/client.ts": {
+      "sha": "3677800a543fffc49e700bea72b5fe330faa53f9",
+      "mode": "100644"
+    },
+    "src/worker/db/schema.ts": {
+      "sha": "876c4c552d198e24f9a6d559f88404fd02fbe1dc",
+      "mode": "100644"
+    },
+    "src/worker/docs-url.ts": {
+      "sha": "46eac2175cd6e535043cff6afaf3e171b62637b8",
+      "mode": "100644"
+    },
+    "src/worker/email/analyze-content.ts": {
+      "sha": "0c0735121bd8995fa9b1fb4d4875df3ccb4c74ff",
+      "mode": "100644"
+    },
+    "src/worker/email/email-address.ts": {
+      "sha": "b40bb5f530b52b03f0f6fdb61430d8d31738f19f",
+      "mode": "100644"
+    },
+    "src/worker/email/extract-code.ts": {
+      "sha": "ffa8382b45d8b30264c8ef33817681caaae10b3f",
+      "mode": "100644"
+    },
+    "src/worker/email/extract-links.ts": {
+      "sha": "41d2a445ef7a8bd80afbdd64a1044279b33d469b",
+      "mode": "100644"
+    },
+    "src/worker/email/header-block.ts": {
+      "sha": "6c708cd4fff1f87a6831175c6cdde83576ae8484",
+      "mode": "100644"
+    },
+    "src/worker/email/html-to-text.ts": {
+      "sha": "3dc802673745687c5a19e0a36d9084c0e61aebd0",
+      "mode": "100644"
+    },
+    "src/worker/email/parse-email.ts": {
+      "sha": "4dc9dec49c06169d49e2ee033a558dea4127763b",
+      "mode": "100644"
+    },
+    "src/worker/email/receive-email.ts": {
+      "sha": "85f1b2bb4d21529b1e86f57a8a665971a88c0ed7",
+      "mode": "100644"
+    },
+    "src/worker/email/risk-signals.ts": {
+      "sha": "34e10fa455869224635dcfc2b2941bbcfadfe891",
+      "mode": "100644"
+    },
+    "src/worker/email/sender-authentication.ts": {
+      "sha": "fab90b6f24b07e0967d2cacc35e6fe7f8ef0c649",
+      "mode": "100644"
+    },
+    "src/worker/email/sender-rules.ts": {
+      "sha": "fd74d463b9e87bf2241d04e7831e0042ab5ddf16",
+      "mode": "100644"
+    },
+    "src/worker/email/spam-verdict.ts": {
+      "sha": "89f78b1ef065cc50e61d4abb0d40713178cae39b",
+      "mode": "100644"
+    },
+    "src/worker/email/visible-text.ts": {
+      "sha": "fd89825ec2bb63a7478d16e6227562e16439f14f",
+      "mode": "100644"
+    },
+    "src/worker/env.d.ts": {
+      "sha": "5144a796b945462b5c7b8846b7af49fba7609b0a",
+      "mode": "100644"
+    },
+    "src/worker/errors.ts": {
+      "sha": "72ef03c2085311d819a406adea4feab727c4a69e",
+      "mode": "100644"
+    },
+    "src/worker/http/client-limits.ts": {
+      "sha": "5e1a98dc9b0b1b359027acea79b801246d53e0b0",
+      "mode": "100644"
+    },
+    "src/worker/http/database-errors.ts": {
+      "sha": "e556ca2c53fd41f6aa4229c433788b425082a416",
+      "mode": "100644"
+    },
+    "src/worker/http/downloads.ts": {
+      "sha": "9784d010ed388059b0926c3f344c7bc6920f1dab",
+      "mode": "100644"
+    },
+    "src/worker/http/error-response.ts": {
+      "sha": "efb4eeb6c42fa4c5938dd432a0d502da23ce1c8c",
+      "mode": "100644"
+    },
+    "src/worker/http/mail-env.ts": {
+      "sha": "e2453b75b070fb5338d3122698012f5069208a60",
+      "mode": "100644"
+    },
+    "src/worker/http/pagination.ts": {
+      "sha": "b6874dadb451993144dcd1124d31501243d7edfc",
+      "mode": "100644"
+    },
+    "src/worker/http/private-hosts.ts": {
+      "sha": "a21a1c2aa9106e5e92f57df1d5e655a2ac300f87",
+      "mode": "100644"
+    },
+    "src/worker/http/validation.ts": {
+      "sha": "6104e3c63614ed1c8cce99161ce4641f138dce5a",
+      "mode": "100644"
+    },
+    "src/worker/ids.ts": {
+      "sha": "0cd5fd7eb7668127e5c4422c0dc02cf276731c16",
+      "mode": "100644"
+    },
+    "src/worker/mail-app.ts": {
+      "sha": "d8842eaec1b7fc69a3288c014d80b637ef21e481",
+      "mode": "100644"
+    },
+    "src/worker/mail-index.ts": {
+      "sha": "09122969da6b09158f097cc4a297bb5259d6459e",
+      "mode": "100644"
+    },
+    "src/worker/messages/attachment-content.ts": {
+      "sha": "b3df417149d2e6d1547647a2f8b13e84c691744a",
+      "mode": "100644"
+    },
+    "src/worker/messages/content-access.ts": {
+      "sha": "6d9dbba69bd1dd7616ce0aa36c1383d666810d9e",
+      "mode": "100644"
+    },
+    "src/worker/messages/message-access.ts": {
+      "sha": "7d909ff942a2456b5480baea89f7664251795d7a",
+      "mode": "100644"
+    },
+    "src/worker/messages/sender-trust.ts": {
+      "sha": "b48ec6a6be927b2039c98176308afb7cee531349",
+      "mode": "100644"
+    },
+    "src/worker/messages/text-folding.ts": {
+      "sha": "c931ed108d41b0fce028d5481456a3087ec5fd3f",
+      "mode": "100644"
+    },
+    "src/worker/sending/cloudflare-sender.ts": {
+      "sha": "645d79e4948fdabe330bbff7bf72eabd007c09c5",
+      "mode": "100644"
+    },
+    "src/worker/sending/create-mail-sender.ts": {
+      "sha": "587afbc2ea75e4d2243663c165296dd982ec4192",
+      "mode": "100644"
+    },
+    "src/worker/sending/mail-sender.ts": {
+      "sha": "72e5540e693b3dc6cfbebf2bd3c6d7c5d26319fe",
+      "mode": "100644"
+    },
+    "src/worker/sending/mailtrap-sender.ts": {
+      "sha": "869fd318ad93c1ff88c824f6cea8b1bb821e0b16",
+      "mode": "100644"
+    },
+    "src/worker/sending/resend-sender.ts": {
+      "sha": "f747715ef5f63484f44766fe73bd4cfa624f57e0",
+      "mode": "100644"
+    },
+    "src/worker/storage/raw-messages.ts": {
+      "sha": "b58192cc7b2c0524799b8b0542fc849fb63bee9b",
+      "mode": "100644"
+    },
+    "src/worker/updates/installed-version.ts": {
+      "sha": "260199e364557d9c1cbbb6e9b988837862ab492c",
+      "mode": "100644"
+    },
+    "src/worker/updates/releases.ts": {
+      "sha": "ed02f37b465c9e0ad46519b6ab6c227dc3dee08d",
+      "mode": "100644"
+    },
+    "src/worker/updates/repository-hosts.ts": {
+      "sha": "be5a4701a3c759a4520314c4f4ffb179dc361dca",
+      "mode": "100644"
+    },
+    "src/worker/updates/update-plan.ts": {
+      "sha": "99c2b9d36bb4252adeab6cb0978cb3795a2ac647",
+      "mode": "100644"
+    },
+    "src/worker/worker-configuration.d.ts": {
+      "sha": "b27b1dff94eb16fa985d4e272578aa5a091acdd2",
+      "mode": "100644"
+    },
+    "test/access-session.ts": {
+      "sha": "f014e84181aeb778e8827bb63db0153b316eaae7",
+      "mode": "100644"
+    },
+    "test/apply-migrations.ts": {
+      "sha": "29e49adc75ac3f05015c8dd90d679aa73ba5f819",
+      "mode": "100644"
+    },
+    "test/e2e/aliases.test.ts": {
+      "sha": "7de7c8007cf19649e53dc34d3a8b82109b5956d8",
+      "mode": "100644"
+    },
+    "test/e2e/dashboard-assets.test.ts": {
+      "sha": "5844e52c1bb335a43ac8ea171e6e30dddc6c8528",
+      "mode": "100644"
+    },
+    "test/e2e/mail-maintenance.test.ts": {
+      "sha": "1569031c5053f5dd89b27bd44f6a6b1ef78ba0c1",
+      "mode": "100644"
+    },
+    "test/e2e/mail-providers.test.ts": {
+      "sha": "32ff6690781dc3768321ad59caa1c2a2aee80882",
+      "mode": "100644"
+    },
+    "test/e2e/personal-mailbox.test.ts": {
+      "sha": "0f51ab0ccd806a73993ab121bd2fbc1cd034f1ed",
+      "mode": "100644"
+    },
+    "test/e2e/preferences.test.ts": {
+      "sha": "599fda4b4d71c47b05d4bc3cd9de4bd2886c8f47",
+      "mode": "100644"
+    },
+    "test/e2e/setup.test.ts": {
+      "sha": "80ee5704f7a6f1a7db0cc74c035521603f409071",
+      "mode": "100644"
+    },
+    "test/e2e/updates.test.ts": {
+      "sha": "0ae6dd4fd49fbab0e69c1c04f376766b8294db65",
+      "mode": "100644"
+    },
+    "test/env.d.ts": {
+      "sha": "2d72bf0604cee326b9ea455de595dbbd2af19d59",
+      "mode": "100644"
+    },
+    "test/mail-helpers.ts": {
+      "sha": "f5a3045ccd357e079a85dc76cf1e1d4eb2b5a323",
+      "mode": "100644"
+    },
+    "test/mail-worker.ts": {
+      "sha": "5dbb57c8eb96f28c2bd2a581e236e225b2620eca",
+      "mode": "100644"
+    },
+    "test/mailbox-owner.ts": {
+      "sha": "4ae15a251f08b3a89e1e4d0c54805e70f6dba2b2",
+      "mode": "100644"
+    },
+    "test/unit/cloudflare-sender.test.ts": {
+      "sha": "0bbae5edc52f637e1eb362228c17fdeba3214980",
+      "mode": "100644"
+    },
+    "test/unit/content-access.test.ts": {
+      "sha": "ebdb56f6148bd615d76321b3c5a7175675d446ff",
+      "mode": "100644"
+    },
+    "test/unit/dashboard.test.ts": {
+      "sha": "40d16df18223c96b7af5ef7c32b4ead95c393c02",
+      "mode": "100644"
+    },
+    "test/unit/extract-code.test.ts": {
+      "sha": "d08a7e85f7935c62dde2136e4f79961fa048231f",
+      "mode": "100644"
+    },
+    "test/unit/extract-links.test.ts": {
+      "sha": "207e8d081b170fe9d37c108db4eaf097e788d9de",
+      "mode": "100644"
+    },
+    "test/unit/html-to-text.test.ts": {
+      "sha": "92e86baac37ce305826192f3d256f3a10515299c",
+      "mode": "100644"
+    },
+    "test/unit/mail-import.test.ts": {
+      "sha": "14cf867c5cd8758748ae76ea6c89433e23cf5283",
+      "mode": "100644"
+    },
+    "test/unit/mail-providers.test.ts": {
+      "sha": "a977dd23ff25b662968ecb0d0ddeadf0f6df3bad",
+      "mode": "100644"
+    },
+    "test/unit/mail-search.test.ts": {
+      "sha": "ddb176a7ac1e13cbae03e2c8f61910c8deb52765",
+      "mode": "100644"
+    },
+    "test/unit/mail-uploads.test.ts": {
+      "sha": "ab10f277f578a7efec2e908136a2d62aaa2c61dd",
+      "mode": "100644"
+    },
+    "test/unit/mailtrap-sender.test.ts": {
+      "sha": "2c21edfac52e5b7f211d6e10356d869ec36f4565",
+      "mode": "100644"
+    },
+    "test/unit/message-access.test.ts": {
+      "sha": "42aebf379913059ee1c2db2f9bfc96c66b35b4c4",
+      "mode": "100644"
+    },
+    "test/unit/personal-storage.test.ts": {
+      "sha": "bca417d66401622eb7236d60c9f469098b5818e0",
+      "mode": "100644"
+    },
+    "test/unit/raw-messages.test.ts": {
+      "sha": "0e371a9a75169774857cd5722ebda04fbdbba3ea",
+      "mode": "100644"
+    },
+    "test/unit/resend-sender.test.ts": {
+      "sha": "0f2db540055664e7e9d1411c9cf6beace33cf070",
+      "mode": "100644"
+    },
+    "test/unit/risk-signals.test.ts": {
+      "sha": "f4180902e528334635a4c717cbaad08bbd92f144",
+      "mode": "100644"
+    },
+    "test/unit/schema.test.ts": {
+      "sha": "432e9dd8f448def52c2b14e46960d8657593de25",
+      "mode": "100644"
+    },
+    "test/unit/sender-authentication.test.ts": {
+      "sha": "57d8b4e4c90b43472b374c819490be62ede979b0",
+      "mode": "100644"
+    },
+    "test/unit/sender-trust.test.ts": {
+      "sha": "e7bf5d5592d9655f45c8501f3147e81b0e844481",
+      "mode": "100644"
+    },
+    "test/unit/setup.test.ts": {
+      "sha": "ee03a67f8da2801c8fe7d48c45fc8b556580f8a6",
+      "mode": "100644"
+    },
+    "test/unit/spam-verdict.test.ts": {
+      "sha": "630b0c42c45696cae97dbcfe14f08ef5ae1b4524",
+      "mode": "100644"
+    },
+    "test/unit/text-folding.test.ts": {
+      "sha": "bfe15b2f9997de4ffd64952d158b6ea7c24b3ba8",
+      "mode": "100644"
+    },
+    "test/unit/updates.test.ts": {
+      "sha": "b80c1262de1a9cc2d2673255d49ace0834b03301",
+      "mode": "100644"
+    },
+    "test/unit/visible-text.test.ts": {
+      "sha": "d55669b68c1e48a3a5eeb9ec94ff5491661a399b",
+      "mode": "100644"
+    },
+    "tsconfig.json": {
+      "sha": "a67a821ca4fd856bcb6e6614571997a355505d33",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/CHANGELOG.md": {
+      "sha": "0b64e2008ebe2b0184279afe8edd8bed84730f18",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/LICENSE": {
+      "sha": "84b23dd89e853fcab174b20dc8cf96e9e97ec646",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/README.md": {
+      "sha": "9a702ad491f2aff91ce9a37a84034bd84d85d6e5",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/package.json": {
+      "sha": "750c414054e83f251a489dacbd0848a162b6abd6",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/fonts.css": {
+      "sha": "af9e7e31c1ec66422363473ac050d6901656f0dc",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/georg-theme.js": {
+      "sha": "4b41b72b4c04dbd182b57e76b1dec707829eedfa",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/georg.css": {
+      "sha": "a25d79e43efb27d2d933349c541e44e5c856d553",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/tailwind.css": {
+      "sha": "ee063b2b5c1284ce042f2405d8e5ef29e7ff020f",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/tokens.json": {
+      "sha": "0ada4b5abb84ffeb85e7a0ae5cbc0c2f4e3de666",
+      "mode": "100644"
+    },
+    "vitest.config.ts": {
+      "sha": "999dfd018235de4dc05f5c64a06ab5c6a292b9f0",
+      "mode": "100644"
+    },
+    "wrangler.jsonc": {
+      "sha": "2fb23b1d84a785c92508657a0285334f4794df53",
+      "mode": "100644"
+    }
+  }
+}

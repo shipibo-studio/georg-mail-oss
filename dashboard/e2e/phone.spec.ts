@@ -214,3 +214,16 @@ test("a preference changed on a phone is saved for every device", async ({ page 
   await page.getByRole("dialog", { name: "Settings" }).getByLabel("Time format").selectOption("12h");
   expect((await saved).postDataJSON()).toMatchObject({ clock: "12h" });
 });
+
+test("a new release can be applied from the Settings sheet on a phone", async ({ page }) => {
+  await page.request.post("/dashboard/api/__mock/update-available");
+  await openInbox(page);
+  await goTo(page, "Settings");
+  const settings = page.getByRole("dialog", { name: "Settings" });
+  await settings.getByRole("button", { name: "Update…" }).tap();
+  const dialog = page.getByRole("dialog", { name: "Update Georg mail" });
+  await dialog.getByRole("button", { name: "Update to 0.2.0" }).tap();
+  await expect(dialog.getByText(/is committed to github\.com\/owner\/mail/)).toBeVisible();
+  const box = await dialog.boundingBox();
+  expect(box?.width).toBeLessThanOrEqual(page.viewportSize()?.width ?? 0);
+});

@@ -9,6 +9,7 @@ import { CLOCKS, type Clock, sampleTime } from "../lib/format";
 import { isSwipeDown, useIsPhone } from "../lib/media";
 import { AliasSettings } from "./AliasSettings";
 import { AccentControl, ThemeControl } from "./Sidebar";
+import { UpdateSettings } from "./UpdateDialog";
 
 const ACCESS_LOGOUT_PATH = "/cdn-cgi/access/logout";
 
@@ -16,10 +17,12 @@ export function SettingsDialog({
   mailbox,
   onClose,
   onImport,
+  onUpdate,
 }: {
   mailbox: Mailbox;
   onClose(): void;
   onImport(): void;
+  onUpdate(): void;
 }) {
   const { t, locale, setLocale, clock, setClock } = useI18n();
   const avatarStyle = useAvatarStyle();
@@ -156,6 +159,7 @@ export function SettingsDialog({
             </button>
           </div>
         </section>
+        <UpdateSettings onUpdate={onUpdate} />
         <div className="signed-in">
           <span className="muted small">
             {t("settings.signedInAs")} <span className="registered-email">{mailbox.owner}</span>

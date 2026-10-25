@@ -167,3 +167,36 @@ export interface SetupRequest {
   displayName?: string;
   forward: boolean;
 }
+
+/** In-app updates of the self-hosted mail client (GET /dashboard/api/updates). */
+export interface UpdateStatus {
+  installed: string;
+  latest: { version: string; url: string } | null;
+  available: boolean;
+  checkedAt: number | null;
+  checkFailed: boolean;
+  /** Where an update is committed, "github.com/owner/repo (main)"; null until UPDATE_REPOSITORY and UPDATE_TOKEN are set. */
+  repository: string | null;
+}
+
+/** What an update would change, before the owner confirms it. */
+export interface UpdatePlan {
+  from: string;
+  to: string;
+  url: string;
+  repository: string;
+  head: string;
+  canApply: boolean;
+  configChanged: boolean;
+  conflicts: string[];
+  conflictCount: number;
+  writes: string[];
+  deletes: number;
+  stageBatch: number;
+}
+
+export interface UpdateCommit {
+  commit: string;
+  url: string;
+  version: string;
+}

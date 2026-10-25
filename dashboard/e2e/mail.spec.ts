@@ -809,3 +809,65 @@ test("the import form: buttons as wide as their label, and a file picker reachab
   await expect(input).toBeFocused();
   await expect(dialog.locator("label.import-files")).toHaveCSS("outline-style", "solid");
 });
+
+test("an install that is up to date says so in Settings, with no notice", async ({ page }) => {
+  await openInbox(page);
+  await expect(page.locator(".update-notice")).toHaveCount(0);
+  await page.getByRole("button", { name: "Settings" }).click();
+  await expect(page.getByRole("dialog", { name: "Settings" }).getByText("Georg mail 0.1.0, up to date.")).toBeVisible();
+});
+
+test("a new release: the notice opens the review, which asks first, then copies the files and commits", async ({
+  page,
+}) => {
+  await page.request.post("/dashboard/api/__mock/update-available");
+  const stages: string[][] = [];
+  page.on("request", (request) => {
+    if (request.url().endsWith("/dashboard/api/updates/stage")) stages.push(request.postDataJSON().paths);
+  });
+  await openInbox(page);
+  await page.getByRole("button", { name: "Version 0.2.0 is available" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Update Georg mail" });
+  await expect(dialog.getByText("45 files change in github.com/owner/mail (main). 2 files are removed.")).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Release notes" })).toHaveAttribute(
+    "href",
+    "https://github.com/shipibo-studio/georg-mail-oss/releases/tag/v0.2.0",
+  );
+  // Nothing is written before the owner confirms.
+  expect(stages).toEqual([]);
+  await dialog.getByRole("button", { name: "Update to 0.2.0" }).click();
+
+  await expect(dialog.getByText(/0\.2\.0 is committed to github\.com\/owner\/mail \(main\)/)).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "See the commit" })).toHaveAttribute(
+    "href",
+    "https://github.com/owner/mail/commit/ddd",
+  );
+  // In batches the Worker can take within Workers Free's subrequest limit.
+  expect(stages.map((paths) => paths.length)).toEqual([20, 20, 5]);
+  await dialog.getByRole("button", { name: "Done" }).click();
+  await expect(page.locator(".update-notice")).toHaveCount(0);
+});
+
+test("a release that would overwrite the owner's own changes is left to a hand update", async ({ page }) => {
+  await page.request.post("/dashboard/api/__mock/update-blocked");
+  await openInbox(page);
+  await page.getByRole("button", { name: "Version 0.2.0 is available" }).click();
+  const dialog = page.getByRole("dialog", { name: "Update Georg mail" });
+  await expect(dialog.getByText("src/worker/mail-app.ts")).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Update to 0.2.0" })).toHaveCount(0);
+  await expect(dialog.getByRole("link", { name: "How to update" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+});
+
+test("without an update token, the notice leads to Settings and the hand update", async ({ page }) => {
+  await page.request.post("/dashboard/api/__mock/update-manual");
+  await openInbox(page);
+  await page.getByRole("button", { name: "Version 0.2.0 is available" }).click();
+  const settings = page.getByRole("dialog", { name: "Settings" });
+  await expect(settings.getByText("Georg mail 0.2.0 is available. This install has 0.1.0.")).toBeVisible();
+  await expect(settings.getByRole("link", { name: "How to update" })).toBeVisible();
+  await expect(settings.getByRole("button", { name: "Update…" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "Update Georg mail" })).toHaveCount(0);
+});

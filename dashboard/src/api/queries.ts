@@ -1,7 +1,7 @@
 import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { DraftInput } from "../lib/drafts";
 import type { Folder } from "../lib/route";
-import { api } from "./client";
+import { api, updatesApi } from "./client";
 import type { FullMessage, MailBox, Mailbox, MessagePage, SenderVerdict, SendRequest } from "./types";
 
 // No polling: data refreshes when the owner asks (the refresh button) or comes back to the tab.
@@ -12,7 +12,21 @@ export const keys = {
   search: (query: string) => ["messages", "search", query] as const,
   drafts: ["drafts"] as const,
   message: (id: string) => ["message", id] as const,
+  updates: ["updates"] as const,
 };
+
+/** The Worker asks GitHub at most every few hours; the dashboard asks the Worker once an hour. */
+const UPDATE_STATUS_STALE_MS = 60 * 60 * 1000;
+
+/** Null where in-app updates do not exist (the hosted product). */
+export function useUpdateStatus() {
+  return useQuery({
+    queryKey: keys.updates,
+    queryFn: updatesApi.status,
+    staleTime: UPDATE_STATUS_STALE_MS,
+    retry: false,
+  });
+}
 
 export function useMailbox() {
   return useQuery({ queryKey: keys.mailbox, queryFn: api.mailbox });

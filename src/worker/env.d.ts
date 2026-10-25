@@ -7,6 +7,12 @@ interface Env {
   ACCESS_AUD?: string;
   /** Resend API key ("re_…"), used when MAIL_PROVIDER is "resend". */
   RESEND_API_KEY?: string;
+  /** The install's repository for in-app updates, github.com/owner/repo or gitlab.com/group/project (open-source edition). */
+  UPDATE_REPOSITORY?: string;
+  /** Branch Workers Builds deploys from; main when unset. */
+  UPDATE_BRANCH?: string;
+  /** Token that may read and write that repository's contents. Updates are by hand without it. */
+  UPDATE_TOKEN?: string;
 }
 
 declare namespace Cloudflare {

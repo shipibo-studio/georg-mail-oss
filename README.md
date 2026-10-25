@@ -14,7 +14,8 @@ A mail client for your own domain that you host on your Cloudflare account, and 
 - **Import** your old mail: a Zoho Mail export, `.mbox` or `.eml` files, with dates kept and duplicates skipped.
 - **A forwarded copy** of every new email to the address you sign in with, if you want one.
 - **Email HTML is safe to open**: it runs no code and loads no tracker until you ask for images.
-- Light and dark themes, accent colors, and English, Spanish (Latin America) and Portuguese (Brazil).
+- **Updates in one click**: it tells you when a new version is out and, once you confirm, commits it to your copy for Cloudflare to deploy, never touching your settings or your own changes.
+- Light and dark themes, accent colors, and display preferences that follow you to every device, in English, Spanish (Latin America) and Portuguese (Brazil).
 
 It keeps one mailbox for its owner. It is not a multi-user mail server.
 
@@ -22,7 +23,7 @@ It keeps one mailbox for its owner. It is not a multi-user mail server.
 
 - A Cloudflare account. The free plan is enough: Workers, D1, R2, Email Routing and Access (up to 50 users) all have free tiers. You can create it during the deploy.
 - Your domain on that account, using Cloudflare's nameservers. Do this first: moving nameservers can take from minutes to a day.
-- A GitHub account, for the Deploy button (it copies this repository to your account). Not needed if you deploy from the command line.
+- A GitHub or GitLab account, for the Deploy button (it copies this repository to your account). Not needed if you deploy from the command line.
 - A sending provider: a free [Resend](https://resend.com) account with your domain verified.
 
 Switching your domain's mail to Email Routing replaces its current MX records: mail stops going to your old provider. Read [Self-hosting](docs/self-hosting.md) before you start.

@@ -12,6 +12,7 @@ import { DESKTOP_ICON, MOON_ICON, SUN_ICON } from "./morph-icons";
 import { ACCOUNT_ITEMS, MAIL_ITEMS, type NavItem } from "./nav-items";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
+import { UpdateNotice } from "./UpdateDialog";
 
 const THEME_OPTIONS: { pref: ThemePref; label: MessageKey }[] = [
   { pref: "system", label: "appearance.system" },
@@ -92,6 +93,7 @@ interface SidebarProps {
   onCompose(): void;
   onSettings(): void;
   onSearch(): void;
+  onUpdate(): void;
 }
 
 function NavGroup({
@@ -141,7 +143,7 @@ function NavGroup({
   );
 }
 
-export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSearch }: SidebarProps) {
+export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSearch, onUpdate }: SidebarProps) {
   const { t } = useI18n();
   const unread = mailbox?.unread ?? 0;
   return (
@@ -180,6 +182,7 @@ export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSea
       <NavGroup title={t("nav.account")} items={ACCOUNT_ITEMS} route={route} navigate={navigate} unread={0} />
 
       <div className="side-spacer" />
+      <UpdateNotice onOpen={onUpdate} />
 
       <div className="side-foot">
         <div className="me">

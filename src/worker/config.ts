@@ -197,6 +197,10 @@ export const RESEND_SEND_URL = "https://api.resend.com/emails";
 export const MAX_PROVIDER_ERROR_CHARS = 300;
 /** Longest an outbound send may take before it is abandoned and reported as retryable. */
 export const MAIL_SEND_TIMEOUT_MS = 10_000;
+/** Each request to GitHub or GitLab while checking for or applying an update of the open-source mail client. */
+export const UPDATE_FETCH_TIMEOUT_MS = 10_000;
+/** How long the newest release, once looked up, is trusted before asking GitHub again. */
+export const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
 /** Events stay queryable (GET /v1/events) and retryable for this long. */
 export const EVENT_RETENTION_DAYS = 7;

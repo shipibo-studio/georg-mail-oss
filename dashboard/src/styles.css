@@ -3242,3 +3242,93 @@ select:focus-visible {
   min-width: 112px;
   justify-content: center;
 }
+
+/* ── Updates of the self-hosted mail client: the sidebar notice, Settings → Updates, the dialog ── */
+.update-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 8px 8px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: var(--r-2);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-align: left;
+  transition: border-color var(--dur-1);
+}
+.update-notice:hover {
+  border-color: var(--accent);
+}
+.update-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+}
+.update-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: start;
+  color: var(--accent);
+  font-size: var(--text-sm);
+}
+.update-link:hover {
+  text-decoration: underline;
+}
+.settings-section.update-body {
+  gap: 14px;
+  padding: 6px 20px 20px;
+}
+.update-body p {
+  margin: 0;
+}
+.update-blocked {
+  display: grid;
+  gap: 8px;
+  color: var(--warn);
+}
+p.update-blocked {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.update-blocked svg {
+  flex: none;
+  margin-top: 2px;
+}
+.update-conflicts {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: var(--r-2);
+  background: var(--bg-hover);
+  color: var(--text-2);
+  list-style: none;
+}
+.update-conflicts li {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.update-done {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.update-done svg {
+  flex: none;
+  color: var(--success);
+}
+.update-body .import-actions {
+  align-items: center;
+  gap: 8px;
+}
+.update-body .import-actions .update-link {
+  margin-right: auto;
+}

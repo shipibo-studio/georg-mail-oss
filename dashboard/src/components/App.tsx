@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ApiError, SessionExpiredError } from "../api/client";
-import { keys, useFolder, useMailbox } from "../api/queries";
+import { keys, useFolder, useMailbox, useUpdateStatus } from "../api/queries";
 import type { FullMessage, MessageSummary, SavedDraft } from "../api/types";
 import { WORKSPACE_DESTINATIONS, WorkspaceSection } from "../editions/workspace";
 import { useI18n } from "../i18n/I18nProvider";
@@ -26,6 +26,7 @@ import { SettingsDialog } from "./SettingsDialog";
 import { SetupGate } from "./SetupView";
 import { Sidebar } from "./Sidebar";
 import { useToast } from "./Toasts";
+import { UpdateDialog } from "./UpdateDialog";
 
 const FRESH_HIGHLIGHT_MS = 2200;
 
@@ -106,6 +107,8 @@ export function App() {
   // finished import back instead of a fresh one.
   const [importRun, setImportRun] = useState(0);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const updates = useUpdateStatus();
 
   // The inbox is watched from every section, so new mail is announced wherever the owner is.
   const mailbox = useMailbox();
@@ -171,7 +174,14 @@ export function App() {
     setImportOpen(true);
   }, []);
 
-  const overlayOpen = settingsOpen || importOpen || paletteOpen || composerOpen;
+  // With a repository to commit to, the update is reviewed right away; without one, Settings says how.
+  const canUpdateHere = Boolean(updates.data?.repository);
+  const openUpdate = useCallback(() => {
+    setSettingsOpen(!canUpdateHere);
+    setUpdateOpen(canUpdateHere);
+  }, [canUpdateHere]);
+
+  const overlayOpen = settingsOpen || importOpen || paletteOpen || composerOpen || updateOpen;
   // ⌘K opens the palette anywhere; C composes when nothing else has the keyboard.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -214,6 +224,7 @@ export function App() {
         onCompose={compose}
         onSettings={openSettings}
         onSearch={() => setPaletteOpen(true)}
+        onUpdate={openUpdate}
       />
       {route.section === "mail" && route.folder === "drafts" && !route.query && <DraftsView onOpen={openDraft} />}
       {route.section === "mail" && (route.folder !== "drafts" || route.query) && (
@@ -266,12 +277,23 @@ export function App() {
 
       <AnimatePresence>
         {settingsOpen && mailbox.data && (
-          <SettingsDialog mailbox={mailbox.data} onClose={() => setSettingsOpen(false)} onImport={openImport} />
+          <SettingsDialog
+            mailbox={mailbox.data}
+            onClose={() => setSettingsOpen(false)}
+            onImport={openImport}
+            onUpdate={openUpdate}
+          />
         )}
       </AnimatePresence>
 
       <AnimatePresence>
         {importOpen && <ImportDialog key={importRun} onClose={() => setImportOpen(false)} />}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {updateOpen && updates.data?.latest && (
+          <UpdateDialog version={updates.data.latest.version} onClose={() => setUpdateOpen(false)} />
+        )}
       </AnimatePresence>
 
       <CommandPalette

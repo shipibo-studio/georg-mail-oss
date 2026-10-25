@@ -7,13 +7,18 @@ import { DASHBOARD_BASE_PATH, dashboardAssets } from "./dashboard/dashboard-asse
 import { requireDashboardSession } from "./dashboard/dashboard-session";
 import { createMailboxRoutes } from "./dashboard/mailbox-routes";
 import { setupRoutes } from "./dashboard/setup-routes";
+import { updateRoutes } from "./dashboard/update-routes";
 import { createDatabase } from "./db/client";
 import { ApiError } from "./errors";
 import { limitRequestBodies, rateLimitByClientIp } from "./http/client-limits";
 import { errorResponse } from "./http/error-response";
 import type { MailEnv } from "./http/mail-env";
 
-const dashboardApi = new Hono<MailEnv>().use(requireDashboardSession).route("/mailbox", createMailboxRoutes());
+const dashboardApi = new Hono<MailEnv>()
+  .use(requireDashboardSession)
+  .route("/mailbox", createMailboxRoutes())
+  // Only here: the hosted product is deployed by its operator, not updated from its dashboard.
+  .route("/updates", updateRoutes);
 
 export const mailApp = new Hono<MailEnv>()
   .use(secureHeaders())

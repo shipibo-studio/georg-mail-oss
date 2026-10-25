@@ -16,6 +16,9 @@ import type {
   SendResult,
   SetupRequest,
   SetupStatus,
+  UpdateCommit,
+  UpdatePlan,
+  UpdateStatus,
   UploadedFile,
 } from "./types";
 
@@ -24,6 +27,8 @@ const MAILBOX_API = "/dashboard/api/mailbox";
 export const V1_API = "/dashboard/api/v1";
 /** Only the self-hosted mail client answers it; the hosted product has no first run. */
 const SETUP_API = "/dashboard/api/setup";
+/** Only the self-hosted mail client answers it; the hosted product is deployed by its operator. */
+const UPDATES_API = "/dashboard/api/updates";
 const DASHBOARD_HEADER = "X-Georg-Dashboard";
 const FILENAME_HEADER = "X-Filename";
 
@@ -164,4 +169,18 @@ export const setupApi = {
   status: () => apiRequest<SetupStatus>(SETUP_API),
   complete: (setup: SetupRequest) =>
     apiRequest<{ address: string; owner: string }>(SETUP_API, { method: "POST", body: setup }),
+};
+
+export const updatesApi = {
+  /** Null where updates do not exist (the hosted product answers 404). */
+  status: () =>
+    apiRequest<UpdateStatus>(UPDATES_API).catch((error: unknown) => {
+      if (error instanceof ApiError && error.status === 404) return null;
+      throw error;
+    }),
+  plan: (version: string) => apiRequest<UpdatePlan>(`${UPDATES_API}/plan`, { method: "POST", body: { version } }),
+  stage: (version: string, paths: string[]) =>
+    apiRequest<{ staged: number }>(`${UPDATES_API}/stage`, { method: "POST", body: { version, paths } }),
+  apply: (version: string, head: string) =>
+    apiRequest<UpdateCommit>(`${UPDATES_API}/apply`, { method: "POST", body: { version, head } }),
 };

@@ -213,6 +213,17 @@ let claimed = true;
 /** Who Access signed in on the first-run page; /__mock/fresh-same-domain uses the mailbox's domain. */
 let visitor = OWNER;
 
+/**
+ * In-app updates: up to date unless a test asks for a release (/__mock/update-available), one that
+ * only a hand update can apply (/__mock/update-blocked), or an install without UPDATE_TOKEN
+ * (/__mock/update-manual).
+ */
+const INSTALLED = "0.1.0";
+const RELEASE = "0.2.0";
+type UpdateScenario = "current" | "available" | "blocked" | "manual";
+let updateScenario: UpdateScenario = "current";
+const RELEASE_FILES = Array.from({ length: 45 }, (_, index) => `src/file-${index}.ts`);
+
 /** Browser tests start every case from the same mailbox. */
 function resetMock() {
   messages = seedMessages();
@@ -224,6 +235,37 @@ function resetMock() {
   visitor = OWNER;
   aliases.length = 0;
   preferences = null;
+  updateScenario = "current";
+}
+
+function updateStatus() {
+  const latest = updateScenario === "current" ? INSTALLED : RELEASE;
+  return {
+    installed: INSTALLED,
+    latest: { version: latest, url: `https://github.com/shipibo-studio/georg-mail-oss/releases/tag/v${latest}` },
+    available: latest !== INSTALLED,
+    checkedAt: Date.now(),
+    checkFailed: false,
+    repository: updateScenario === "manual" ? null : "github.com/owner/mail (main)",
+  };
+}
+
+function updatePlan() {
+  const blocked = updateScenario === "blocked";
+  return {
+    from: INSTALLED,
+    to: RELEASE,
+    url: `https://github.com/shipibo-studio/georg-mail-oss/releases/tag/v${RELEASE}`,
+    repository: "github.com/owner/mail (main)",
+    head: "a".repeat(40),
+    canApply: !blocked,
+    configChanged: false,
+    conflicts: blocked ? ["src/worker/mail-app.ts"] : [],
+    conflictCount: blocked ? 1 : 0,
+    writes: RELEASE_FILES,
+    deletes: 2,
+    stageBatch: 20,
+  };
 }
 
 function summary(message: MockMessage) {
@@ -397,12 +439,36 @@ export function mockApi(): Plugin {
       } else if (request.url === "/arrive") arrive();
       else if (request.url === "/arrive-test") mockV1.arrive();
       else if (request.url === "/fresh") claimed = false;
+      else if (request.url === "/update-available") updateScenario = "available";
+      else if (request.url === "/update-blocked") updateScenario = "blocked";
+      else if (request.url === "/update-manual") updateScenario = "manual";
       else if (request.url === "/fresh-same-domain") {
         claimed = false;
         visitor = `someone@${ADDRESS.split("@")[1]}`;
       } else return send(response, 404);
       return send(response, 204);
     });
+
+    server.middlewares.use(
+      "/dashboard/api/updates",
+      guarded(async (request, response) => {
+        const path = (request.url ?? "/").split("?")[0];
+        if (request.method === "GET" && path === "/") return send(response, 200, updateStatus());
+        if (request.method !== "POST") return send(response, 405);
+        await readBody(request);
+        if (path === "/plan") return send(response, 200, updatePlan());
+        if (path === "/stage") return send(response, 200, { staged: 20 });
+        if (path === "/apply") {
+          updateScenario = "current";
+          return send(response, 201, {
+            commit: "d".repeat(40),
+            url: "https://github.com/owner/mail/commit/ddd",
+            version: RELEASE,
+          });
+        }
+        return send(response, 404);
+      }),
+    );
 
     server.middlewares.use(
       "/dashboard/api/setup",
