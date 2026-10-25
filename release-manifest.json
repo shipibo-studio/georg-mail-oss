@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "files": {
     ".dev.vars.example": {
       "sha": "61d5cc29e956c6899fb6bc45e4b89a7596da81aa",
@@ -690,11 +690,11 @@
       "mode": "100644"
     },
     "package.json": {
-      "sha": "5730d65a9cd52c5d65c0f9bf44738f442951cc8f",
+      "sha": "1b079c15f73d93ad254c7ba3f877a449f8ff12dd",
       "mode": "100644"
     },
     "pnpm-lock.yaml": {
-      "sha": "810763251b71756b95e4666ee18a1e827bc8d281",
+      "sha": "2a2edbc50774746cef22052a5936a3484f26d1d2",
       "mode": "100644"
     },
     "pnpm-workspace.yaml": {
