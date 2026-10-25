@@ -15,7 +15,7 @@ export type ErrorCode =
   | "internal_error"
   | "unavailable";
 
-const STATUS_BY_CODE: Record<ErrorCode, ContentfulStatusCode> = {
+export const STATUS_BY_CODE: Record<ErrorCode, ContentfulStatusCode> = {
   unauthorized: 401,
   forbidden: 403,
   not_found: 404,

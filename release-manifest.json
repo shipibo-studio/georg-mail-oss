@@ -842,7 +842,7 @@
       "mode": "100644"
     },
     "src/worker/errors.ts": {
-      "sha": "a616d75cd1a5e073d3e5410ceca84676211a9b41",
+      "sha": "90dbc3211df7f44e4eb14b683b8af0ccd29c1ff4",
       "mode": "100644"
     },
     "src/worker/http/client-limits.ts": {
