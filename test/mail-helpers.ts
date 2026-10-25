@@ -17,6 +17,11 @@ export async function createOwnerAccount(planId = "paid"): Promise<string> {
   return accountId;
 }
 
+/** Whether a URL is on exactly this host: a prefix check would also match "host.evil.test". */
+export function isHost(url: string, host: string): boolean {
+  return new URL(url).hostname === host;
+}
+
 export async function json<T = Record<string, unknown>>(response: Response): Promise<T> {
   return (await response.json()) as T;
 }

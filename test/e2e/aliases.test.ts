@@ -9,7 +9,7 @@ import { createDatabase } from "../../src/worker/db/client";
 import { messages } from "../../src/worker/db/schema";
 import mailWorker from "../../src/worker/mail-index";
 import { ACCESS_CERTS_URL, accessJwk, accessToken, DASHBOARD_ORIGIN } from "../access-session";
-import { BASE_URL, buildEmail, inboundEmail, json } from "../mail-helpers";
+import { BASE_URL, buildEmail, inboundEmail, isHost, json } from "../mail-helpers";
 import { type Owner, randomName, setupOwner } from "../mailbox-owner";
 
 type Json = Record<string, unknown>;
@@ -22,7 +22,7 @@ beforeAll(() => {
   vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
     const request = new Request(input, init);
     if (request.url === ACCESS_CERTS_URL) return Response.json({ keys: [accessJwk] });
-    if (request.url.startsWith("https://send.api.mailtrap.io")) {
+    if (isHost(request.url, "send.api.mailtrap.io")) {
       sent.push((await request.json()) as Json);
       return Response.json({ success: true, message_ids: ["m1"] });
     }

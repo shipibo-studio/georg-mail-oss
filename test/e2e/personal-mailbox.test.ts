@@ -35,7 +35,7 @@ import {
   type DashboardRequest,
   DASHBOARD_ORIGIN as ORIGIN,
 } from "../access-session";
-import { BASE_URL, buildEmail, inboundEmail, json } from "../mail-helpers";
+import { BASE_URL, buildEmail, inboundEmail, isHost, json } from "../mail-helpers";
 import { MAIL_CRON, mailWorker } from "../mail-worker";
 import { dashboard, deliver, deliverStored, type Owner, randomName, setupOwner } from "../mailbox-owner";
 
@@ -53,7 +53,7 @@ beforeAll(async () => {
   vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
     const request = new Request(input, init);
     if (request.url === ACCESS_CERTS_URL) return Response.json({ keys: [accessJwk] });
-    if (request.url.startsWith("https://send.api.mailtrap.io")) {
+    if (isHost(request.url, "send.api.mailtrap.io")) {
       mailtrapRequests.push((await request.json()) as Json);
       return mailtrapStatus === 200
         ? Response.json({ success: true, message_ids: ["m1"] })

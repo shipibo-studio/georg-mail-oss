@@ -982,7 +982,7 @@
       "mode": "100644"
     },
     "test/e2e/aliases.test.ts": {
-      "sha": "7de7c8007cf19649e53dc34d3a8b82109b5956d8",
+      "sha": "2818468c7b9eccfbe4419446de85c5dd38e33b4b",
       "mode": "100644"
     },
     "test/e2e/dashboard-assets.test.ts": {
@@ -1002,7 +1002,7 @@
       "mode": "100644"
     },
     "test/e2e/personal-mailbox.test.ts": {
-      "sha": "8a70fa0d481ecd9db18ca8095727de94cf9b0711",
+      "sha": "7ceb9d04866db705976497f9cf434605bdfc3f3e",
       "mode": "100644"
     },
     "test/e2e/preferences.test.ts": {
@@ -1022,7 +1022,7 @@
       "mode": "100644"
     },
     "test/mail-helpers.ts": {
-      "sha": "f5a3045ccd357e079a85dc76cf1e1d4eb2b5a323",
+      "sha": "ce8a22d9577cd81757ac14c3ab02e8f944e22734",
       "mode": "100644"
     },
     "test/mail-worker.ts": {
