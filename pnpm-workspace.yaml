@@ -6,6 +6,6 @@ minimumReleaseAgeExclude:
   - miniflare@5.20261012.1-beta
   - wrangler@4.151.1
   - '@cloudflare/vitest-plugin@1.4.4'
-  # First-party design system, published by us.
-  - '@shipibo-studio/georg-ds@0.6.0'
-  - '@shipibo-studio/georg-ds@0.7.0'
+  # First-party design system, published by us: every version, since a release is installed the day
+  # it ships. The rest of the policy still holds back fresh third-party versions.
+  - '@shipibo-studio/georg-ds'

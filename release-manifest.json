@@ -541,6 +541,10 @@
       "sha": "ff5c4119bbb3e1de903d9a463902a72457c80020",
       "mode": "100644"
     },
+    "migrations/0033_outbound_completed_at.sql": {
+      "sha": "9747a519fd4d91e05d1254fee6c327ca2d4b7c2f",
+      "mode": "100644"
+    },
     "migrations/meta/0000_snapshot.json": {
       "sha": "89751bfed61254d9d16e5852814fa115f063819c",
       "mode": "100644"
@@ -673,8 +677,12 @@
       "sha": "1d602e3338048aa2a80c85ce7edf0d99e6d437ed",
       "mode": "100644"
     },
+    "migrations/meta/0033_snapshot.json": {
+      "sha": "3936185378f057079a5e47357840144fd5d055bf",
+      "mode": "100644"
+    },
     "migrations/meta/_journal.json": {
-      "sha": "2565a16e6648f1f8f1f26977aae4b5e70b4a2c31",
+      "sha": "6b9a92dc6d7cb5f9ba27c03f4b2d1a95d0a86188",
       "mode": "100644"
     },
     "package.json": {
@@ -686,7 +694,7 @@
       "mode": "100644"
     },
     "pnpm-workspace.yaml": {
-      "sha": "339aae784f691496cb03ec0bdc6f858ed1d40eab",
+      "sha": "d592c5173314ff5668d6e44840705082633fa36d",
       "mode": "100644"
     },
     "scripts/check-invisible-characters.mjs": {
@@ -746,7 +754,7 @@
       "mode": "100644"
     },
     "src/worker/dashboard/mailbox-routes.ts": {
-      "sha": "cd8041ddc56adc29adfd8d3efcbd602e87e8f7dd",
+      "sha": "f65a0a486b6cc0c8160a864da4f55f9531f115ea",
       "mode": "100644"
     },
     "src/worker/dashboard/preferences.ts": {
@@ -766,7 +774,7 @@
       "mode": "100644"
     },
     "src/worker/db/schema.ts": {
-      "sha": "1baf7df43a5c2bb1933ad98a0e28f9b0155d3f06",
+      "sha": "38784a25d433cedccc3141dd1260868a25ebcc08",
       "mode": "100644"
     },
     "src/worker/docs-url.ts": {
@@ -834,7 +842,7 @@
       "mode": "100644"
     },
     "src/worker/errors.ts": {
-      "sha": "72ef03c2085311d819a406adea4feab727c4a69e",
+      "sha": "a616d75cd1a5e073d3e5410ceca84676211a9b41",
       "mode": "100644"
     },
     "src/worker/http/client-limits.ts": {
@@ -851,6 +859,10 @@
     },
     "src/worker/http/error-response.ts": {
       "sha": "efb4eeb6c42fa4c5938dd432a0d502da23ce1c8c",
+      "mode": "100644"
+    },
+    "src/worker/http/idempotency.ts": {
+      "sha": "dd5698b23d61f3895fc025bd21211b696f8d71a8",
       "mode": "100644"
     },
     "src/worker/http/mail-env.ts": {
@@ -970,7 +982,7 @@
       "mode": "100644"
     },
     "test/e2e/personal-mailbox.test.ts": {
-      "sha": "0f51ab0ccd806a73993ab121bd2fbc1cd034f1ed",
+      "sha": "5e096074e12854c23fbf52d73018ee88458938da",
       "mode": "100644"
     },
     "test/e2e/preferences.test.ts": {

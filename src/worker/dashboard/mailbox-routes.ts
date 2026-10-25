@@ -33,6 +33,7 @@ import { setSenderRule } from "../email/sender-rules";
 import { ApiError, notFound } from "../errors";
 import { isUniqueViolation } from "../http/database-errors";
 import { downloadHeaders, safeFilename } from "../http/downloads";
+import { keyInFlight, markReplayed, replayable } from "../http/idempotency";
 import type { MailEnv } from "../http/mail-env";
 import { decodeCursor, encodeCursor, pageQuerySchema } from "../http/pagination";
 import { validate } from "../http/validation";
@@ -430,10 +431,9 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
         .where(and(eq(outboundMessages.inboxId, mailbox.id), eq(outboundMessages.idempotencyKey, idempotencyKey)))
         .limit(1);
       if (previous) {
-        if (previous.requestHash !== requestHash) {
-          throw new ApiError("conflict", "This Idempotency-Key was already used for a different message.");
-        }
-        return context.json({ id: previous.id, recipients: previous.recipients, replayed: true });
+        const replay = replayable(previous, requestHash);
+        markReplayed(context);
+        return context.json({ id: replay.id, recipients: replay.recipients, replayed: true });
       }
 
       const now = Date.now();
@@ -452,11 +452,7 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
         recipients.length,
         PERSONAL_SENDS_PER_DAY,
       ]);
-      if (reserved === "duplicate") {
-        throw new ApiError("conflict", "A message with this Idempotency-Key is being sent.", {
-          hint: "Retry with the same key in a moment to get its result.",
-        });
-      }
+      if (reserved === "duplicate") throw keyInFlight();
       if (reserved === "over_limit") {
         throw new ApiError("rate_limited", `A personal mailbox sends to ${PERSONAL_SENDS_PER_DAY} recipients a day.`, {
           hint: "Try again tomorrow.",
@@ -489,6 +485,8 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
       const storedBytes = body.text.length * 2;
       const messageId = createId("msg");
       await db.batch([
+        // Handed to the provider: a retry with the same key now gets this send's answer.
+        db.update(outboundMessages).set({ completedAt: Date.now() }).where(eq(outboundMessages.id, outboundId)),
         db.insert(messages).values({
           id: messageId,
           inboxId: mailbox.id,

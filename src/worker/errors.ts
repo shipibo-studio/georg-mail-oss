@@ -7,6 +7,8 @@ export type ErrorCode =
   | "not_found"
   | "validation_failed"
   | "conflict"
+  | "idempotency_key_reused"
+  | "idempotency_key_in_flight"
   | "plan_limit"
   | "payload_too_large"
   | "rate_limited"
@@ -19,6 +21,8 @@ const STATUS_BY_CODE: Record<ErrorCode, ContentfulStatusCode> = {
   not_found: 404,
   validation_failed: 400,
   conflict: 409,
+  idempotency_key_reused: 409,
+  idempotency_key_in_flight: 409,
   plan_limit: 403,
   payload_too_large: 413,
   rate_limited: 429,

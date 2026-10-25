@@ -636,6 +636,9 @@ export const outboundMessages = sqliteTable(
     // "personal": sent by the owner from the personal mailbox, with its own daily cap.
     kind: text("kind", { enum: OUTBOUND_KINDS }).notNull().default("internal"),
     createdAt: integer("created_at").notNull(),
+    // Set once the message was delivered or handed to the provider. Until then a retry with the
+    // same Idempotency-Key is told to wait (idempotency_key_in_flight) instead of getting an answer.
+    completedAt: integer("completed_at"),
   },
   (table) => [
     uniqueIndex("outbound_messages_inbox_key_unique").on(table.inboxId, table.idempotencyKey),

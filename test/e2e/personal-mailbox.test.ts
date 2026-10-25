@@ -518,9 +518,12 @@ describe("mailbox API", () => {
     expect((await send(owner, body, "same-key-0001")).status).toBe(201);
     const replay = await send(owner, body, "same-key-0001");
     expect(replay.status).toBe(200);
+    expect(replay.headers.get("Idempotent-Replayed")).toBe("true");
     expect((await json(replay)).replayed).toBe(true);
     expect(mailtrapRequests).toHaveLength(1);
-    expect((await send(owner, { ...body, text: "Changed" }, "same-key-0001")).status).toBe(409);
+    const changed = await send(owner, { ...body, text: "Changed" }, "same-key-0001");
+    expect(changed.status).toBe(409);
+    expect(await json(changed)).toMatchObject({ error: { code: "idempotency_key_reused" } });
   });
 
   test.each([
