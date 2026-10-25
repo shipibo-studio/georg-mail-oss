@@ -416,6 +416,28 @@ textarea.g-input { min-height: 72px; resize: vertical; line-height: 1.45; }
 }
 .g-file-name { overflow: hidden; max-width: 220px; color: var(--text); text-overflow: ellipsis; white-space: nowrap; }
 .g-file-size { color: var(--text-3); font-size: var(--text-xs); font-variant-numeric: tabular-nums; }
+/* The remove button: any <button> in the chip, as React renders it or as georg-file.js creates it. */
+.g-file-chip > button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-3);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--dur-1), color var(--dur-1);
+}
+.g-file-chip > button:hover { background: var(--bg-hover); color: var(--text); }
+.g-file-chip > button > svg, .g-file-chip > button > .ti { width: 12px; height: 12px; font-size: 12px; }
+/* A file that could not be attached or uploaded */
+.g-file-chip[data-state="failed"] { border-color: var(--danger); color: var(--danger); }
+.g-file-chip[data-state="failed"] .g-file-name { color: var(--danger); }
 
 /* ── Chip and badge ──────────────────────────────────────── */
 /* Chip: a short label (a tag, a detected code, a risk). data-tone colors it on its soft fill.

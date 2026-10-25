@@ -1,4 +1,6 @@
 // ⌘K: go anywhere, run any action, find what the edition offers by typing (georg-ds palette).
+
+import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import {
   IconCircleFilled,
   IconDeviceDesktop,
@@ -200,7 +202,7 @@ export function CommandPalette(props: CommandPaletteProps) {
             initial={{ opacity: 0, y: -6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 520, damping: 34 }}
+            transition={SPRING.overlay}
           >
             <div className="palette-search">
               <IconSearch size={16} stroke={1.5} />
@@ -246,7 +248,7 @@ export function CommandPalette(props: CommandPaletteProps) {
                         <motion.span
                           layoutId="palette-selection"
                           className="palette-highlight"
-                          transition={{ type: "spring", stiffness: 700, damping: 45 }}
+                          transition={SPRING.list}
                         />
                       )}
                       {item.icon}

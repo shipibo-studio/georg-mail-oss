@@ -2,7 +2,7 @@
 
 The **georg** design system: tokens, typography, color, motion, and interaction patterns for every georg interface (georg-mail is the first).
 
-> **Version 0.6** (October 2026). It grew out of the georg-mail dashboard mockup, which serves as its reference demo: [`demo/dashboard.html`](demo/dashboard.html) (open it in a browser). Its consumers today are [georg-mail](https://github.com/shipibo-studio/georg-mail) and [georg-app](https://github.com/shipibo-studio/georg-app).
+> **Version 0.7** (October 2026). It grew out of the georg-mail dashboard mockup, which serves as its reference demo: [`demo/dashboard.html`](demo/dashboard.html) (open it in a browser). Its consumers today are [georg-mail](https://github.com/shipibo-studio/georg-mail) and [georg-app](https://github.com/shipibo-studio/georg-app).
 
 See [CHANGELOG.md](CHANGELOG.md).
 
@@ -24,6 +24,7 @@ See [CHANGELOG.md](CHANGELOG.md).
 | [`src/georg-theme.js`](src/georg-theme.js) | Theme and accent control: flash-free initialization, persistence, `window.georgTheme` API |
 | [`src/components.css`](src/components.css) | Components: button, status, meter, progress, tabs, segmented control, switch, toast, tooltip, alert, field, checkbox and radio, file drop zone, chip and badge, empty state, keyboard shortcut, copy button (`g-` classes) |
 | [`src/georg-tabs.js`](src/georg-tabs.js), [`src/georg-toast.js`](src/georg-toast.js), [`src/georg-tooltip.js`](src/georg-tooltip.js), [`src/georg-copy.js`](src/georg-copy.js), [`src/georg-file.js`](src/georg-file.js) | Opt-in behavior for tabs, toasts, tooltips, copy buttons and file drop zones (not needed with Radix) |
+| [`src/georg-motion.mjs`](src/georg-motion.mjs), [`src/georg-sounds.mjs`](src/georg-sounds.mjs) | ES modules for React and bundlers: named springs, durations and swipe rule for Motion, and interface sound recipes for Web Audio. No side effects |
 | [`src/fonts.css`](src/fonts.css) | Fonts from Google Fonts, for prototypes |
 | [`src/tailwind.css`](src/tailwind.css) | Bridge for Tailwind CSS v4 and mapping to shadcn/ui variables |
 | [`src/tokens.json`](src/tokens.json) | Every token resolved per theme and accent, for native apps (also attached to each GitHub release) |
@@ -40,6 +41,7 @@ Only `src/` is shipped to consumers. The package exports keep short import paths
 | Guide | Contents |
 | --- | --- |
 | [Foundations](docs/foundations.md) | Color, typography, icons, shape and elevation, motion |
+| [Motion and sound](docs/motion.md) | Named springs, durations, gestures, every microinteraction with its reduced-motion fallback, and interface sounds |
 | [Theme and accent](docs/theming.md) | `data-theme` attributes, the `georgTheme` API, React hook |
 | [Interaction patterns](docs/patterns.md) | Copy, arrivals, live waiting, countdown, hold to delete, ⌘K and more; external content rules |
 | [Components](docs/components.md) | The components georg-ds ships (markup, rules, Radix recipes, SwiftUI equivalents), the shadcn/ui bridge and allowed sources |
@@ -69,7 +71,7 @@ The package is **`@shipibo-studio/georg-ds`**, published privately to GitHub Pac
 **3. Install a pinned version:**
 
 ```bash
-pnpm add @shipibo-studio/georg-ds@0.6.0
+pnpm add @shipibo-studio/georg-ds@0.7.0
 
 # During development, with the repository cloned next to the project
 pnpm add @shipibo-studio/georg-ds@link:../georg-ds
@@ -90,7 +92,7 @@ pnpm add @shipibo-studio/georg-ds@link:../georg-ds
 ### App (Vite + React + Tailwind v4)
 
 ```bash
-pnpm add @shipibo-studio/georg-ds@0.6.0
+pnpm add @shipibo-studio/georg-ds@0.7.0
 pnpm add @fontsource-variable/stack-sans-notch @fontsource-variable/geist @fontsource-variable/geist-mono @tabler/icons-react morphicons motion
 ```
 

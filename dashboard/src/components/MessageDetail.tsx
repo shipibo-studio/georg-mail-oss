@@ -1,3 +1,4 @@
+import { EASE_OUT, GESTURE, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import {
   IconAlertOctagon,
   IconAlertTriangle,
@@ -27,7 +28,6 @@ import { EmailFrame } from "./EmailFrame";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
 
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 type Tab = "preview" | "text";
 const MAX_LINKS = 8;
 
@@ -99,7 +99,7 @@ function CodeCard({ code }: { code: string }) {
               className={index === middle - 1 && code.length > 4 ? "digit gap" : "digit"}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 420, damping: 20, delay: 0.1 + index * 0.035 }}
+              transition={{ ...SPRING.pop, delay: 0.1 + index * 0.035 }}
             >
               {digit}
             </motion.span>
@@ -175,11 +175,7 @@ function Tabs({ tab, onTab, hasHtml }: { tab: Tab; onTab(tab: Tab): void; hasHtm
           >
             {t(item === "preview" ? "detail.tabPreview" : "detail.tabText")}
             {tab === item && (
-              <motion.span
-                layoutId="tab-indicator"
-                className="tab-indicator"
-                transition={{ type: "spring", stiffness: 500, damping: 40 }}
-              />
+              <motion.span layoutId="tab-indicator" className="tab-indicator" transition={SPRING.selection} />
             )}
           </button>
         ))}
@@ -261,7 +257,7 @@ export function MessageDetail({
           drag={isPhone ? "x" : false}
           dragDirectionLock
           dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={{ left: 0, right: 0.6 }}
+          dragElastic={{ left: 0, right: GESTURE.backElastic }}
           dragSnapToOrigin
           onDragEnd={(_, info) => {
             if (isSwipeBack(info.offset.x, info.velocity.x)) onBack();

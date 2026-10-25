@@ -8,3 +8,4 @@ minimumReleaseAgeExclude:
   - '@cloudflare/vitest-plugin@1.4.4'
   # First-party design system, published by us.
   - '@shipibo-studio/georg-ds@0.6.0'
+  - '@shipibo-studio/georg-ds@0.7.0'

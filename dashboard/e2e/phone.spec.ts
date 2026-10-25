@@ -129,9 +129,9 @@ test("files can be attached on a phone", async ({ page }) => {
     mimeType: "image/jpeg",
     buffer: Buffer.from([0xff, 0xd8, 0xff]),
   });
-  await expect(composer.locator(".file-chip.ready")).toHaveText(/foto\.jpg/);
+  await expect(composer.locator('.g-file-chip[data-state="ready"]')).toHaveText(/foto\.jpg/);
   await composer.getByRole("button", { name: "Remove foto.jpg" }).tap();
-  await expect(composer.locator(".file-chip")).toHaveCount(0);
+  await expect(composer.locator(".g-file-chip")).toHaveCount(0);
 });
 
 test("old mail can be imported from a phone", async ({ page }) => {

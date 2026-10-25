@@ -1,5 +1,7 @@
 // The account's notification channels, in one place: the registered email (which also gets the
 // forwarded copy of incoming mail), plus what the edition adds (Slack, in the hosted product).
+
+import { EASE_OUT } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconAlertTriangle, IconMail, IconMailForward } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useMailbox, useUpdateSettings } from "../api/queries";
@@ -9,8 +11,6 @@ import { useI18n } from "../i18n/I18nProvider";
 import { formatBytes } from "../lib/format";
 import { Switch } from "./controls";
 import { useToast } from "./Toasts";
-
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 /** The forwarded copy of every incoming email, to the registered address. */
 function ForwardSetting({ mailbox }: { mailbox: Mailbox }) {

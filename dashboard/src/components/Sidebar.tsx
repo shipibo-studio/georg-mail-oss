@@ -1,3 +1,4 @@
+import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconCheck, IconPencilPlus, IconSearch, IconSettings } from "@tabler/icons-react";
 import { MorphIcon } from "morphicons/react";
 import { motion } from "motion/react";
@@ -35,7 +36,7 @@ export function ThemeControl() {
       <motion.span
         className="thumb"
         animate={{ x: THEME_OPTIONS.findIndex((option) => option.pref === pref) * SEGMENT_WIDTH }}
-        transition={{ type: "spring", stiffness: 520, damping: 34 }}
+        transition={SPRING.overlay}
       />
       {THEME_OPTIONS.map((option) => (
         <Tip key={option.pref} label={t(option.label)}>
@@ -126,11 +127,7 @@ function NavGroup({
             >
               {active && (
                 // One highlight for the whole sidebar: it slides between groups too.
-                <motion.span
-                  layoutId="folder-highlight"
-                  className="folder-highlight"
-                  transition={{ type: "spring", stiffness: 500, damping: 38 }}
-                />
+                <motion.span layoutId="folder-highlight" className="folder-highlight" transition={SPRING.nav} />
               )}
               <item.Icon size={16} stroke={1.5} />
               <span className="folder-name">{t(item.label)}</span>
@@ -205,7 +202,7 @@ export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSea
               aria-label={t("nav.settings")}
               onClick={onSettings}
               whileHover={{ rotate: 45 }}
-              transition={{ type: "spring", stiffness: 300, damping: 18 }}
+              transition={SPRING.playful}
             >
               <IconSettings size={16} stroke={1.5} />
             </motion.button>

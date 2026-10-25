@@ -1,3 +1,4 @@
+import { EASE_OUT } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconPhotoOff } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -72,7 +73,7 @@ export function EmailFrame({ html, messageId }: { html: string; messageId: strin
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.24, ease: EASE_OUT }}
           >
             <IconPhotoOff size={16} stroke={1.5} />
             <span>{t("detail.imagesBlocked")}</span>

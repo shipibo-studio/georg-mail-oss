@@ -1,5 +1,7 @@
 // The dashboard shell: navigation, the composer, settings and the ⌘K palette around one section
 // (mail, notifications or one of the edition's workspace sections) at a time. The URL is the state.
+
+import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconAlertTriangle, IconWifiOff } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
@@ -270,7 +272,7 @@ export function App() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
-            transition={{ type: "spring", stiffness: 420, damping: 30 }}
+            transition={SPRING.sheet}
           >
             {composer.draft.subject || t(composer.draft.inReplyTo ? "compose.reply" : "compose.newMessage")}
           </motion.button>

@@ -1,3 +1,4 @@
+import { GESTURE, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconFileImport, IconLogout, IconX } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
@@ -58,12 +59,12 @@ export function SettingsDialog({
         initial={isPhone ? { y: "100%" } : { opacity: 0, y: -8, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={isPhone ? { y: "100%" } : { opacity: 0, y: -4, scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 420, damping: 32 }}
+        transition={SPRING.sheet}
         // On phones the sheet follows the finger down and closes past a threshold.
         drag={isPhone ? "y" : false}
         dragDirectionLock
         dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={{ top: 0, bottom: 0.7 }}
+        dragElastic={{ top: 0, bottom: GESTURE.sheetElastic }}
         dragSnapToOrigin
         onDragEnd={(_, info) => {
           if (isSwipeDown(info.offset.y, info.velocity.y)) onClose();

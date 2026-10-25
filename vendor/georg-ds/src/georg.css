@@ -71,6 +71,7 @@
   --dur-1: 150ms;   /* hover, color */
   --dur-2: 220ms;   /* appear, opacity */
   --dur-3: 320ms;   /* movement, springs */
+  --dur-exit: 140ms; /* leaving: dialogs, menus, chips; always faster than arriving */
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
 

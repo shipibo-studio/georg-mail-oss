@@ -1,6 +1,6 @@
 {
   "name": "@shipibo-studio/georg-ds",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "georg design system: tokens, typography, theme, accents and interaction patterns",
   "license": "MIT",
   "author": "Jorge Epuñan",
@@ -28,6 +28,8 @@
     "./georg-toast.js": "./src/georg-toast.js",
     "./georg-copy.js": "./src/georg-copy.js",
     "./georg-file.js": "./src/georg-file.js",
+    "./georg-motion.mjs": "./src/georg-motion.mjs",
+    "./georg-sounds.mjs": "./src/georg-sounds.mjs",
     "./tokens.json": "./src/tokens.json",
     "./package.json": "./package.json"
   },

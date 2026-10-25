@@ -1,5 +1,7 @@
 // Small interaction primitives from georg-ds: copy with a morphing icon, switch, press-and-hold
 // delete and avatar.
+
+import { EASE_OUT, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { MorphIcon } from "morphicons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
@@ -210,7 +212,7 @@ export function CountBadge({ count }: { count: number }) {
           initial={{ scale: 0.4, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.4, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+          transition={SPRING.pop}
         >
           <motion.span
             key={count}
@@ -283,13 +285,13 @@ export function EmptyPanel({ icon, title, body }: { icon: ReactNode; title: stri
       className="g-empty"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.32, ease: EASE_OUT }}
     >
       <motion.span
         className="g-empty-icon"
         initial={{ scale: 0.8, rotate: -8 }}
         animate={{ scale: 1, rotate: 0 }}
-        transition={{ type: "spring", stiffness: 260, damping: 14, delay: 0.08 }}
+        transition={{ ...SPRING.playful, delay: 0.08 }}
       >
         {icon}
       </motion.span>
@@ -324,11 +326,7 @@ export function TabBar<T extends string>({
         >
           {tab.label}
           {tab.value === value && (
-            <motion.span
-              layoutId={`${id}-indicator`}
-              className="tab-indicator"
-              transition={{ type: "spring", stiffness: 500, damping: 40 }}
-            />
+            <motion.span layoutId={`${id}-indicator`} className="tab-indicator" transition={SPRING.selection} />
           )}
         </button>
       ))}

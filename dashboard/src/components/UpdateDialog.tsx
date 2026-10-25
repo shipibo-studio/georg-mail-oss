@@ -2,6 +2,8 @@
 // Settings, and the dialog that reviews the update, asks for confirmation, copies the release's files
 // into the install's repository and makes the commit Cloudflare then deploys. The hosted product has
 // none of it: its status query answers null and nothing renders.
+
+import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconAlertTriangle, IconCircleCheck, IconExternalLink, IconRefresh, IconX } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
@@ -178,7 +180,7 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
         initial={{ opacity: 0, y: -8, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -4, scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 420, damping: 32 }}
+        transition={SPRING.sheet}
       >
         <header className="dialog-head">
           <h2 id="update-title">{t("updates.title")}</h2>
@@ -235,7 +237,7 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
                 <motion.span
                   className="g-progress-bar spring-width"
                   animate={{ width: `${percent}%` }}
-                  transition={{ type: "spring", stiffness: 120, damping: 24 }}
+                  transition={SPRING.progress}
                 />
               </div>
             </>

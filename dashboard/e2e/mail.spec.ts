@@ -76,8 +76,8 @@ test("attaches files, sends them, and keeps them with the Sent copy", async ({ p
     { name: "cotizacion.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4 cotización") },
     { name: "setup.exe", mimeType: "application/octet-stream", buffer: Buffer.from("MZ") },
   ]);
-  await expect(composer.locator(".file-chip.ready")).toHaveText(/cotizacion\.pdf/);
-  await expect(composer.locator(".file-chip.failed")).toHaveText(/setup\.exe/);
+  await expect(composer.locator('.g-file-chip[data-state="ready"]')).toHaveText(/cotizacion\.pdf/);
+  await expect(composer.locator('.g-file-chip[data-state="failed"]')).toHaveText(/setup\.exe/);
 
   await composer.getByRole("button", { name: "Send" }).click();
   await expect(composer.getByRole("alert")).toHaveText("Remove the files that could not be uploaded");
@@ -106,7 +106,7 @@ test("refuses files over the per-message limit, and accepts files dropped on the
     buffer: Buffer.alloc(6 * 1024 * 1024),
   });
   await expect(composer.getByRole("alert")).toHaveText("Attachments are limited to 5 MB per message");
-  await expect(composer.locator(".file-chip")).toHaveCount(0);
+  await expect(composer.locator(".g-file-chip")).toHaveCount(0);
 
   await composer.evaluate((element) => {
     const transfer = new DataTransfer();
@@ -114,7 +114,7 @@ test("refuses files over the per-message limit, and accepts files dropped on the
     element.dispatchEvent(new DragEvent("dragover", { dataTransfer: transfer, bubbles: true, cancelable: true }));
     element.dispatchEvent(new DragEvent("drop", { dataTransfer: transfer, bubbles: true, cancelable: true }));
   });
-  await expect(composer.locator(".file-chip.ready")).toHaveText(/notas\.txt/);
+  await expect(composer.locator('.g-file-chip[data-state="ready"]')).toHaveText(/notas\.txt/);
 });
 
 test("drafts save as you type, reopen from Drafts, and go away when sent", async ({ page }) => {

@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-24
+
+### Fixed
+
+- **The remove button of `g-file-chip` had no style of its own.** It depended on the `g-button` classes that `georg-file.js` adds, so React projects had to write their own; georg-mail did. Now any `<button>` inside a chip is styled as its remove button: 20 px, round, `--text-3` until hover. The script creates that bare button too. Reported by georg-mail.
+
+### Added
+
+- **Motion and sound**, promoted from georg-mail:
+  - [`docs/motion.md`](docs/motion.md): principles, named springs, durations, gestures and a spec for every microinteraction. Each one lists its trigger, enter and exit timing, reduced-motion fallback and sound. It also lists what never animates and the interface sound rules.
+  - `--dur-exit` (140 ms) in `georg.css` and `tokens.json`, for elements leaving: always faster than arriving.
+  - `src/georg-motion.mjs` (export `./georg-motion.mjs`), an ES module for Motion: `EASE_OUT`, `EASE_SPRING`, `DURATION` (seconds, mirroring the `--dur-*` tokens), the ten named springs in `SPRING`, `GESTURE` and `isSwipe`. Unit tests check it against the CSS tokens.
+  - `src/georg-sounds.mjs` (export `./georg-sounds.mjs`): georg-mail's synthesized interface sounds as data (`SOUND_RECIPES`, `SOUND_MIX`) and `scheduleSound(audioContext, name)`, which plays one on Web Audio. There are no audio files, and they are licensed MIT. The setting, the repeat window and the click wiring stay in each app. End-to-end tests render every sound in Chromium and check that it is audible, soft and ends on time.
+  Both modules are frozen, have no side effects and are in the 85% coverage gate (100% today).
+- `g-file-chip[data-state="failed"]` for a file that could not be attached or uploaded: a `--danger` border and name. The contrast test now checks `--danger` text on `--bg-sunken`.
+
+### Consumer impact
+
+- **georg-mail** can delete its `.g-file-chip button` rules and move the Composer's `.file-chip.failed` to `data-state="failed"`.
+- **georg-mail** can replace its inline springs with `SPRING.*` and its `SOUND_RECIPES` and `schedule()` in `lib/sounds.ts` with `georg-sounds.mjs`. It keeps the setting, `soundForClick` and the `georg:sound` event. It should also move its one-off springs (600/30, 520/30, 500/20, 420/36, 420/30, 420/20, 380/32, 300/18, 120/24) to the closest named one, and add reduced-motion fallbacks for the floating empty icon and the waiting ping and sweep.
+- **georg-app**, **Georg spendia** and **georg-website** get `--dur-exit` and can import the modules from their bundles when they animate or play sounds in JavaScript.
+- **Georg port** can read `--dur-exit` from `tokens.json`; SwiftUI's `.interpolatingSpring(stiffness:damping:)` takes the springs as they are.
+
 ## [0.6.0] - 2026-10-24
 
 ### Added
@@ -154,7 +177,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Bridge for Tailwind CSS v4 and shadcn/ui.
 - Interactive demo based on the georg-mail dashboard.
 
-[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.3.0...v0.4.0

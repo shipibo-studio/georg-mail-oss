@@ -1,5 +1,7 @@
 // The Drafts folder: messages still being written, newest first. Opening one brings it back to the
 // composer; they are saved as they are typed, from any device.
+
+import { EASE_OUT } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconFilePencil, IconTrash } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useDeleteDraft, useDrafts } from "../api/queries";
@@ -11,7 +13,6 @@ import { RefreshButton } from "./RefreshButton";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
 
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 const PREVIEW_CHARS = 140;
 
 function DraftRow({ draft, index, onOpen }: { draft: SavedDraft; index: number; onOpen(draft: SavedDraft): void }) {

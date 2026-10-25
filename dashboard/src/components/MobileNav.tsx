@@ -1,3 +1,4 @@
+import { GESTURE, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconDots, type IconInbox, IconPencilPlus, IconSettings } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { type ReactNode, useState } from "react";
@@ -45,11 +46,7 @@ function Tab({
       onClick={onClick}
     >
       {active && (
-        <motion.span
-          layoutId="mobile-tab-highlight"
-          className="mobile-tab-highlight"
-          transition={{ type: "spring", stiffness: 500, damping: 38 }}
-        />
+        <motion.span layoutId="mobile-tab-highlight" className="mobile-tab-highlight" transition={SPRING.nav} />
       )}
       <span className="mobile-tab-icon">
         {icon}
@@ -89,11 +86,11 @@ function MoreSheet({
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
-            transition={{ type: "spring", stiffness: 420, damping: 36 }}
+            transition={SPRING.sheet}
             drag="y"
             dragDirectionLock
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0, bottom: 0.7 }}
+            dragElastic={{ top: 0, bottom: GESTURE.sheetElastic }}
             dragSnapToOrigin
             onDragEnd={(_, info) => {
               if (isSwipeDown(info.offset.y, info.velocity.y)) onClose();
@@ -151,7 +148,7 @@ export function MobileNav({ route, unread, navigate, onCompose, onSettings }: Mo
           aria-label={t("nav.compose")}
           onClick={onCompose}
           whileTap={{ scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 500, damping: 20 }}
+          transition={SPRING.pop}
         >
           <IconPencilPlus size={22} stroke={1.5} />
         </motion.button>

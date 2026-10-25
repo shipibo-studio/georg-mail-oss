@@ -72,7 +72,6 @@
     size.textContent = formatSize(file.size);
     const remove = document.createElement("button");
     remove.type = "button";
-    remove.className = "g-button g-button-small g-button-icon g-button-ghost";
     remove.setAttribute("aria-label", `Remove ${file.name}`);
     remove.textContent = "×";
     remove.addEventListener("click", () => {

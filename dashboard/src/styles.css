@@ -1296,27 +1296,9 @@ pre.raw {
   font-weight: 600;
   pointer-events: none;
 }
-/* Attachments are georg-ds's g-file-list and g-file-chip; these add the composer's spacing and states. */
+/* Attachments are georg-ds's g-file-list and g-file-chip (with its remove button and data-state="failed"). */
 .composer-files {
   padding: 0 16px 10px;
-}
-.file-chip.failed {
-  border-color: var(--danger);
-  color: var(--danger);
-}
-.g-file-chip button {
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border: 0;
-  border-radius: 99px;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-}
-.g-file-chip button:hover {
-  background: var(--bg-hover);
 }
 .spin {
   animation: spin 0.9s linear infinite;
@@ -3009,4 +2991,12 @@ p.update-blocked {
 .g-tooltip.tooltip-wrap-anywhere {
   overflow-wrap: anywhere;
   text-align: left;
+}
+
+/* Without motion, the waiting indicator stays still: no ping, no sweep (georg-ds docs/motion.md). */
+@media (prefers-reduced-motion: reduce) {
+  .waiting .dot::after,
+  .waiting::before {
+    animation: none;
+  }
 }

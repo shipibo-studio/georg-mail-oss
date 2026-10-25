@@ -1,3 +1,4 @@
+import { EASE_OUT, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import {
   IconAlertOctagon,
   IconArchive,
@@ -22,7 +23,6 @@ import { RefreshButton } from "./RefreshButton";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
 
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 const SKELETON_ROWS = 6;
 /** Days Trash and Spam keep a message; the Worker's PERSONAL_BIN_RETENTION_DAYS. */
 const TRASH_RETENTION_DAYS = 30;
@@ -211,13 +211,7 @@ const MessageRow = memo(function MessageRow({
       exit={{ opacity: 0, x: -16, transition: { duration: 0.22, ease: EASE_OUT } }}
       transition={{ duration: fresh ? 0.52 : 0.28, ease: EASE_OUT, delay: fresh ? 0 : Math.min(index, 12) * 0.018 }}
     >
-      {selected && (
-        <motion.span
-          layoutId="msg-selection"
-          className="msg-bar"
-          transition={{ type: "spring", stiffness: 500, damping: 40 }}
-        />
-      )}
+      {selected && <motion.span layoutId="msg-selection" className="msg-bar" transition={SPRING.selection} />}
       {sent ? (
         <span className="avatar avatar-sent" aria-hidden="true">
           <IconSend size={14} stroke={1.5} />
@@ -299,7 +293,7 @@ function EmptyState({ folder, query, address }: { folder: Folder; query: string 
         className="g-empty-icon"
         initial={{ scale: 0.8, rotate: -8 }}
         animate={{ scale: 1, rotate: 0 }}
-        transition={{ type: "spring", stiffness: 260, damping: 14, delay: 0.08 }}
+        transition={{ ...SPRING.playful, delay: 0.08 }}
       >
         <Icon size={26} stroke={1.5} />
       </motion.span>

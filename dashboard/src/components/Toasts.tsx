@@ -1,3 +1,4 @@
+import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconAlertTriangle, IconCheck, IconInfoCircle } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useRef, useState } from "react";
@@ -92,7 +93,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 initial={{ opacity: 0, y: 10, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: toast.bump % 2 ? [1, 1.03, 1] : 1 }}
                 exit={{ opacity: 0, y: 6, scale: 0.98, transition: { duration: 0.2 } }}
-                transition={{ type: "spring", stiffness: 520, damping: 30 }}
+                transition={SPRING.overlay}
                 onClick={() => dismiss(toast.id)}
               >
                 <Icon size={16} stroke={1.5} />

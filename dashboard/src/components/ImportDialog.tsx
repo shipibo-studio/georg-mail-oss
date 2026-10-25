@@ -1,6 +1,8 @@
 // Imports old mail (a Zoho export, .mbox or .eml files): the browser unpacks it and sends one message
 // per request, a few at a time, so each request stays small for the Worker. Messages already in the
 // mailbox are skipped by the Worker, so an interrupted import can be run again from the start.
+
+import { EASE_OUT, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconAlertTriangle, IconFileZip, IconPlayerStop, IconX } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { MorphIcon } from "morphicons/react";
@@ -112,7 +114,7 @@ function ImportProgressView({
         <motion.span
           className="import-badge"
           animate={finished ? { scale: [1, 1.18, 1] } : { scale: 1 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.5, ease: EASE_OUT }}
         >
           <MorphIcon
             icon={finished ? (troubled ? X_ICON : CHECK_ICON) : DOWNLOAD_ICON}
@@ -146,7 +148,7 @@ function ImportProgressView({
           className="g-progress-bar spring-width"
           initial={false}
           animate={{ width: `${percent}%` }}
-          transition={{ type: "spring", stiffness: 140, damping: 26 }}
+          transition={SPRING.progress}
         />
       </div>
       <ul className="import-stats" aria-live="polite">
@@ -303,7 +305,7 @@ export function ImportDialog({ onClose }: { onClose(): void }) {
         initial={{ opacity: 0, y: -8, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -4, scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 420, damping: 32 }}
+        transition={SPRING.sheet}
       >
         <header className="dialog-head">
           <h2 id="import-title">{t("import.title")}</h2>

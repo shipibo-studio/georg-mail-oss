@@ -1,3 +1,4 @@
+import { isSwipe } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { useSyncExternalStore } from "react";
 
 /** Phones: one column, bottom navigation, sheets instead of floating panels (see styles.css). */
@@ -18,16 +19,7 @@ export function useIsPhone(): boolean {
   return useMediaQuery(PHONE_QUERY);
 }
 
-const SWIPE_DISTANCE_PX = 90;
-const SWIPE_MIN_FLICK_PX = 24;
-const SWIPE_VELOCITY_PX_PER_S = 500;
-
-/** A swipe far enough, or a short flick fast enough, along one axis. */
-function isSwipe(offset: number, velocity: number): boolean {
-  return offset > SWIPE_DISTANCE_PX || (offset > SWIPE_MIN_FLICK_PX && velocity > SWIPE_VELOCITY_PX_PER_S);
-}
-
-/** Swiping a message to the right goes back to the list. */
+/** Swiping a message to the right goes back to the list (georg-ds's thresholds: far enough, or a fast flick). */
 export function isSwipeBack(offsetX: number, velocityX: number): boolean {
   return isSwipe(offsetX, velocityX);
 }

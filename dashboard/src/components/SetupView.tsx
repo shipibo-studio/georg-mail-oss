@@ -1,6 +1,8 @@
 // First run of a self-hosted mail client: the person Cloudflare Access let in picks the mailbox
 // address, a display name and whether to get a copy of new mail, and becomes its owner. Shown only
 // when the mailbox cannot load because nobody owns the install yet; the Worker decides that.
+
+import { EASE_OUT } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconAlertTriangle, IconMailForward } from "@tabler/icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
@@ -118,7 +120,7 @@ export function SetupGate({ fallback, onDone }: { fallback: ReactNode; onDone():
         aria-labelledby="setup-title"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.3, ease: EASE_OUT }}
       >
         <div className="brand">
           <div className="logo">g</div>

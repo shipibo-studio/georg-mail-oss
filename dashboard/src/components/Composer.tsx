@@ -1,3 +1,4 @@
+import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconAlertTriangle, IconLoader2, IconMinus, IconPaperclip, IconTrash, IconX } from "@tabler/icons-react";
 import { MorphIcon } from "morphicons/react";
 import { AnimatePresence, motion, useAnimationControls } from "motion/react";
@@ -168,7 +169,7 @@ function RecipientField({
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.14 } }}
-              transition={{ type: "spring", stiffness: 600, damping: 30 }}
+              transition={SPRING.chip}
             >
               <Tip label={isValidAddress(address) ? address : t("compose.invalidAddress", { address })} wrapAnywhere>
                 <span className="mono">{address}</span>
@@ -222,11 +223,12 @@ function FileChip({ file, onRemove }: { file: DraftFile; onRemove(): void }) {
   return (
     <motion.li
       layout
-      className={`g-file-chip file-chip ${file.status}`}
+      className="g-file-chip"
+      data-state={file.status}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.14 } }}
-      transition={{ type: "spring", stiffness: 600, damping: 32 }}
+      transition={SPRING.chip}
     >
       {file.status === "uploading" ? (
         <IconLoader2 size={14} stroke={1.5} className="spin" aria-label={t("compose.uploading")} />
@@ -396,7 +398,7 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
           ? { y: "100%", transition: { duration: 0.22 } }
           : { opacity: 0, y: 20, scale: 0.98, transition: { duration: 0.18 } }
       }
-      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+      transition={SPRING.panel}
       onKeyDown={onKeyDown}
       onDragOver={(event) => {
         if (!event.dataTransfer.types.includes("Files")) return;

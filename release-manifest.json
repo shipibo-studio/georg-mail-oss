@@ -50,7 +50,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "985260c8aaecbad62643671b06cd7cec6ccd98d1",
+      "sha": "dffb1910b7861ff774ca62287319227230e8905d",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -58,7 +58,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/phone.spec.ts": {
-      "sha": "2035bd32fe30c259b8e9d7a39028939b9aad8d70",
+      "sha": "df7cc2c62702f4b6cbb01adc965a4fa586a1193f",
       "mode": "100644"
     },
     "dashboard/index.html": {
@@ -102,27 +102,27 @@
       "mode": "100644"
     },
     "dashboard/src/components/App.tsx": {
-      "sha": "343c6a7907b2b9e54d3eac77ed27da05faf219cc",
+      "sha": "20ac460aed5100f74198b2d823b9f5cab231352c",
       "mode": "100644"
     },
     "dashboard/src/components/CommandPalette.tsx": {
-      "sha": "6a2a8bdb9ebce9a6c4edb6268756a14727b0d60a",
+      "sha": "9bdf2a18120bea48ae3094edfb50bf0fbbcc7733",
       "mode": "100644"
     },
     "dashboard/src/components/Composer.tsx": {
-      "sha": "ffdfcbb61ad73a7baca8f0db8c25cc8ed21cf6ed",
+      "sha": "6dbc6cdd77886073eed470103c922834aff42b37",
       "mode": "100644"
     },
     "dashboard/src/components/DraftsView.tsx": {
-      "sha": "dd513adffa7f4d81d9efe3df4ceed74e0cfc56e6",
+      "sha": "70d7e83cf02c10822e0a7dbf33590a76417b4417",
       "mode": "100644"
     },
     "dashboard/src/components/EmailFrame.tsx": {
-      "sha": "23cd2302e85327b1861e7d971b75386482e18f66",
+      "sha": "d9d2df05b7a511c90d2aae57e35b8d745ca9ac0b",
       "mode": "100644"
     },
     "dashboard/src/components/ImportDialog.tsx": {
-      "sha": "60fa2218ac1ba05a19d1157958370b6367cce180",
+      "sha": "025607179256a8cbc38e36f3747d1bea7799c643",
       "mode": "100644"
     },
     "dashboard/src/components/MailView.tsx": {
@@ -130,19 +130,19 @@
       "mode": "100644"
     },
     "dashboard/src/components/MessageDetail.tsx": {
-      "sha": "2570dbffb2cf90a38b3d8f10003331d53706a66e",
+      "sha": "f17ad21c6ac6f8ce09ca75c4d52a1dbdd7ed852e",
       "mode": "100644"
     },
     "dashboard/src/components/MessageList.tsx": {
-      "sha": "333bc064eb98ccaf8a5b062b425386332f6b159c",
+      "sha": "a7d65bf135ace581ed696ecc3c7e3615238ea0af",
       "mode": "100644"
     },
     "dashboard/src/components/MobileNav.tsx": {
-      "sha": "df06b562b58b4524d011b718dc38cfc7fa525255",
+      "sha": "8edfe4b7bd2e6449623b46914285666709ca5dd2",
       "mode": "100644"
     },
     "dashboard/src/components/NotificationsView.tsx": {
-      "sha": "b9cd1115b2fb0eb83228f478b97897c6bd000524",
+      "sha": "5cb79b9651e34fa221a2390180ded98696ad2f4f",
       "mode": "100644"
     },
     "dashboard/src/components/PreferenceSync.tsx": {
@@ -154,19 +154,19 @@
       "mode": "100644"
     },
     "dashboard/src/components/SettingsDialog.tsx": {
-      "sha": "af707fc3e92d885852aaf97be72115fa8fa48cd5",
+      "sha": "4f8ede33106f9be9970d7280cbdcbbd5980fbc05",
       "mode": "100644"
     },
     "dashboard/src/components/SetupView.tsx": {
-      "sha": "728d14fe278bb33172330102126f8908ef526ecb",
+      "sha": "1f416acfd0373539bf989f47f259d7e1c8a9bdd9",
       "mode": "100644"
     },
     "dashboard/src/components/Sidebar.tsx": {
-      "sha": "86b5246927cf4a9aceeaa7fd53651b1e70ea4df8",
+      "sha": "ba8106837fb331acfe58fcf2500fe41f0210028b",
       "mode": "100644"
     },
     "dashboard/src/components/Toasts.tsx": {
-      "sha": "701aa9cfedefabe8e7cb19045afe572779b3dd7c",
+      "sha": "c0ca67791b362b157c8cfd792e0ae07e4f19a542",
       "mode": "100644"
     },
     "dashboard/src/components/Tooltip.tsx": {
@@ -174,11 +174,11 @@
       "mode": "100644"
     },
     "dashboard/src/components/UpdateDialog.tsx": {
-      "sha": "c4a0047f4e5eef5b86cd5abab9bf4f86fbf00d43",
+      "sha": "2a09731a689354cdcbb7238e0eb37da0f1bce340",
       "mode": "100644"
     },
     "dashboard/src/components/controls.tsx": {
-      "sha": "874645206bb5a0b5e03ad64592c88ff674418861",
+      "sha": "6b7cd2d672785967e3e3d8d80e9285b96f623501",
       "mode": "100644"
     },
     "dashboard/src/components/keyboard.ts": {
@@ -199,6 +199,10 @@
     },
     "dashboard/src/editions/workspace.tsx": {
       "sha": "9e1d78c07229ba0dfc4ef536d51420e593fdfc24",
+      "mode": "100644"
+    },
+    "dashboard/src/georg-ds.d.ts": {
+      "sha": "b5bea1e284d6b458b33510754a810ba092b3988c",
       "mode": "100644"
     },
     "dashboard/src/i18n/I18nProvider.tsx": {
@@ -254,7 +258,7 @@
       "mode": "100644"
     },
     "dashboard/src/lib/media.ts": {
-      "sha": "163ad21a1f98360428b3cab7b4130038d1777d82",
+      "sha": "5f416c09e1f014b062259b5305c0387053024a63",
       "mode": "100644"
     },
     "dashboard/src/lib/preferences.ts": {
@@ -274,7 +278,7 @@
       "mode": "100644"
     },
     "dashboard/src/lib/sounds.ts": {
-      "sha": "1d19c4b09154756a95ebcb1a53376a416adaf98d",
+      "sha": "874614a05d7f89d1ec292dff7a7eb4e4ba507f31",
       "mode": "100644"
     },
     "dashboard/src/lib/theme.ts": {
@@ -286,7 +290,7 @@
       "mode": "100644"
     },
     "dashboard/src/styles.css": {
-      "sha": "3f27ff90c6320c6fcd22ef6bcbb0a9753b1c1459",
+      "sha": "04738bab727a436fcb664bc02129dc6a099360f2",
       "mode": "100644"
     },
     "dashboard/test/aliases-and-retry.test.ts": {
@@ -682,7 +686,7 @@
       "mode": "100644"
     },
     "pnpm-workspace.yaml": {
-      "sha": "496508e61dea84df335cb00dab316769abd519a8",
+      "sha": "339aae784f691496cb03ec0bdc6f858ed1d40eab",
       "mode": "100644"
     },
     "scripts/check-invisible-characters.mjs": {
@@ -1098,7 +1102,7 @@
       "mode": "100644"
     },
     "vendor/georg-ds/CHANGELOG.md": {
-      "sha": "412c6203b91d8da8b9ca4385fc59fe9bbecbbb81",
+      "sha": "894457d80c3ef90a6e80bf64c8044c9b65ea6941",
       "mode": "100644"
     },
     "vendor/georg-ds/LICENSE": {
@@ -1106,15 +1110,15 @@
       "mode": "100644"
     },
     "vendor/georg-ds/README.md": {
-      "sha": "08b35f6bfee8b992b0471f1eca93520d7900dfd9",
+      "sha": "98f259cbcb061b4ad169ca8df18b9671115ea5b5",
       "mode": "100644"
     },
     "vendor/georg-ds/package.json": {
-      "sha": "beb0f3f34fcf0df7cd239abb0af3e0b106d8cec6",
+      "sha": "9e0e680b83c7ca7e270839176d2151392e745cad",
       "mode": "100644"
     },
     "vendor/georg-ds/src/components.css": {
-      "sha": "f18a3306f03e85777aaa40fdea703e85b4130e3c",
+      "sha": "2ab5f28f449ddcfa7d38a2ff42c5269c3869cc17",
       "mode": "100644"
     },
     "vendor/georg-ds/src/fonts.css": {
@@ -1126,7 +1130,15 @@
       "mode": "100644"
     },
     "vendor/georg-ds/src/georg-file.js": {
-      "sha": "b4f6e5a851148a58c69d8f58a5130ad8e0387ec0",
+      "sha": "9a85ba1c9f502c2e533f5a8c22337a0b977efad7",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/georg-motion.mjs": {
+      "sha": "daf878d7d12e89b02b7179b88663af6d0143b741",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/georg-sounds.mjs": {
+      "sha": "d542a133a8f32213a8c0080dbaa9b1b20cd77f1d",
       "mode": "100644"
     },
     "vendor/georg-ds/src/georg-tabs.js": {
@@ -1146,7 +1158,7 @@
       "mode": "100644"
     },
     "vendor/georg-ds/src/georg.css": {
-      "sha": "09b15a0a21d5846122355bdbe07efb5aad183608",
+      "sha": "b519089742c47c80ba8c121eb75045e51cce0c72",
       "mode": "100644"
     },
     "vendor/georg-ds/src/tailwind.css": {
@@ -1154,7 +1166,7 @@
       "mode": "100644"
     },
     "vendor/georg-ds/src/tokens.json": {
-      "sha": "fe4bf6a0102945bf4d3da09dc5c640ba14b43a5a",
+      "sha": "795e6131aa31923f90193cb4c979aca454bef845",
       "mode": "100644"
     },
     "vitest.config.ts": {
