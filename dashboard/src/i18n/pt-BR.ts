@@ -537,6 +537,7 @@ export const ptBR: Translations = {
   "activity.action.message_deleted": "Excluiu uma mensagem",
   "activity.action.messages_listed": "Listou mensagens",
   "activity.action.message_sent": "Enviou uma mensagem",
+  "activity.action.message_replied": "Respondeu a um remetente confiável",
   "activity.action.inbox_created": "Criou uma caixa",
   "activity.action.inbox_deleted": "Excluiu uma caixa",
   "activity.action.project_created": "Criou um projeto",

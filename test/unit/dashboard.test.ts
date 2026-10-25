@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { accessIssuer, assertSameOriginWrite } from "../../src/worker/dashboard/dashboard-session";
-import { threadableMessageId } from "../../src/worker/dashboard/mailbox-routes";
+import { threadableMessageId } from "../../src/worker/email/message-id";
 
 const BASE_URL = "https://mail.dasgeorg.cc";
 

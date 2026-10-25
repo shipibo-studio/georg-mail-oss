@@ -535,6 +535,7 @@ export const en = {
   "activity.action.message_deleted": "Deleted a message",
   "activity.action.messages_listed": "Listed messages",
   "activity.action.message_sent": "Sent a message",
+  "activity.action.message_replied": "Replied to a trusted sender",
   "activity.action.inbox_created": "Created an inbox",
   "activity.action.inbox_deleted": "Deleted an inbox",
   "activity.action.project_created": "Created a project",

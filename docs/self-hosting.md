@@ -30,9 +30,39 @@ It takes about 30 minutes. Everything fits Cloudflare's and Resend's free plans.
 
 ### With the button
 
-Press **Deploy to Cloudflare** in the [README](../README.md). Cloudflare asks you to connect GitHub, copies this repository to your account, creates the D1 database and the R2 bucket, builds the app and deploys the Worker. When it asks for variables and secrets, you can fill them in now or later (next section).
+Press **Deploy to Cloudflare** in the [README](../README.md) and sign in to Cloudflare. It asks to connect your GitHub or GitLab account, then shows one long form. Field by field:
 
-From then on, every push to your copy's `main` branch deploys again, applying new database migrations first.
+1. **Project.** Pick the Git account the copy goes to and keep **Create private Git repository** on. The project name becomes the Worker's name and the default name of its database and bucket.
+
+   ![The Deploy form: Git account, private repository and project name](images/install/01-deploy-project.png)
+
+2. **Storage.** Keep **Create new** for the D1 database and the R2 bucket; any names do. Read replication is not needed.
+
+   ![Naming the new D1 database and R2 bucket](images/install/02-deploy-storage.png)
+
+3. **Secrets.** `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` can stay empty for now: you get them in [Put it behind Cloudflare Access](#put-it-behind-cloudflare-access). Paste `RESEND_API_KEY` if you already have it ([Send with Resend](#send-with-resend)).
+
+   ![The secrets: Access team domain, Access audience and the Resend key](images/install/03-deploy-secrets.png)
+
+4. **Variables.** Your domain, the address the app will live at, the mailbox's address and `resend` as the provider ([what each one is](#configure-the-worker)).
+
+   ![The variables: MAIL_DOMAIN, PUBLIC_BASE_URL and PERSONAL_MAILBOX_ADDRESSES](images/install/04-deploy-variables.png)
+
+5. **Build.** Leave the commands as they come: `pnpm run build`, and `pnpm run deploy`, which applies database migrations before deploying.
+
+   ![The build and deploy commands, left as they are](images/install/05-deploy-build.png)
+
+6. **Access.** Turn on **Protect with Cloudflare Access** for **All traffic**, so nobody reaches the app, not even its first-run page, without signing in. Leave **Enable Preview builds** off.
+
+   ![Protect with Cloudflare Access, for all traffic](images/install/06-deploy-access.png)
+
+7. **Who may sign in.** Add the **Cloudflare account** policy: only members of your Cloudflare account get in. **Do not add "Email domain" with a public provider such as `gmail.com`**: that lets in every Gmail user in the world. To let in an address outside your Cloudflare account, add an **Emails** rule with that exact address afterwards, in Zero Trust.
+
+   ![The Cloudflare account policy, chosen as the only way in](images/install/07-deploy-access-policy.png)
+
+8. Press **Deploy**. Cloudflare copies the repository, creates the database and the bucket, builds the app and deploys it, in two or three minutes. From then on, every push to your copy's `main` branch deploys again, applying new database migrations first.
+
+The app answers "The dashboard is not configured" until `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` are set: that is the next step.
 
 ### Deploy from the command line
 
@@ -86,10 +116,12 @@ To keep it in the repository instead, add this to `wrangler.jsonc` and deploy:
 
 Access signs you in before any request reaches the Worker, and the Worker checks Access's signature on every request itself.
 
+If you turned on Access in the Deploy form, the application already exists: open it in **Zero Trust → Access → Applications**, check its policy (see step 2 below) and go to step 3. If you then give the Worker its own subdomain, add that domain to the same application.
+
 1. Open **Zero Trust** in the Cloudflare dashboard. The first time, it asks you to pick a team name: your team domain is then `https://<team>.cloudflareaccess.com`. You find it again in **Settings → Custom Pages**.
 2. **Access → Applications → Add an application → Self-hosted.**
    - Application domain: `mail.example.com` (no path).
-   - Policy: **Allow**, include **Emails** → the email you sign in with. Only the people this policy lets in can ever reach the app, including the first-run page.
+   - Policy: **Allow**, include **Emails** → the email you sign in with. Only the people this policy lets in can ever reach the app, including the first-run page. Never allow a whole public email domain (`gmail.com`, `outlook.com`): it lets in everyone who has an address there.
    - Sign-in: the one-time PIN is on by default; Google is also available under **Settings → Authentication**.
 3. Open the application and copy its **Application Audience (AUD) Tag**.
 4. Set the secrets `ACCESS_TEAM_DOMAIN` (the team domain, with `https://`) and `ACCESS_AUD` (the tag).
@@ -121,7 +153,11 @@ Open `https://mail.example.com/dashboard`. Access asks you to sign in; then the 
 - give the name your mail is sent with,
 - choose whether new mail is also forwarded to the email you signed in with.
 
+![The first-run page: the mailbox address, your name and the forwarded copy](images/install/08-first-run.png)
+
 **Create the mailbox**, and it is yours: the first-run page closes for good, for everyone. Send yourself a message from another account to check that mail arrives.
+
+![The mailbox, with a verification email open](images/install/09-mailbox.png)
 
 ## More addresses for the same mailbox
 

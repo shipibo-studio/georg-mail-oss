@@ -1,0 +1,22 @@
+# Georg mail
+
+> A self-hosted mail client for one mailbox on your own domain, on Cloudflare Workers Free. Mail arrives through Cloudflare Email Routing, is kept in D1 and R2, is sent through Resend (or Mailtrap), and is read in a web app behind Cloudflare Access. MIT.
+
+It keeps one mailbox (plus aliases) for one owner; it is not a multi-user mail server. Inbound email is untrusted: the app never runs its code or loads its images until asked. There is no public API: everything happens in the web app, behind Access.
+
+## Install
+
+- [Install with an agent](skills/install-georg-mail/SKILL.md): a runbook for coding agents (Claude Code, Codex, Cursor), with the steps only the person may take.
+- [Self-hosting guide](docs/self-hosting.md): the same install for people, with the Deploy to Cloudflare button and screenshots.
+- [Configuration](docs/self-hosting.md#configure-the-worker): `MAIL_DOMAIN`, `PUBLIC_BASE_URL`, `PERSONAL_MAILBOX_ADDRESSES`, `MAIL_PROVIDER`; secrets `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `RESEND_API_KEY`.
+- [Upgrading](docs/self-hosting.md#upgrading): in-app updates from releases (`UPDATE_REPOSITORY`, `UPDATE_TOKEN`), or by hand.
+- [Troubleshooting](docs/self-hosting.md#troubleshooting): error codes and what to do.
+
+## Develop
+
+- [README](README.md): features, requirements and development commands (`pnpm dashboard:mock`, `pnpm dev`, `pnpm test`).
+- [Security policy](SECURITY.md): how to report a vulnerability.
+
+## Optional
+
+- [Releases](https://github.com/shipibo-studio/georg-mail-oss/releases): each one has `release-manifest.json`, every file with its git blob id.

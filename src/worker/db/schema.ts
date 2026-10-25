@@ -3,6 +3,9 @@ import { index, integer, primaryKey, sqliteTable, text, uniqueIndex } from "driz
 
 // All timestamps are Unix epoch milliseconds stored as integers.
 
+export const OUTBOUND_KINDS = ["internal", "reply", "personal"] as const;
+export type OutboundKind = (typeof OUTBOUND_KINDS)[number];
+
 export const AUDIT_ACTIONS = [
   "message_read",
   "message_deleted",
@@ -27,6 +30,7 @@ export const AUDIT_ACTIONS = [
   "notify_hook_deleted",
   "notification_channel_updated",
   "ai_extraction_updated",
+  "message_replied",
 ] as const;
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
 
@@ -77,6 +81,8 @@ export const plans = sqliteTable("plans", {
   maxStorageBytes: integer("max_storage_bytes").notNull().default(52_428_800),
   // Webhooks and notify hooks: outgoing notifications are a paid feature.
   hooksEnabled: integer("hooks_enabled", { mode: "boolean" }).notNull().default(false),
+  // Replies to trusted senders: the one way an agent's email leaves Georg mail, so a paid feature.
+  repliesEnabled: integer("replies_enabled", { mode: "boolean" }).notNull().default(false),
 });
 
 export const accounts = sqliteTable("accounts", {
@@ -625,10 +631,15 @@ export const outboundMessages = sqliteTable(
     recipientCount: integer("recipient_count").notNull(),
     // Delivered recipient addresses, returned again when the request is retried.
     recipients: text("recipients", { mode: "json" }).$type<string[]>().notNull(),
+    // "internal": delivered to inboxes of the same project. "reply": an agent's reply sent out to a
+    // trusted sender, counted against Georg mail's own daily budget with the email provider.
+    // "personal": sent by the owner from the personal mailbox, with its own daily cap.
+    kind: text("kind", { enum: OUTBOUND_KINDS }).notNull().default("internal"),
     createdAt: integer("created_at").notNull(),
   },
   (table) => [
     uniqueIndex("outbound_messages_inbox_key_unique").on(table.inboxId, table.idempotencyKey),
+    index("outbound_messages_kind_created_idx").on(table.kind, table.createdAt),
     index("outbound_messages_account_created_idx").on(table.accountId, table.createdAt),
   ],
 );

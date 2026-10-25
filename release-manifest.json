@@ -30,7 +30,7 @@
       "mode": "100644"
     },
     "README.md": {
-      "sha": "5fbd163b40997ebbf8c76dbbdd7ee0e78dad593c",
+      "sha": "3354b9ee92bfbfb07c5b8c31a12e4606d29c7c6c",
       "mode": "100644"
     },
     "SECURITY.md": {
@@ -206,15 +206,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "29f8c5ee5448b02a0b8f292aa1f783a69896e3d4",
+      "sha": "73dbd1b4c8ab110bcfce09688da0c15e7a3a57f2",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "b131d8d60ff4c5db3417cd829659c29d2b3b9e9b",
+      "sha": "453364309ef21f104d910b6b318b6049315077d4",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "f532ab99b6da583b8b9a7d62291ef181e1b5ecb2",
+      "sha": "12799495447168af8c41951f71f2514938a07e87",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {
@@ -357,12 +357,52 @@
       "sha": "65d61242a3c6bb8be8e342df97c2505f332a042f",
       "mode": "100644"
     },
+    "docs/images/install/01-deploy-project.png": {
+      "sha": "3dd088c106bda5b9f4b285802ad19044f7e94fcc",
+      "mode": "100644"
+    },
+    "docs/images/install/02-deploy-storage.png": {
+      "sha": "b87297e120d7168660eeb173728622009f9c2377",
+      "mode": "100644"
+    },
+    "docs/images/install/03-deploy-secrets.png": {
+      "sha": "0fcdf01a7bccc538248d1cf5c15942673f82a1cb",
+      "mode": "100644"
+    },
+    "docs/images/install/04-deploy-variables.png": {
+      "sha": "ad793cf61aa5ca682d1423375f26bc06206593e3",
+      "mode": "100644"
+    },
+    "docs/images/install/05-deploy-build.png": {
+      "sha": "673516f8a412f6833f9bb5f5d7fae5624be9838d",
+      "mode": "100644"
+    },
+    "docs/images/install/06-deploy-access.png": {
+      "sha": "a210f75379fc7bb3408b994da6d7a3a88b236045",
+      "mode": "100644"
+    },
+    "docs/images/install/07-deploy-access-policy.png": {
+      "sha": "e0a4d659f8338dee65041282cd3116b3f3495f23",
+      "mode": "100644"
+    },
+    "docs/images/install/08-first-run.png": {
+      "sha": "286dc2371a96b07ab0cff9771ba839fe251d90be",
+      "mode": "100644"
+    },
+    "docs/images/install/09-mailbox.png": {
+      "sha": "69f1ce8f638dfecd3005aeb4e4d123242a618e1d",
+      "mode": "100644"
+    },
     "docs/self-hosting.md": {
-      "sha": "4f6957bc1517137c0135b517b68cd885aa9d9466",
+      "sha": "9ed2b5e3cca2a6418ac45cb7d49586c4bca9efd3",
       "mode": "100644"
     },
     "drizzle.config.ts": {
       "sha": "5ac5b9f1a782fbe52d12254d019397b348fa4ff8",
+      "mode": "100644"
+    },
+    "llms.txt": {
+      "sha": "c1ffc250bc28efe0c3fffe623ff14bdb69924bb0",
       "mode": "100644"
     },
     "migrations/0000_init.sql": {
@@ -493,6 +533,10 @@
       "sha": "a6e558bd2432e036b34f36459be5e5a79a0ae0c1",
       "mode": "100644"
     },
+    "migrations/0032_trusted_sender_replies.sql": {
+      "sha": "ff5c4119bbb3e1de903d9a463902a72457c80020",
+      "mode": "100644"
+    },
     "migrations/meta/0000_snapshot.json": {
       "sha": "89751bfed61254d9d16e5852814fa115f063819c",
       "mode": "100644"
@@ -621,8 +665,12 @@
       "sha": "8f2e7e1faa84b43ea5a6a7470dc9d6b19ca153ef",
       "mode": "100644"
     },
+    "migrations/meta/0032_snapshot.json": {
+      "sha": "1d602e3338048aa2a80c85ce7edf0d99e6d437ed",
+      "mode": "100644"
+    },
     "migrations/meta/_journal.json": {
-      "sha": "0c3765a20c1aaed361522e998c006c5da8d86dba",
+      "sha": "2565a16e6648f1f8f1f26977aae4b5e70b4a2c31",
       "mode": "100644"
     },
     "package.json": {
@@ -641,8 +689,12 @@
       "sha": "d9d917b86f3d16b27a44db08b39eb1335fdb61af",
       "mode": "100644"
     },
+    "skills/install-georg-mail/SKILL.md": {
+      "sha": "119950aeea7fd72601b379ade11e3852bf6baa5e",
+      "mode": "100644"
+    },
     "src/worker/config.ts": {
-      "sha": "788ca87da73eee695dd1167e82b6bdfb4bc00366",
+      "sha": "bfc3df82f41653ff897da4696cb86f674a6d02cb",
       "mode": "100644"
     },
     "src/worker/crypto.ts": {
@@ -690,7 +742,7 @@
       "mode": "100644"
     },
     "src/worker/dashboard/mailbox-routes.ts": {
-      "sha": "b1da0b86fd5c0ad96abd8f5d421f2db83f41f9e8",
+      "sha": "cd8041ddc56adc29adfd8d3efcbd602e87e8f7dd",
       "mode": "100644"
     },
     "src/worker/dashboard/preferences.ts": {
@@ -710,7 +762,7 @@
       "mode": "100644"
     },
     "src/worker/db/schema.ts": {
-      "sha": "876c4c552d198e24f9a6d559f88404fd02fbe1dc",
+      "sha": "1baf7df43a5c2bb1933ad98a0e28f9b0155d3f06",
       "mode": "100644"
     },
     "src/worker/docs-url.ts": {
@@ -739,6 +791,10 @@
     },
     "src/worker/email/html-to-text.ts": {
       "sha": "3dc802673745687c5a19e0a36d9084c0e61aebd0",
+      "mode": "100644"
+    },
+    "src/worker/email/message-id.ts": {
+      "sha": "42b7eac93bc720b3c5bfd02c2b2668ca1c384eee",
       "mode": "100644"
     },
     "src/worker/email/parse-email.ts": {
@@ -950,7 +1006,7 @@
       "mode": "100644"
     },
     "test/unit/dashboard.test.ts": {
-      "sha": "40d16df18223c96b7af5ef7c32b4ead95c393c02",
+      "sha": "df5991ff51fc2601b660691a506820c6fca11618",
       "mode": "100644"
     },
     "test/unit/extract-code.test.ts": {

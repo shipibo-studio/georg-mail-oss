@@ -537,6 +537,7 @@ export const es419: Translations = {
   "activity.action.message_deleted": "Eliminó un mensaje",
   "activity.action.messages_listed": "Listó mensajes",
   "activity.action.message_sent": "Envió un mensaje",
+  "activity.action.message_replied": "Respondió a un remitente de confianza",
   "activity.action.inbox_created": "Creó un buzón",
   "activity.action.inbox_deleted": "Eliminó un buzón",
   "activity.action.project_created": "Creó un proyecto",

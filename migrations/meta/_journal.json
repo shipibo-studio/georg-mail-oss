@@ -225,6 +225,13 @@
       "when": 1792886980156,
       "tag": "0031_member_preferences",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "6",
+      "when": 1792896343989,
+      "tag": "0032_trusted_sender_replies",
+      "breakpoints": true
     }
   ]
 }

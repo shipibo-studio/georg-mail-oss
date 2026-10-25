@@ -131,6 +131,13 @@ export const MAX_TRUSTED_SENDERS_PER_PROJECT = 20;
 export const MAX_VERIFICATION_EMAILS_PER_DAY = 10;
 /** For the whole service, below Mailtrap's free quota of 150 emails a day. */
 export const MAX_VERIFICATION_EMAILS_PER_DAY_GLOBAL = 100;
+/**
+ * Agent replies to trusted senders for the whole service: what is left of the provider's 150 a day
+ * after the personal mailbox (40) and verification emails (100).
+ */
+export const MAX_TRUSTED_REPLIES_PER_DAY_GLOBAL = 10;
+/** Longest reply text an agent can send to a trusted sender. */
+export const MAX_REPLY_TEXT_CHARS = 16_000;
 /** Per recipient address across all accounts, so nobody can be flooded with verification emails. */
 export const MAX_VERIFICATION_EMAILS_PER_RECIPIENT_PER_DAY = 3;
 /** Wait before a verification email can be sent again to the same address. */

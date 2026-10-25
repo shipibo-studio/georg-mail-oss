@@ -38,6 +38,8 @@ Switching your domain's mail to Email Routing replaces its current MX records: m
 
 Every step, and where to find each setting in Cloudflare and Resend, is in **[docs/self-hosting.md](docs/self-hosting.md)**.
 
+**Installing with a coding agent?** Point Claude Code, Codex or Cursor at [`skills/install-georg-mail/SKILL.md`](skills/install-georg-mail/SKILL.md) (or [`llms.txt`](llms.txt)): it runs the commands, and leaves to you the steps that are yours, such as the secrets, who may sign in and moving your domain's mail.
+
 ## Development
 
 Node.js 24 and pnpm:

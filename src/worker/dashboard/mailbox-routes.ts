@@ -28,6 +28,7 @@ import {
   SENDER_VERDICTS,
 } from "../db/schema";
 import { normalizeAddress } from "../email/email-address";
+import { threadableMessageId } from "../email/message-id";
 import { setSenderRule } from "../email/sender-rules";
 import { ApiError, notFound } from "../errors";
 import { isUniqueViolation } from "../http/database-errors";
@@ -73,7 +74,6 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const IDEMPOTENCY_KEY_PATTERN = /^[A-Za-z0-9._:-]{8,100}$/;
 const MAX_PERSONAL_TEXT_CHARS = 15_000;
 // A Message-ID copied from untrusted inbound mail goes into our own headers only when it has this shape.
-const MESSAGE_ID_PATTERN = /^<[^<>\s]{1,250}>$/;
 const LINE_BREAK = /[\r\n]/;
 
 type AppContext = Context<MailEnv>;
@@ -130,8 +130,8 @@ const attachmentParam = z.object({ messageId: z.string().max(64), attachmentId: 
 
 // Counted in recipients for this mailbox, in the same statement that records the send.
 const RESERVE_PERSONAL_SEND = `
-  INSERT INTO outbound_messages (id, account_id, inbox_id, idempotency_key, request_hash, recipient_count, recipients, created_at)
-  SELECT ?, ?, ?, ?, ?, ?, ?, ?
+  INSERT INTO outbound_messages (id, account_id, inbox_id, idempotency_key, request_hash, recipient_count, recipients, kind, created_at)
+  SELECT ?, ?, ?, ?, ?, ?, ?, 'personal', ?
   WHERE (SELECT coalesce(sum(recipient_count), 0) FROM outbound_messages WHERE inbox_id = ? AND created_at > ?) + ? <= ?`;
 
 async function personalMailbox(context: AppContext): Promise<Inbox> {
@@ -262,12 +262,6 @@ async function readOriginal(context: AppContext, message: Message): Promise<R2Ob
   const original = message.rawObjectKey ? await context.env.MAIL_STORAGE.get(message.rawObjectKey) : null;
   if (!original) throw notFound("Original message");
   return original;
-}
-
-/** A parent's Message-ID, only when it is safe to copy into our own In-Reply-To and References. */
-export function threadableMessageId(value: string | null | undefined): string | null {
-  const trimmed = value?.trim();
-  return trimmed && MESSAGE_ID_PATTERN.test(trimmed) ? trimmed : null;
 }
 
 /** Reserves the send in the same statement that checks the daily cap, so parallel sends cannot exceed it. */
