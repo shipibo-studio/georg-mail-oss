@@ -178,6 +178,7 @@ export const es419: Translations = {
   "settings.scopeMail": "Correo",
   "settings.scopeEverywhere": "Correo y workspace",
   "settings.signOut": "Cerrar sesión",
+  "settings.holdToSignOut": "Mantén presionado para cerrar sesión",
   "settings.signedInAs": "Sesión iniciada como",
   "aliases.section": "Direcciones",
   "aliases.description": "El correo a cualquiera de estas llega a esta bandeja, y puedes enviar desde ellas.",

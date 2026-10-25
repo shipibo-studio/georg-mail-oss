@@ -177,6 +177,7 @@ export const ptBR: Translations = {
   "settings.scopeMail": "E-mail",
   "settings.scopeEverywhere": "E-mail e workspace",
   "settings.signOut": "Sair",
+  "settings.holdToSignOut": "Segure para sair",
   "settings.signedInAs": "Conectado como",
   "aliases.section": "Endereços",
   "aliases.description": "E-mails para qualquer um destes chegam a esta caixa, e você pode enviar a partir deles.",

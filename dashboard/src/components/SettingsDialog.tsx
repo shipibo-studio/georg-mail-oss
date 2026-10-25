@@ -10,11 +10,29 @@ import { CLOCKS, type Clock, sampleTime } from "../lib/format";
 import { isSwipeDown, useIsPhone } from "../lib/media";
 import { play, setSounds, useSounds } from "../lib/sounds";
 import { AliasSettings } from "./AliasSettings";
-import { Switch } from "./controls";
+import { HoldButton, Switch } from "./controls";
 import { AccentControl, ThemeControl } from "./Sidebar";
 import { UpdateSettings } from "./UpdateDialog";
 
 const ACCESS_LOGOUT_PATH = "/cdn-cgi/access/logout";
+
+/**
+ * Sign out by press and hold, the app's way to confirm an action with one outcome: a click alone
+ * does nothing. It ends the Access session, so the next visit signs in again.
+ */
+function SignOut() {
+  const { t } = useI18n();
+  return (
+    <HoldButton
+      label={t("settings.holdToSignOut")}
+      className="g-button g-button-ghost sign-out"
+      // Cloudflare Access ends the session on this path of any protected app.
+      onConfirm={() => window.location.assign(ACCESS_LOGOUT_PATH)}
+    >
+      <IconLogout size={16} stroke={1.5} /> {t("settings.signOut")}
+    </HoldButton>
+  );
+}
 
 export function SettingsDialog({
   mailbox,
@@ -188,10 +206,7 @@ export function SettingsDialog({
           <span className="muted small">
             {t("settings.signedInAs")} <span className="registered-email">{mailbox.owner}</span>
           </span>
-          {/* Cloudflare Access ends the session on this path of any protected app. */}
-          <a className="g-button g-button-ghost sign-out" href={ACCESS_LOGOUT_PATH}>
-            <IconLogout size={16} stroke={1.5} /> {t("settings.signOut")}
-          </a>
+          <SignOut />
         </div>
       </motion.div>
     </motion.div>

@@ -50,7 +50,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "dffb1910b7861ff774ca62287319227230e8905d",
+      "sha": "90bcaf4852552f8c585fcddd81ccf176bc3fdcab",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -58,7 +58,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/phone.spec.ts": {
-      "sha": "df7cc2c62702f4b6cbb01adc965a4fa586a1193f",
+      "sha": "b13ca47cada42eb2fa50469540fb329ffd7d5e29",
       "mode": "100644"
     },
     "dashboard/index.html": {
@@ -154,7 +154,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/SettingsDialog.tsx": {
-      "sha": "4f8ede33106f9be9970d7280cbdcbbd5980fbc05",
+      "sha": "ac5ba10e95233bb5efa1279a11f80b86067d408f",
       "mode": "100644"
     },
     "dashboard/src/components/SetupView.tsx": {
@@ -210,15 +210,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "73dbd1b4c8ab110bcfce09688da0c15e7a3a57f2",
+      "sha": "aa1ebaf2c87e9d683b532957d7080638e326df17",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "453364309ef21f104d910b6b318b6049315077d4",
+      "sha": "a7709628930260e442e046d19e38a27e90e911be",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "12799495447168af8c41951f71f2514938a07e87",
+      "sha": "44c1bf432231a69b4a99750c8d0dcb5d89924cd2",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {

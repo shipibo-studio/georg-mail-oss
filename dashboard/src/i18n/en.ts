@@ -176,6 +176,7 @@ export const en = {
   "settings.scopeMail": "Mail",
   "settings.scopeEverywhere": "Mail and workspace",
   "settings.signOut": "Sign out",
+  "settings.holdToSignOut": "Hold to sign out",
   "settings.signedInAs": "Signed in as",
   "aliases.section": "Addresses",
   "aliases.description": "Mail to any of these lands in this inbox, and you can send from them.",

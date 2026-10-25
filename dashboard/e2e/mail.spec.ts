@@ -470,9 +470,17 @@ test("settings say what is shared, show who is signed in and offer to sign out",
   await expect(dialog.getByRole("switch")).toHaveAccessibleName("Interface sounds");
   await expect(dialog.getByText("Delivery")).toHaveCount(0);
   await expect(dialog.locator(".signed-in .registered-email")).toHaveText("owner@example.org");
-  const signOut = dialog.getByRole("link", { name: "Sign out" });
-  await expect(signOut).toHaveAttribute("href", "/cdn-cgi/access/logout");
+  // Signing out takes a press and hold: a click alone keeps the session.
+  const signOut = dialog.getByRole("button", { name: "Hold to sign out" });
   await expect(signOut).toHaveClass(/g-button/);
+  await expect(signOut).toContainText("Sign out");
+  await signOut.click();
+  await page.waitForTimeout(1_100);
+  await expect(dialog).toBeVisible();
+  await signOut.hover();
+  await page.mouse.down();
+  await page.waitForURL(/\/cdn-cgi\/access\/logout$/);
+  await page.mouse.up();
 });
 
 test("Notifications show the registered email and switch the forwarded copy", async ({ page }) => {

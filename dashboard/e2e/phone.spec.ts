@@ -244,3 +244,18 @@ test("taps sound on a phone, and the Settings sheet can silence them", async ({ 
   await expect.poll(async () => (await sounds()).at(-1)).toBe("toggleOff");
   await expect(page.getByRole("switch", { name: "Interface sounds" })).not.toBeChecked();
 });
+
+test("signing out from the Settings sheet takes a press and hold", async ({ page }) => {
+  await openInbox(page);
+  await goTo(page, "Settings");
+  const signOut = page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Hold to sign out" });
+  await signOut.tap();
+  await page.waitForTimeout(1_100);
+  await expect(page).toHaveURL(/\/dashboard\//);
+  const box = await signOut.boundingBox();
+  if (!box) throw new Error("Sign out is not visible");
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.waitForURL(/\/cdn-cgi\/access\/logout$/);
+  await page.mouse.up();
+});
