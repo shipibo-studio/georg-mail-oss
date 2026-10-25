@@ -6,7 +6,7 @@ import { createResendSender, formatAddress } from "../../src/worker/sending/rese
 const KEY = "re_test_key";
 
 const message: OutboundMessage = {
-  from: { email: "oi@andalaosa.cl", name: "Andalaosa" },
+  from: { email: "oi@aurora.test", name: "Aurora" },
   to: [{ email: "camila@estudio.cl" }],
   cc: [{ email: "otro@estudio.cl", name: "Otro" }],
   subject: "Propuesta",
@@ -50,7 +50,7 @@ describe("Resend sender", () => {
     expect(String(init?.body)).not.toContain(KEY);
     expect(init?.signal).toBeInstanceOf(AbortSignal);
     expect(JSON.parse(String(init?.body))).toEqual({
-      from: '"Andalaosa" <oi@andalaosa.cl>',
+      from: '"Aurora" <oi@aurora.test>',
       to: ["camila@estudio.cl"],
       cc: ['"Otro" <otro@estudio.cl>'],
       subject: "Propuesta",
@@ -65,13 +65,13 @@ describe("Resend sender", () => {
   test("leaves out optional fields that are not set", async () => {
     const fetchImpl = fakeFetch(jsonResponse({ id: "re-2" }));
     await createResendSender({ apiKey: KEY, fetch: fetchImpl }).send({
-      from: { email: "oi@andalaosa.cl" },
+      from: { email: "oi@aurora.test" },
       to: [{ email: "a@b.test" }],
       subject: "S",
       html: "<p>Hi</p>",
     });
     expect(JSON.parse(String(fetchImpl.mock.calls[0]?.[1]?.body))).toEqual({
-      from: "oi@andalaosa.cl",
+      from: "oi@aurora.test",
       to: ["a@b.test"],
       subject: "S",
       html: "<p>Hi</p>",

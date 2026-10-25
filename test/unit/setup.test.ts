@@ -2,17 +2,17 @@
 import { describe, expect, test } from "vitest";
 import { canForwardCopy } from "../../src/worker/dashboard/setup-routes";
 
-const RECEIVING = ["andalaosa.cl", "example.com"];
+const RECEIVING = ["aurora.test", "example.com"];
 
 describe("the forwarded copy's destination", () => {
-  test.each(["me@gmail.com", "me@notandalaosa.cl", "me@andalaosa.cl.evil.test", "me@example.co"])(
+  test.each(["me@gmail.com", "me@notaurora.test", "me@aurora.test.evil.test", "me@example.co"])(
     "%s is outside the install's domains",
     (owner) => {
       expect(canForwardCopy(owner, RECEIVING)).toBe(true);
     },
   );
 
-  test.each(["hola@andalaosa.cl", "Otro@AndaLaosa.CL", "x@mail.andalaosa.cl", "x@deep.mail.example.com"])(
+  test.each(["hola@aurora.test", "Otro@Aurora.TEST", "x@mail.aurora.test", "x@deep.mail.example.com"])(
     "%s would loop back into this install",
     (owner) => {
       expect(canForwardCopy(owner, RECEIVING)).toBe(false);
@@ -20,6 +20,6 @@ describe("the forwarded copy's destination", () => {
   );
 
   test("with no receiving domain, any address can take the copy", () => {
-    expect(canForwardCopy("me@andalaosa.cl", [])).toBe(true);
+    expect(canForwardCopy("me@aurora.test", [])).toBe(true);
   });
 });

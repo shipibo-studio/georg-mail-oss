@@ -1206,7 +1206,7 @@ describe("importing old mail", () => {
     new TextEncoder().encode(
       [
         `From: ${overrides.from ?? "Camila <camila@estudio.test>"}`,
-        `To: ${overrides.to ?? "owner@andalaosa.test"}`,
+        `To: ${overrides.to ?? "owner@aurora.test"}`,
         `Subject: ${overrides.subject ?? "Cotización antigua"}`,
         `Date: ${OLD_DATE}`,
         ...(overrides.messageId === null

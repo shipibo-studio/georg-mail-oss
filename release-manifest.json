@@ -50,7 +50,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "a8d911ca7ca09c807621dfe931ef0afb12fdc9de",
+      "sha": "cc4d8d2241b04fc9014daf67ab2a37fda8a8dd6c",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -66,7 +66,7 @@
       "mode": "100644"
     },
     "dashboard/mock/mock-api.ts": {
-      "sha": "907a3d18c4c86558bdae18a7d972e55b9a8fa7c3",
+      "sha": "c58aaf2d112ef66ee431580455893fdd75409c76",
       "mode": "100644"
     },
     "dashboard/mock/mock-v1.ts": {
@@ -210,15 +210,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "cd44ec65a26cef6d407d5df6ee8092dd474df503",
+      "sha": "1f2551c95bb1a0bb947c7a675fd8b44efbb32354",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "678695b44ce89b716fe220b285efe2153c64c70b",
+      "sha": "f086a0e6838f517f1f6bc9be38637dde1ca8f18a",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "77ee1fed6dcf932e2e16c1a610814415d432fb3f",
+      "sha": "7a6282eeadd3b67cf7b037d2a404fda32d6c2b99",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {
@@ -290,7 +290,7 @@
       "mode": "100644"
     },
     "dashboard/src/styles.css": {
-      "sha": "34fbb69b17a35d8b25bf747a0c963ee13bef6000",
+      "sha": "59a500acaafcd891938586f56c623f54f7819770",
       "mode": "100644"
     },
     "dashboard/test/aliases-and-retry.test.ts": {
@@ -994,7 +994,7 @@
       "mode": "100644"
     },
     "test/e2e/personal-mailbox.test.ts": {
-      "sha": "5e096074e12854c23fbf52d73018ee88458938da",
+      "sha": "8a70fa0d481ecd9db18ca8095727de94cf9b0711",
       "mode": "100644"
     },
     "test/e2e/preferences.test.ts": {
@@ -1026,7 +1026,7 @@
       "mode": "100644"
     },
     "test/unit/cloudflare-sender.test.ts": {
-      "sha": "0bbae5edc52f637e1eb362228c17fdeba3214980",
+      "sha": "df27c22fc6ea38b89c7c60fecf46aafe60a780f0",
       "mode": "100644"
     },
     "test/unit/content-access.test.ts": {
@@ -1082,7 +1082,7 @@
       "mode": "100644"
     },
     "test/unit/resend-sender.test.ts": {
-      "sha": "0f2db540055664e7e9d1411c9cf6beace33cf070",
+      "sha": "98d9b2d9349fd9fbe41ba19cd0446bf6a9590899",
       "mode": "100644"
     },
     "test/unit/risk-signals.test.ts": {
@@ -1102,7 +1102,7 @@
       "mode": "100644"
     },
     "test/unit/setup.test.ts": {
-      "sha": "ee03a67f8da2801c8fe7d48c45fc8b556580f8a6",
+      "sha": "28217f3cbc5bdc32883c89e7646fffcf66bdbdfd",
       "mode": "100644"
     },
     "test/unit/spam-verdict.test.ts": {
@@ -1114,7 +1114,7 @@
       "mode": "100644"
     },
     "test/unit/updates.test.ts": {
-      "sha": "b80c1262de1a9cc2d2673255d49ace0834b03301",
+      "sha": "91f29ac5d095c0364f00fb5f48d00269408f3a94",
       "mode": "100644"
     },
     "test/unit/visible-text.test.ts": {

@@ -166,8 +166,8 @@ describe("what an update changes", () => {
 
 describe("package.json", () => {
   test("is the release's, with the install's name", () => {
-    const merged = mergePackageManifest('{"name":"georg-mail-oss","version":"0.2.0"}', '{"name":"andalaosa-mail"}');
-    expect(merged).toBe('{\n  "name": "andalaosa-mail",\n  "version": "0.2.0"\n}\n');
+    const merged = mergePackageManifest('{"name":"georg-mail-oss","version":"0.2.0"}', '{"name":"aurora-mail"}');
+    expect(merged).toBe('{\n  "name": "aurora-mail",\n  "version": "0.2.0"\n}\n');
     expect(JSON.parse(mergePackageManifest('{"name":"a"}', "{}")).name).toBe("a");
   });
 });

@@ -678,14 +678,14 @@ test("a fresh self-hosted install asks its first visitor to create the mailbox, 
   await expect(setup).toBeVisible();
   await expect(setup.getByText("You are signed in as owner@example.org.")).toBeVisible();
   await expect(setup.locator("output.setup-address")).toHaveText("hello@example.com");
-  await setup.getByLabel("Your name").fill("Andalaosa");
+  await setup.getByLabel("Your name").fill("Aurora");
   const forward = setup.getByRole("switch", { name: "Forward a copy" });
   await expect(forward).toHaveAttribute("aria-checked", "true");
   await forward.click();
   await setup.getByRole("button", { name: "Create the mailbox" }).click();
 
   await expect(page.locator("button.msg").first()).toBeVisible();
-  await expect(page.locator(".sidebar .who")).toContainText("Andalaosa");
+  await expect(page.locator(".sidebar .who")).toContainText("Aurora");
   await page.locator(".sidebar").getByRole("button", { name: "Notifications" }).click();
   await expect(page.getByRole("switch", { name: "Forward a copy" })).toHaveAttribute("aria-checked", "false");
 });

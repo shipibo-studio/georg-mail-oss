@@ -3,7 +3,7 @@ import { createCloudflareSender } from "../../src/worker/sending/cloudflare-send
 import { MailSendError, type OutboundMessage } from "../../src/worker/sending/mail-sender";
 
 const message: OutboundMessage = {
-  from: { email: "oi@andalaosa.cl", name: "Andalaosa" },
+  from: { email: "oi@aurora.test", name: "Aurora" },
   to: [{ email: "camila@estudio.cl" }, { email: "ana@estudio.cl", name: "Ana" }],
   cc: [{ email: "otro@estudio.cl" }],
   subject: "Propuesta",
@@ -39,7 +39,7 @@ describe("Cloudflare Email Sending sender", () => {
     expect(await createCloudflareSender(binding).send(message)).toEqual({ messageIds: ["cf-1"] });
 
     expect(send).toHaveBeenCalledWith({
-      from: { email: "oi@andalaosa.cl", name: "Andalaosa" },
+      from: { email: "oi@aurora.test", name: "Aurora" },
       // Addresses without a name go as plain strings: the binding's named form requires a name.
       to: ["camila@estudio.cl", { email: "ana@estudio.cl", name: "Ana" }],
       cc: ["otro@estudio.cl"],

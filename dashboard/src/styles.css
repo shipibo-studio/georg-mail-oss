@@ -3007,3 +3007,56 @@ p.update-blocked {
   align-items: center;
   gap: inherit;
 }
+
+/* Under a test inbox: the keys that reach it and what each allows (AgentAccess). */
+.agent-access {
+  margin: 4px 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-2);
+  background: var(--bg-sunken);
+}
+.agent-access summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.agent-access[open] summary {
+  border-bottom: 1px solid var(--border);
+}
+.agent-access > p {
+  margin: 0;
+  padding: 8px 12px 10px;
+}
+.access-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.access-row {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.access-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.access-name {
+  font-weight: 500;
+}
+.access-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

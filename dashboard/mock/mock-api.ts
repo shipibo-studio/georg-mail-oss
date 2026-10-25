@@ -138,8 +138,8 @@ function seedMessages(): MockMessage[] {
       readAt: now - 4 * 60 * MINUTE,
     }),
     received({
-      fromName: "Estudio Andalaosa",
-      fromAddress: "hola@andalaosa.cl",
+      fromName: "Estudio Aurora",
+      fromAddress: "hola@aurora.test",
       subject: "Fotos del lanzamiento (24 MB)",
       text: "",
       bodyParsed: false,
@@ -419,7 +419,7 @@ const SURPRISES = [
   },
   {
     fromName: "Andrea",
-    fromAddress: "andrea@andalaosa.cl",
+    fromAddress: "andrea@aurora.test",
     subject: "¿Café mañana?",
     text: "¿Te tinca un café mañana a las 9?",
   },
