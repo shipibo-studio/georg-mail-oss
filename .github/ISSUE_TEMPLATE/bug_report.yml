@@ -1,0 +1,63 @@
+name: Bug report
+description: Something in Georg mail does not work as it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting it. Never paste API keys, tokens, email addresses or the content of your mail here: this issue is public.
+        A security problem? Do not open an issue: [report it privately](https://github.com/shipibo-studio/georg-mail-oss/security/advisories/new).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open …
+        2. Press …
+        3. See …
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Settings → Mailbox → Updates shows it.
+      placeholder: "0.2.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Sending provider
+      options:
+        - Resend
+        - Mailtrap
+        - Cloudflare Email Sending
+        - Not related to sending
+    validations:
+      required: true
+  - type: dropdown
+    id: plan
+    attributes:
+      label: Cloudflare Workers plan
+      options:
+        - Free
+        - Paid
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: "Safari 26 on an iPhone, Chrome 156 on macOS"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Errors or logs
+      description: From the browser console or `wrangler tail`, with addresses, keys and mail content removed.
+      render: text

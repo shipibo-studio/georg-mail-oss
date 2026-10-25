@@ -13,6 +13,14 @@
       "sha": "95eacc07b6c74301559eb7466c9bd2746f719fd6",
       "mode": "100644"
     },
+    ".github/ISSUE_TEMPLATE/bug_report.yml": {
+      "sha": "6009a368e7253de57f86053652c6515b8bcb6f7c",
+      "mode": "100644"
+    },
+    ".github/ISSUE_TEMPLATE/config.yml": {
+      "sha": "671ffbbdff0e0ee220d9fc8c4d08e8e925b1f46a",
+      "mode": "100644"
+    },
     ".github/workflows/ci.yml": {
       "sha": "cd1d0ab086cf7293254b07bbe485a6dd7d2f1186",
       "mode": "100644"
@@ -30,7 +38,7 @@
       "mode": "100644"
     },
     "README.md": {
-      "sha": "812a239e452bfd0ce4a1c20b25c9fbbd9523805f",
+      "sha": "ee3f1b669ba2cfc47581ee5f19d535e28384c54a",
       "mode": "100644"
     },
     "SECURITY.md": {

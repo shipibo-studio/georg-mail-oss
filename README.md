@@ -1,5 +1,7 @@
 # Georg mail
 
+[![CI](https://github.com/shipibo-studio/georg-mail-oss/actions/workflows/ci.yml/badge.svg)](https://github.com/shipibo-studio/georg-mail-oss/actions/workflows/ci.yml)
+
 A mail client for your own domain that you host on your Cloudflare account, and that runs on the **free Workers plan**. Mail arrives through Cloudflare Email Routing, is kept in D1 and R2, and you read and send it from a fast web app behind Cloudflare Access.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/shipibo-studio/georg-mail-oss)
