@@ -11,12 +11,16 @@ export type RiskReason =
   | "risky_attachment"
   | "unauthenticated_sender";
 
+import type { Preferences } from "../lib/preferences";
+
 export interface Mailbox {
   address: string;
   /** More addresses of the mailbox: mail to them lands here, and it can send from them. */
   aliases: string[];
   /** Addresses the install accepts that the owner can still add as aliases. */
   claimableAliases: string[];
+  /** The signed-in person's display preferences, kept on the server; null until they change one. */
+  preferences?: Preferences | null;
   displayName: string | null;
   owner: string;
   forwardTo: string | null;

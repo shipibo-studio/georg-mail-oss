@@ -754,3 +754,37 @@ test("sender avatars are faces by default, and initials once chosen in Settings,
   await settings.getByLabel("Sender avatars").selectOption("faces");
   await expect(row(page, "Propuesta para el sitio de Georg").first().locator("img.avatar-sender")).toBeVisible();
 });
+
+test("display preferences follow the person to another browser", async ({ page, browser }, testInfo) => {
+  await openInbox(page);
+  await page.getByRole("button", { name: "Settings" }).click();
+  const settings = page.getByRole("dialog", { name: "Settings" });
+  const saved = page.waitForRequest(
+    (request) => request.method() === "PUT" && request.url().endsWith("/dashboard/api/mailbox/preferences"),
+  );
+  await settings.getByLabel("Sender avatars").selectOption("initials");
+  await settings.getByLabel("Time format").selectOption("12h");
+  await saved;
+
+  // A browser with nothing stored: the saved preferences apply as soon as the mailbox loads.
+  const other = await browser.newContext({ baseURL: testInfo.project.use.baseURL });
+  const fresh = await other.newPage();
+  await fresh.goto("/dashboard/inbox");
+  await expect(fresh.locator("button.msg .avatar-initials").first()).toBeVisible();
+  await fresh.getByRole("button", { name: "Settings" }).click();
+  await expect(fresh.getByRole("dialog", { name: "Settings" }).getByLabel("Time format")).toHaveValue("12h");
+  // …and become this browser's cache for the next first paint.
+  expect(await fresh.evaluate(() => localStorage.getItem("georg-mail.avatar-style"))).toBe("initials");
+  await other.close();
+});
+
+test("a browser's own preferences are saved the first time, when the server has none", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("georg-mail.avatar-style", "initials"));
+  const saved = page.waitForRequest(
+    (request) => request.method() === "PUT" && request.url().endsWith("/dashboard/api/mailbox/preferences"),
+  );
+  await openInbox(page);
+  expect((await saved).postDataJSON()).toMatchObject({ avatars: "initials" });
+  const mailbox = await (await page.request.get("/dashboard/api/mailbox")).json();
+  expect(mailbox.preferences).toMatchObject({ avatars: "initials" });
+});

@@ -1,6 +1,7 @@
 // The dashboard's only way to reach the API. Writes carry the X-Georg-Dashboard header (and the
 // browser adds Origin), which the Worker requires against cross-site requests.
 import type { DraftInput } from "../lib/drafts";
+import type { Preferences } from "../lib/preferences";
 import type { Folder } from "../lib/route";
 import type {
   FullMessage,
@@ -119,6 +120,7 @@ export const api = {
   mailbox: () => request<Mailbox>(""),
   updateSettings: (settings: Pick<Mailbox, "forwardEnabled">) =>
     request<Mailbox>("", { method: "PATCH", body: settings }),
+  savePreferences: (changes: Preferences) => request<Preferences>("/preferences", { method: "PUT", body: changes }),
   addAlias: (address: string) => request<{ address: string }>("/aliases", { method: "POST", body: { address } }),
   removeAlias: (address: string) => request<void>(`/aliases/${encodeURIComponent(address)}`, { method: "DELETE" }),
   messages: (folder: Folder, cursor: string | null) => {

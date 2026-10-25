@@ -107,6 +107,16 @@ export const dashboardMembers = sqliteTable("dashboard_members", {
   createdAt: integer("created_at").notNull(),
 });
 
+// Display preferences of a person who opens the dashboard (theme, accent, language, time format,
+// avatars), so they are the same on every device. Closed sets only; see dashboard/preferences.ts.
+export const memberPreferences = sqliteTable("member_preferences", {
+  email: text("email")
+    .primaryKey()
+    .references(() => dashboardMembers.email, { onDelete: "cascade" }),
+  preferences: text("preferences", { mode: "json" }).$type<Record<string, string>>().notNull(),
+  updatedAt: integer("updated_at").notNull(),
+});
+
 export const projects = sqliteTable(
   "projects",
   {

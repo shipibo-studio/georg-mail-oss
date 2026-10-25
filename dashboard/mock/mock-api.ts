@@ -206,6 +206,8 @@ const OWNER = "owner@example.org";
 /** Addresses the install accepts besides the main one; the owner adds them as aliases. */
 const CONFIGURED_ALIASES = ["contact@example.com", "support@example.com"];
 const aliases: string[] = [];
+/** The signed-in person's saved display preferences; null until they change one. */
+let preferences: Record<string, string> | null = null;
 /** False after POST /__mock/fresh: a self-hosted install that nobody owns yet (first-run setup). */
 let claimed = true;
 /** Who Access signed in on the first-run page; /__mock/fresh-same-domain uses the mailbox's domain. */
@@ -221,6 +223,7 @@ function resetMock() {
   claimed = true;
   visitor = OWNER;
   aliases.length = 0;
+  preferences = null;
 }
 
 function summary(message: MockMessage) {
@@ -303,6 +306,7 @@ function mailbox() {
   return {
     address: ADDRESS,
     aliases: [...aliases],
+    preferences,
     claimableAliases: CONFIGURED_ALIASES.filter((address) => !aliases.includes(address)),
     owner: OWNER,
     forwardTo: OWNER,
@@ -319,6 +323,16 @@ async function readBody(request: IncomingMessage): Promise<Record<string, unknow
   const chunks: Buffer[] = [];
   for await (const chunk of request) chunks.push(chunk as Buffer);
   return chunks.length ? JSON.parse(Buffer.concat(chunks).toString("utf8")) : {};
+}
+
+/**
+ * Connect ignores the promise an async handler returns, so a rejection (a page that closes while
+ * its request body is still arriving) would take the whole mock down. It closes that request only.
+ */
+function guarded(handler: (request: IncomingMessage, response: ServerResponse) => Promise<unknown>) {
+  return (request: IncomingMessage, response: ServerResponse) => {
+    handler(request, response).catch(() => response.destroy());
+  };
 }
 
 function send(response: ServerResponse, status: number, body?: unknown) {
@@ -390,252 +404,268 @@ export function mockApi(): Plugin {
       return send(response, 204);
     });
 
-    server.middlewares.use("/dashboard/api/setup", async (request, response) => {
-      if (request.method === "GET") {
-        const canForward = visitor.split("@")[1] !== ADDRESS.split("@")[1];
-        return send(
-          response,
-          200,
-          claimed ? { needed: false } : { needed: true, email: visitor, addresses: [ADDRESS], canForward },
-        );
-      }
-      if (request.method !== "POST") return send(response, 405);
-      if (claimed) return send(response, 409, { error: { code: "conflict", message: "Already set up." } });
-      const body = await readBody(request);
-      claimed = true;
-      settings.forwardEnabled = body.forward !== false && visitor.split("@")[1] !== ADDRESS.split("@")[1];
-      if (typeof body.displayName === "string" && body.displayName) settings.displayName = body.displayName;
-      return send(response, 201, { address: ADDRESS, owner: OWNER });
-    });
-
-    server.middlewares.use("/dashboard/api/v1", async (request, response) => {
-      await new Promise((resolve) => setTimeout(resolve, process.env.GEORG_MOCK_E2E === "1" ? 30 : 200));
-      await mockV1.handle(request, response);
-    });
-
-    server.middlewares.use("/dashboard/api/mailbox", async (request, response) => {
-      if (!claimed) return send(response, 403, { error: { code: "forbidden", message: "Not a member." } });
-      const url = new URL(request.url ?? "/", "http://mock");
-      const method = request.method ?? "GET";
-      const match = /^\/messages\/(msg_[a-z0-9]+)$/.exec(url.pathname);
-      const download = /^\/messages\/(msg_[a-z0-9]+)\/(original|attachments\/[a-z0-9_]+)$/.exec(url.pathname);
-      if (download && method === "GET") {
-        response.setHeader("Content-Type", "application/octet-stream");
-        response.setHeader("Content-Disposition", `attachment; filename="${download[1]}.eml"`);
-        return response.end("From: mock@example.test\r\nSubject: Mock\r\n\r\nMock original\r\n");
-      }
-      await new Promise((resolve) => setTimeout(resolve, process.env.GEORG_MOCK_E2E === "1" ? 30 : 250));
-
-      if (url.pathname === "/" && method === "GET") return send(response, 200, mailbox());
-      if (url.pathname === "/" && method === "PATCH") {
-        Object.assign(settings, await readBody(request));
-        return send(response, 200, mailbox());
-      }
-      if (url.pathname === "/messages" && method === "GET") {
-        const folder = url.searchParams.get("folder");
-        const list = messages
-          .filter((message) => inFolder(message, folder))
-          .sort((a, b) => b.receivedAt - a.receivedAt);
-        return send(response, 200, { messages: list.map(summary), nextCursor: null });
-      }
-      if (url.pathname === "/uploads" && method === "POST") {
-        const chunks: Buffer[] = [];
-        for await (const chunk of request) chunks.push(chunk as Buffer);
-        const filename = decodeURIComponent(String(request.headers["x-filename"] ?? "attachment"));
-        // The Worker refuses programs; the mock refuses one, so the failed state can be seen.
-        if (filename.endsWith(".exe")) {
-          return send(response, 400, {
-            error: { code: "validation_failed", message: "This type of file cannot be sent by email." },
-          });
+    server.middlewares.use(
+      "/dashboard/api/setup",
+      guarded(async (request, response) => {
+        if (request.method === "GET") {
+          const canForward = visitor.split("@")[1] !== ADDRESS.split("@")[1];
+          return send(
+            response,
+            200,
+            claimed ? { needed: false } : { needed: true, email: visitor, addresses: [ADDRESS], canForward },
+          );
         }
-        const id = `upl_mock${(++uploadCounter).toString(36).padStart(16, "0")}`;
-        const file = {
-          id: `att_${id.slice(4)}`,
-          kind: "file",
-          sizeBytes: Buffer.concat(chunks).byteLength,
-          inline: false,
-          filename,
-          contentType: String(request.headers["content-type"] ?? "application/octet-stream"),
-        };
-        uploads.set(id, file);
-        return send(response, 201, { id, filename, contentType: file.contentType, sizeBytes: file.sizeBytes });
-      }
-      const draftMatch = /^\/drafts(?:\/(drf_[a-z0-9]+))?$/.exec(url.pathname);
-      if (draftMatch) {
-        const presentDraft = (draft: MockDraft) => ({
-          ...draft,
-          attachments: draft.attachments.flatMap((id) => {
-            const file = uploads.get(id);
-            return file
-              ? [{ id, filename: file.filename, contentType: file.contentType, sizeBytes: file.sizeBytes }]
-              : [];
-          }),
-          createdAt: new Date(draft.createdAt).toISOString(),
-          updatedAt: new Date(draft.updatedAt).toISOString(),
-        });
-        const id = draftMatch[1];
-        if (!id && method === "GET") {
-          const list = [...drafts.values()].sort((a, b) => b.updatedAt - a.updatedAt);
-          return send(response, 200, { drafts: list.map(presentDraft) });
+        if (request.method !== "POST") return send(response, 405);
+        if (claimed) return send(response, 409, { error: { code: "conflict", message: "Already set up." } });
+        const body = await readBody(request);
+        claimed = true;
+        settings.forwardEnabled = body.forward !== false && visitor.split("@")[1] !== ADDRESS.split("@")[1];
+        if (typeof body.displayName === "string" && body.displayName) settings.displayName = body.displayName;
+        return send(response, 201, { address: ADDRESS, owner: OWNER });
+      }),
+    );
+
+    server.middlewares.use(
+      "/dashboard/api/v1",
+      guarded(async (request, response) => {
+        await new Promise((resolve) => setTimeout(resolve, process.env.GEORG_MOCK_E2E === "1" ? 30 : 200));
+        await mockV1.handle(request, response);
+      }),
+    );
+
+    server.middlewares.use(
+      "/dashboard/api/mailbox",
+      guarded(async (request, response) => {
+        if (!claimed) return send(response, 403, { error: { code: "forbidden", message: "Not a member." } });
+        const url = new URL(request.url ?? "/", "http://mock");
+        const method = request.method ?? "GET";
+        const match = /^\/messages\/(msg_[a-z0-9]+)$/.exec(url.pathname);
+        const download = /^\/messages\/(msg_[a-z0-9]+)\/(original|attachments\/[a-z0-9_]+)$/.exec(url.pathname);
+        if (download && method === "GET") {
+          response.setHeader("Content-Type", "application/octet-stream");
+          response.setHeader("Content-Disposition", `attachment; filename="${download[1]}.eml"`);
+          return response.end("From: mock@example.test\r\nSubject: Mock\r\n\r\nMock original\r\n");
         }
-        if (!id && method === "POST") {
-          const body = (await readBody(request)) as Partial<MockDraft>;
-          const now = Date.now();
-          const draft: MockDraft = {
-            to: [],
-            cc: [],
-            subject: "",
-            text: "",
-            inReplyTo: null,
-            attachments: [],
-            ...body,
-            id: `drf_mock${(++draftCounter).toString(36).padStart(16, "0")}`,
-            createdAt: now,
-            updatedAt: now,
+        await new Promise((resolve) => setTimeout(resolve, process.env.GEORG_MOCK_E2E === "1" ? 30 : 250));
+
+        if (url.pathname === "/" && method === "GET") return send(response, 200, mailbox());
+        if (url.pathname === "/" && method === "PATCH") {
+          Object.assign(settings, await readBody(request));
+          return send(response, 200, mailbox());
+        }
+        if (url.pathname === "/messages" && method === "GET") {
+          const folder = url.searchParams.get("folder");
+          const list = messages
+            .filter((message) => inFolder(message, folder))
+            .sort((a, b) => b.receivedAt - a.receivedAt);
+          return send(response, 200, { messages: list.map(summary), nextCursor: null });
+        }
+        if (url.pathname === "/uploads" && method === "POST") {
+          const chunks: Buffer[] = [];
+          for await (const chunk of request) chunks.push(chunk as Buffer);
+          const filename = decodeURIComponent(String(request.headers["x-filename"] ?? "attachment"));
+          // The Worker refuses programs; the mock refuses one, so the failed state can be seen.
+          if (filename.endsWith(".exe")) {
+            return send(response, 400, {
+              error: { code: "validation_failed", message: "This type of file cannot be sent by email." },
+            });
+          }
+          const id = `upl_mock${(++uploadCounter).toString(36).padStart(16, "0")}`;
+          const file = {
+            id: `att_${id.slice(4)}`,
+            kind: "file",
+            sizeBytes: Buffer.concat(chunks).byteLength,
+            inline: false,
+            filename,
+            contentType: String(request.headers["content-type"] ?? "application/octet-stream"),
           };
-          drafts.set(draft.id, draft);
-          return send(response, 201, presentDraft(draft));
+          uploads.set(id, file);
+          return send(response, 201, { id, filename, contentType: file.contentType, sizeBytes: file.sizeBytes });
         }
-        const draft = id ? drafts.get(id) : undefined;
-        if (!draft) return send(response, 404, { error: { code: "not_found", message: "Draft not found." } });
-        if (method === "GET") return send(response, 200, presentDraft(draft));
-        if (method === "PUT") {
-          Object.assign(draft, (await readBody(request)) as Partial<MockDraft>, { updatedAt: Date.now() });
-          return send(response, 200, presentDraft(draft));
+        const draftMatch = /^\/drafts(?:\/(drf_[a-z0-9]+))?$/.exec(url.pathname);
+        if (draftMatch) {
+          const presentDraft = (draft: MockDraft) => ({
+            ...draft,
+            attachments: draft.attachments.flatMap((id) => {
+              const file = uploads.get(id);
+              return file
+                ? [{ id, filename: file.filename, contentType: file.contentType, sizeBytes: file.sizeBytes }]
+                : [];
+            }),
+            createdAt: new Date(draft.createdAt).toISOString(),
+            updatedAt: new Date(draft.updatedAt).toISOString(),
+          });
+          const id = draftMatch[1];
+          if (!id && method === "GET") {
+            const list = [...drafts.values()].sort((a, b) => b.updatedAt - a.updatedAt);
+            return send(response, 200, { drafts: list.map(presentDraft) });
+          }
+          if (!id && method === "POST") {
+            const body = (await readBody(request)) as Partial<MockDraft>;
+            const now = Date.now();
+            const draft: MockDraft = {
+              to: [],
+              cc: [],
+              subject: "",
+              text: "",
+              inReplyTo: null,
+              attachments: [],
+              ...body,
+              id: `drf_mock${(++draftCounter).toString(36).padStart(16, "0")}`,
+              createdAt: now,
+              updatedAt: now,
+            };
+            drafts.set(draft.id, draft);
+            return send(response, 201, presentDraft(draft));
+          }
+          const draft = id ? drafts.get(id) : undefined;
+          if (!draft) return send(response, 404, { error: { code: "not_found", message: "Draft not found." } });
+          if (method === "GET") return send(response, 200, presentDraft(draft));
+          if (method === "PUT") {
+            Object.assign(draft, (await readBody(request)) as Partial<MockDraft>, { updatedAt: Date.now() });
+            return send(response, 200, presentDraft(draft));
+          }
+          if (method === "DELETE") {
+            for (const file of draft.attachments) uploads.delete(file);
+            drafts.delete(draft.id);
+            return send(response, 204);
+          }
         }
-        if (method === "DELETE") {
-          for (const file of draft.attachments) uploads.delete(file);
-          drafts.delete(draft.id);
+        if (url.pathname === "/imports" && method === "POST") {
+          const chunks: Buffer[] = [];
+          for await (const chunk of request) chunks.push(chunk as Buffer);
+          const raw = Buffer.concat(chunks).toString("utf8");
+          const folder = String(request.headers["x-import-folder"] ?? "");
+          if (!["inbox", "sent", "archive"].includes(folder) || !raw.trim()) {
+            return send(response, 400, { error: { code: "validation_failed", message: "Not a message." } });
+          }
+          // Just enough of RFC 822 for the dashboard: the real parsing happens in the Worker.
+          const [head = "", ...body] = raw.split(/\r?\n\r?\n/);
+          const header = (name: string) => new RegExp(`^${name}:\\s*(.*)$`, "im").exec(head)?.[1]?.trim() ?? null;
+          const messageIdHeader = header("Message-ID");
+          const existing = messageIdHeader
+            ? messages.find((item) => item.messageIdHeader === messageIdHeader)
+            : undefined;
+          if (existing) return send(response, 200, { status: "duplicate", messageId: existing.id });
+          const from = header("From") ?? "";
+          const date = Date.parse(header("Date") ?? "");
+          const message = received({
+            fromName: /^(.*?)\s*</.exec(from)?.[1]?.replace(/"/g, "") || null,
+            fromAddress: (/<([^>]+)>/.exec(from)?.[1] ?? from).toLowerCase(),
+            verified: false,
+            subject: header("Subject") ?? "",
+            text: body.join("\n\n").trim(),
+            receivedAt: Number.isFinite(date) ? date : Date.now(),
+            box: folder === "archive" ? "archive" : null,
+            messageIdHeader,
+          });
+          message.readAt = message.receivedAt;
+          if (folder === "sent") {
+            message.direction = "sent";
+            message.recipients = [header("To") ?? ""];
+          }
+          messages.push(message);
+          return send(response, 201, { status: "imported", messageId: message.id });
+        }
+        const uploadMatch = /^\/uploads\/(upl_[a-z0-9]+)$/.exec(url.pathname);
+        if (uploadMatch && method === "DELETE") {
+          return send(response, uploads.delete(uploadMatch[1] ?? "") ? 204 : 404);
+        }
+        if (url.pathname === "/messages/search" && method === "POST") {
+          const body = (await readBody(request)) as { q: string; folder?: string };
+          const list = messages
+            .filter((message) =>
+              body.folder ? inFolder(message, body.folder) : message.box === null || message.box === "archive",
+            )
+            .filter((message) => matchesSearch(message, body.q))
+            .sort((a, b) => b.receivedAt - a.receivedAt);
+          return send(response, 200, { messages: list.map(summary), nextCursor: null });
+        }
+        if (url.pathname === "/preferences" && method === "PUT") {
+          const changes = (await readBody(request)) as Record<string, string>;
+          preferences = { ...preferences, ...changes };
+          return send(response, 200, preferences);
+        }
+        if (url.pathname === "/aliases" && method === "POST") {
+          const { address } = (await readBody(request)) as { address?: string };
+          if (!address || !CONFIGURED_ALIASES.includes(address) || aliases.includes(address)) {
+            return send(response, 400, {
+              error: { code: "validation_failed", message: "Not an address you can add." },
+            });
+          }
+          aliases.push(address);
+          return send(response, 201, { address });
+        }
+        const aliasPath = /^\/aliases\/(.+)$/.exec(url.pathname);
+        if (aliasPath && method === "DELETE") {
+          const index = aliases.indexOf(decodeURIComponent(aliasPath[1] ?? ""));
+          if (index < 0) return send(response, 404, { error: { code: "not_found", message: "No such alias." } });
+          aliases.splice(index, 1);
           return send(response, 204);
         }
-      }
-      if (url.pathname === "/imports" && method === "POST") {
-        const chunks: Buffer[] = [];
-        for await (const chunk of request) chunks.push(chunk as Buffer);
-        const raw = Buffer.concat(chunks).toString("utf8");
-        const folder = String(request.headers["x-import-folder"] ?? "");
-        if (!["inbox", "sent", "archive"].includes(folder) || !raw.trim()) {
-          return send(response, 400, { error: { code: "validation_failed", message: "Not a message." } });
-        }
-        // Just enough of RFC 822 for the dashboard: the real parsing happens in the Worker.
-        const [head = "", ...body] = raw.split(/\r?\n\r?\n/);
-        const header = (name: string) => new RegExp(`^${name}:\\s*(.*)$`, "im").exec(head)?.[1]?.trim() ?? null;
-        const messageIdHeader = header("Message-ID");
-        const existing = messageIdHeader
-          ? messages.find((item) => item.messageIdHeader === messageIdHeader)
-          : undefined;
-        if (existing) return send(response, 200, { status: "duplicate", messageId: existing.id });
-        const from = header("From") ?? "";
-        const date = Date.parse(header("Date") ?? "");
-        const message = received({
-          fromName: /^(.*?)\s*</.exec(from)?.[1]?.replace(/"/g, "") || null,
-          fromAddress: (/<([^>]+)>/.exec(from)?.[1] ?? from).toLowerCase(),
-          verified: false,
-          subject: header("Subject") ?? "",
-          text: body.join("\n\n").trim(),
-          receivedAt: Number.isFinite(date) ? date : Date.now(),
-          box: folder === "archive" ? "archive" : null,
-          messageIdHeader,
-        });
-        message.readAt = message.receivedAt;
-        if (folder === "sent") {
-          message.direction = "sent";
-          message.recipients = [header("To") ?? ""];
-        }
-        messages.push(message);
-        return send(response, 201, { status: "imported", messageId: message.id });
-      }
-      const uploadMatch = /^\/uploads\/(upl_[a-z0-9]+)$/.exec(url.pathname);
-      if (uploadMatch && method === "DELETE") {
-        return send(response, uploads.delete(uploadMatch[1] ?? "") ? 204 : 404);
-      }
-      if (url.pathname === "/messages/search" && method === "POST") {
-        const body = (await readBody(request)) as { q: string; folder?: string };
-        const list = messages
-          .filter((message) =>
-            body.folder ? inFolder(message, body.folder) : message.box === null || message.box === "archive",
-          )
-          .filter((message) => matchesSearch(message, body.q))
-          .sort((a, b) => b.receivedAt - a.receivedAt);
-        return send(response, 200, { messages: list.map(summary), nextCursor: null });
-      }
-      if (url.pathname === "/aliases" && method === "POST") {
-        const { address } = (await readBody(request)) as { address?: string };
-        if (!address || !CONFIGURED_ALIASES.includes(address) || aliases.includes(address)) {
-          return send(response, 400, { error: { code: "validation_failed", message: "Not an address you can add." } });
-        }
-        aliases.push(address);
-        return send(response, 201, { address });
-      }
-      const aliasPath = /^\/aliases\/(.+)$/.exec(url.pathname);
-      if (aliasPath && method === "DELETE") {
-        const index = aliases.indexOf(decodeURIComponent(aliasPath[1] ?? ""));
-        if (index < 0) return send(response, 404, { error: { code: "not_found", message: "No such alias." } });
-        aliases.splice(index, 1);
-        return send(response, 204);
-      }
-      if (url.pathname === "/messages" && method === "POST") {
-        const body = (await readBody(request)) as {
-          to: string[];
-          cc?: string[];
-          subject: string;
-          text: string;
-          attachments?: string[];
-          draftId?: string;
-          from?: string;
-        };
-        if (body.from && body.from !== ADDRESS && !aliases.includes(body.from)) {
-          return send(response, 400, {
-            error: { code: "validation_failed", message: "Not an address of this mailbox." },
+        if (url.pathname === "/messages" && method === "POST") {
+          const body = (await readBody(request)) as {
+            to: string[];
+            cc?: string[];
+            subject: string;
+            text: string;
+            attachments?: string[];
+            draftId?: string;
+            from?: string;
+          };
+          if (body.from && body.from !== ADDRESS && !aliases.includes(body.from)) {
+            return send(response, 400, {
+              error: { code: "validation_failed", message: "Not an address of this mailbox." },
+            });
+          }
+          if (body.draftId) drafts.delete(body.draftId);
+          const files = (body.attachments ?? []).map((id) => uploads.get(id));
+          if (files.some((file) => !file)) {
+            return send(response, 400, {
+              error: { code: "validation_failed", message: "An attached file was not found." },
+            });
+          }
+          for (const id of body.attachments ?? []) uploads.delete(id);
+          const recipients = [...new Set([...body.to, ...(body.cc ?? [])])];
+          messages.unshift({
+            ...received({
+              fromAddress: body.from ?? ADDRESS,
+              subject: body.subject,
+              text: body.text,
+              receivedAt: Date.now(),
+            }),
+            direction: "sent",
+            fromName: "Georg",
+            readAt: Date.now(),
+            recipients,
+            attachments: files.filter((file) => file !== undefined),
           });
+          await new Promise((resolve) => setTimeout(resolve, 600));
+          return send(response, 201, { id: "out_mock", recipients, replayed: false });
         }
-        if (body.draftId) drafts.delete(body.draftId);
-        const files = (body.attachments ?? []).map((id) => uploads.get(id));
-        if (files.some((file) => !file)) {
-          return send(response, 400, {
-            error: { code: "validation_failed", message: "An attached file was not found." },
-          });
+        const message = match ? messages.find((item) => item.id === match[1]) : undefined;
+        if (!message) return send(response, 404, { error: { code: "not_found", message: "Message not found." } });
+        if (method === "GET") {
+          message.readAt ??= Date.now();
+          return send(response, 200, full(message));
         }
-        for (const id of body.attachments ?? []) uploads.delete(id);
-        const recipients = [...new Set([...body.to, ...(body.cc ?? [])])];
-        messages.unshift({
-          ...received({
-            fromAddress: body.from ?? ADDRESS,
-            subject: body.subject,
-            text: body.text,
-            receivedAt: Date.now(),
-          }),
-          direction: "sent",
-          fromName: "Georg",
-          readAt: Date.now(),
-          recipients,
-          attachments: files.filter((file) => file !== undefined),
-        });
-        await new Promise((resolve) => setTimeout(resolve, 600));
-        return send(response, 201, { id: "out_mock", recipients, replayed: false });
-      }
-      const message = match ? messages.find((item) => item.id === match[1]) : undefined;
-      if (!message) return send(response, 404, { error: { code: "not_found", message: "Message not found." } });
-      if (method === "GET") {
-        message.readAt ??= Date.now();
-        return send(response, 200, full(message));
-      }
-      if (method === "PATCH") {
-        const body = (await readBody(request)) as { box: MockMessage["box"]; sender?: "block" | "allow" | null };
-        message.box = body.box;
-        if (body.box === "spam") message.spamReason ??= "reported";
-        if (body.sender === undefined) return send(response, 200, { id: message.id, box: body.box });
-        const previousSender = senderRules.get(message.fromAddress) ?? null;
-        if (body.sender === null) senderRules.delete(message.fromAddress);
-        else senderRules.set(message.fromAddress, body.sender);
-        return send(response, 200, { id: message.id, box: body.box, sender: body.sender, previousSender });
-      }
-      if (method === "DELETE") {
-        messages.splice(messages.indexOf(message), 1);
-        return send(response, 204);
-      }
-      return send(response, 405, { error: { code: "not_found", message: "Route not found." } });
-    });
+        if (method === "PATCH") {
+          const body = (await readBody(request)) as { box: MockMessage["box"]; sender?: "block" | "allow" | null };
+          message.box = body.box;
+          if (body.box === "spam") message.spamReason ??= "reported";
+          if (body.sender === undefined) return send(response, 200, { id: message.id, box: body.box });
+          const previousSender = senderRules.get(message.fromAddress) ?? null;
+          if (body.sender === null) senderRules.delete(message.fromAddress);
+          else senderRules.set(message.fromAddress, body.sender);
+          return send(response, 200, { id: message.id, box: body.box, sender: body.sender, previousSender });
+        }
+        if (method === "DELETE") {
+          messages.splice(messages.indexOf(message), 1);
+          return send(response, 204);
+        }
+        return send(response, 405, { error: { code: "not_found", message: "Route not found." } });
+      }),
+    );
   };
   return {
     name: "georg-mail-mock-api",

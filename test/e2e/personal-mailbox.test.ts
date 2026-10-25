@@ -371,6 +371,7 @@ describe("mailbox API", () => {
       aliases: [],
       // What the install's configuration still lets the owner add; aliases.test.ts covers it.
       claimableAliases: expect.any(Array),
+      preferences: null,
       displayName: "Owner",
       owner: owner.member,
       forwardTo: "owner@gmail.test",

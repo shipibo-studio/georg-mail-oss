@@ -21,6 +21,7 @@ import { isPaletteShortcut, isTyping } from "./keyboard";
 import { MailView } from "./MailView";
 import { MobileNav } from "./MobileNav";
 import { NotificationsView } from "./NotificationsView";
+import { PreferenceSync } from "./PreferenceSync";
 import { SettingsDialog } from "./SettingsDialog";
 import { SetupGate } from "./SetupView";
 import { Sidebar } from "./Sidebar";
@@ -228,6 +229,7 @@ export function App() {
       <WorkspaceSection route={route} navigate={navigate} />
       {route.section === "notifications" && <NotificationsView />}
       <MobileNav route={route} unread={unread} navigate={navigate} onCompose={compose} onSettings={openSettings} />
+      <PreferenceSync saved={mailbox.data?.preferences} />
 
       <AnimatePresence>
         {composer && composerOpen && (

@@ -67,6 +67,7 @@ import {
   storeUpload,
   toBase64,
 } from "./mail-uploads";
+import { preferencesSchema, readPreferences, savePreferences } from "./preferences";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const IDEMPOTENCY_KEY_PATTERN = /^[A-Za-z0-9._:-]{8,100}$/;
@@ -294,6 +295,8 @@ async function presentMailbox(context: AppContext, mailbox: Inbox) {
     aliases: await listAliases(db, mailbox.id),
     // Configured addresses the owner may still add as aliases.
     claimableAliases: await unclaimedAddresses(context.env, db),
+    // The signed-in person's display preferences, null until they change one.
+    preferences: await readPreferences(db, session.email),
     displayName: mailbox.displayName,
     owner: session.email,
     forwardTo: mailbox.forwardTo,
@@ -356,6 +359,11 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
       const forwardEnabled = mailbox.forwardTo ? (changes.forwardEnabled ?? mailbox.forwardEnabled) : false;
       await context.get("db").update(inboxes).set({ forwardEnabled }).where(eq(inboxes.id, mailbox.id));
       return context.json(await presentMailbox(context, { ...mailbox, forwardEnabled }));
+    })
+
+    .put("/preferences", validate("json", preferencesSchema), async (context) => {
+      const { email } = context.get("dashboard");
+      return context.json(await savePreferences(context.get("db"), email, context.req.valid("json")));
     })
 
     .post("/aliases", validate("json", aliasSchema), async (context) => {

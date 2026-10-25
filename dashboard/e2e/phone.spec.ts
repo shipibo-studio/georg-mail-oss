@@ -204,3 +204,13 @@ test("sender avatars switch to initials from the Settings sheet on a phone", asy
   await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Close settings" }).tap();
   await expect(page.locator("button.msg .avatar-initials").first()).toBeVisible();
 });
+
+test("a preference changed on a phone is saved for every device", async ({ page }) => {
+  await openInbox(page);
+  await goTo(page, "Settings");
+  const saved = page.waitForRequest(
+    (request) => request.method() === "PUT" && request.url().endsWith("/dashboard/api/mailbox/preferences"),
+  );
+  await page.getByRole("dialog", { name: "Settings" }).getByLabel("Time format").selectOption("12h");
+  expect((await saved).postDataJSON()).toMatchObject({ clock: "12h" });
+});
