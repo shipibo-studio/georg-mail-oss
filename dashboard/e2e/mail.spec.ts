@@ -788,3 +788,24 @@ test("a browser's own preferences are saved the first time, when the server has 
   const mailbox = await (await page.request.get("/dashboard/api/mailbox")).json();
   expect(mailbox.preferences).toMatchObject({ avatars: "initials" });
 });
+
+test("the import form: buttons as wide as their label, and a file picker reachable from the keyboard", async ({
+  page,
+}) => {
+  await openInbox(page);
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).click();
+  const dialog = page.getByRole("dialog", { name: "Import mail" });
+  const width = async (locator: ReturnType<typeof page.locator>) => (await locator.boundingBox())?.width ?? 0;
+  const dialogWidth = await width(dialog);
+  expect(await width(dialog.locator("label.import-files"))).toBeLessThan(dialogWidth / 2);
+  expect(await width(dialog.getByRole("button", { name: "Start import" }))).toBeLessThan(dialogWidth / 3);
+
+  // The picker is a real control: Tab reaches its input, and the label shows the focus.
+  const input = dialog.getByTestId("import-input");
+  for (let step = 0; step < 4 && !(await input.evaluate((node) => node === document.activeElement)); step++) {
+    await page.keyboard.press("Tab");
+  }
+  await expect(input).toBeFocused();
+  await expect(dialog.locator("label.import-files")).toHaveCSS("outline-style", "solid");
+});

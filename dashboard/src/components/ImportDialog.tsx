@@ -312,7 +312,7 @@ export function ImportDialog({ onClose }: { onClose(): void }) {
               <input
                 type="file"
                 multiple
-                hidden
+                className="sr-only"
                 accept=".zip,.mbox,.mbx,.eml"
                 data-testid="import-input"
                 onChange={(event) =>
@@ -347,9 +347,11 @@ export function ImportDialog({ onClose }: { onClose(): void }) {
               </select>
             </div>
             <p className="muted small">{t("import.note")}</p>
-            <button type="button" className="btn primary" disabled={files.length === 0} onClick={() => void start()}>
-              {t("import.start")}
-            </button>
+            <div className="import-actions">
+              <button type="button" className="btn primary" disabled={files.length === 0} onClick={() => void start()}>
+                {t("import.start")}
+              </button>
+            </div>
           </section>
         )}
 

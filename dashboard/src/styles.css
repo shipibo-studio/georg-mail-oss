@@ -3048,6 +3048,60 @@ select:focus-visible {
   display: flex;
   justify-content: flex-end;
 }
+
+/* Choosing what to import: the file picker tinted with the accent (the solid accent stays for
+   Start), the chosen files as pills, the destination between rules, buttons only as wide as their label. */
+.settings-section.import-pick {
+  gap: 14px;
+  padding: 6px 20px 20px;
+}
+.import-files {
+  justify-self: start;
+  height: 36px;
+  padding: 0 14px;
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: none;
+  cursor: pointer;
+}
+.import-files:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.import-files:has(:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.import-file-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.import-file-list li {
+  max-width: 100%;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: var(--bg-hover);
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.import-pick .setting.compact {
+  padding: 10px 0;
+  border-block: 1px solid var(--border);
+}
+.import-pick .import-actions {
+  margin-top: 4px;
+}
+.import-actions .btn {
+  height: 34px;
+  padding: 0 16px;
+}
 @media (prefers-reduced-motion: reduce) {
   .progress.active .progress-bar::after,
   .progress.indeterminate .progress-bar {
