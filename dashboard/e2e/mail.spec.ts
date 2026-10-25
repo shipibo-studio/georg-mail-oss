@@ -10,7 +10,7 @@ test("opens a message with its detected code, verified sender and copy", async (
   await expect(page.locator(".code-value")).toHaveText(/482\s*913/);
   await expect(page.locator(".sender-badge.verified")).toBeVisible();
   await page.getByRole("button", { name: "Copy code" }).click();
-  await expect(page.locator(".code-card .btn.copied")).toBeVisible();
+  await expect(page.locator(".code-card .g-copy[data-copied]")).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("482913");
   await expect(page.getByText("Code copied")).toBeVisible();
 });
@@ -329,7 +329,7 @@ test("search covers Archive and Sent, marks archived results, and says when noth
   await search.press("Enter");
   await expect(page.locator("button.msg")).toHaveCount(2);
   await expect(row(page, "Re: Propuesta")).toBeVisible();
-  await expect(page.locator("button.msg .chip", { hasText: "Archive" })).toHaveCount(1);
+  await expect(page.locator("button.msg .g-chip", { hasText: "Archive" })).toHaveCount(1);
 
   await search.fill("zzzz");
   await search.press("Enter");
@@ -414,7 +414,7 @@ test("imports a Zoho export zip with dates kept, and skips what is already here"
   await expect
     .poll(
       async () =>
-        ((await bar.locator(".progress-bar").boundingBox())?.width ?? 0) / ((await bar.boundingBox())?.width ?? 1),
+        ((await bar.locator(".g-progress-bar").boundingBox())?.width ?? 0) / ((await bar.boundingBox())?.width ?? 1),
     )
     .toBeGreaterThan(0.98);
   await dialog.getByRole("button", { name: "Close" }).last().click();
@@ -471,7 +471,7 @@ test("settings say what is shared, show who is signed in and offer to sign out",
   await expect(dialog.locator(".signed-in .registered-email")).toHaveText("owner@example.org");
   const signOut = dialog.getByRole("link", { name: "Sign out" });
   await expect(signOut).toHaveAttribute("href", "/cdn-cgi/access/logout");
-  await expect(signOut).toHaveClass(/btn/);
+  await expect(signOut).toHaveClass(/g-button/);
 });
 
 test("Notifications show the registered email and switch the forwarded copy", async ({ page }) => {
@@ -512,7 +512,7 @@ test("mail too large to preview offers its original", async ({ page }) => {
 test("new mail slides in with a toast and updates the unread count", async ({ page }) => {
   await page.clock.install();
   await openInbox(page);
-  await expect(page.locator(".folder .badge")).toHaveText("3");
+  await expect(page.locator(".folder .g-badge")).toHaveText("3");
   await page.request.post("/dashboard/api/__mock/arrive");
   // No polling: nothing changes until the owner refreshes.
   await page.clock.runFor(60_000);
@@ -521,7 +521,7 @@ test("new mail slides in with a toast and updates the unread count", async ({ pa
   await refresh.click();
   await expect(row(page, "GEO-42 moved to In review")).toBeVisible();
   await expect(page.getByText("New email from Linear")).toBeVisible();
-  await expect(page.locator(".folder .badge")).toHaveText("4");
+  await expect(page.locator(".folder .g-badge")).toHaveText("4");
   await expect(page).toHaveTitle("(4) Georg mail");
 });
 
@@ -561,7 +561,7 @@ test("accents are neon in dark mode and glow on solid accent elements", async ({
     window.georgTheme.setAccent("green");
   });
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  const badge = page.locator(".folder .badge");
+  const badge = page.locator(".folder .g-badge");
   await expect(badge).toHaveCSS("background-color", "rgb(124, 255, 0)");
   await expect(badge).not.toHaveCSS("box-shadow", "none");
   // Light mode keeps the hue deep enough to read on white.
@@ -789,25 +789,38 @@ test("a browser's own preferences are saved the first time, when the server has 
   expect(mailbox.preferences).toMatchObject({ avatars: "initials" });
 });
 
-test("the import form: buttons as wide as their label, and a file picker reachable from the keyboard", async ({
+test("the import form: a drop zone reachable from the keyboard, chosen files as chips, a narrow Start", async ({
   page,
 }) => {
   await openInbox(page);
   await page.getByRole("button", { name: "Settings" }).click();
   await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).click();
   const dialog = page.getByRole("dialog", { name: "Import mail" });
-  const width = async (locator: ReturnType<typeof page.locator>) => (await locator.boundingBox())?.width ?? 0;
-  const dialogWidth = await width(dialog);
-  expect(await width(dialog.locator("label.import-files"))).toBeLessThan(dialogWidth / 2);
-  expect(await width(dialog.getByRole("button", { name: "Start import" }))).toBeLessThan(dialogWidth / 3);
+  const dialogWidth = (await dialog.boundingBox())?.width ?? 0;
+  const start = dialog.getByRole("button", { name: "Start import" });
+  expect((await start.boundingBox())?.width ?? 0).toBeLessThan(dialogWidth / 3);
 
-  // The picker is a real control: Tab reaches its input, and the label shows the focus.
+  // The zone is a real control: Tab reaches its input, and the zone shows the focus.
   const input = dialog.getByTestId("import-input");
   for (let step = 0; step < 4 && !(await input.evaluate((node) => node === document.activeElement)); step++) {
     await page.keyboard.press("Tab");
   }
   await expect(input).toBeFocused();
-  await expect(dialog.locator("label.import-files")).toHaveCSS("outline-style", "solid");
+  await expect(dialog.locator("label.g-file")).toHaveCSS("outline-style", "solid");
+  await expect(input).toHaveAccessibleDescription(".zip, .mbox or .eml files");
+
+  await input.setInputFiles([
+    { name: "inbox.zip", mimeType: "application/zip", buffer: Buffer.alloc(2048) },
+    { name: "notes.txt", mimeType: "text/plain", buffer: Buffer.from("not mail") },
+    { name: "old.mbox", mimeType: "application/mbox", buffer: Buffer.from("From x") },
+  ]);
+  const chosen = dialog.getByRole("list", { name: "Chosen files" }).locator(".g-file-chip");
+  await expect(chosen).toHaveCount(2);
+  await expect(chosen.first()).toContainText("inbox.zip");
+  await expect(chosen.first().locator(".g-file-size")).not.toBeEmpty();
+  await dialog.getByRole("button", { name: "Remove inbox.zip" }).click();
+  await expect(chosen).toHaveText([/old\.mbox/]);
+  await expect(start).toBeEnabled();
 });
 
 test("an install that is up to date says so in Settings, with no notice", async ({ page }) => {

@@ -40,7 +40,7 @@ export function AliasSettings({ mailbox }: { mailbox: Mailbox }) {
               <span className="mono">{alias}</span>
               <button
                 type="button"
-                className="btn ghost icon"
+                className="g-button g-button-ghost g-button-icon"
                 aria-label={t("aliases.remove", { address: alias })}
                 disabled={remove.isPending}
                 onClick={() =>
@@ -59,7 +59,7 @@ export function AliasSettings({ mailbox }: { mailbox: Mailbox }) {
       {claimable.length > 0 ? (
         <div className="alias-add">
           <select
-            className="select mono"
+            className="g-input select mono"
             aria-label={t("aliases.choose")}
             value={selected}
             onChange={(event) => setChoice(event.target.value)}
@@ -72,7 +72,7 @@ export function AliasSettings({ mailbox }: { mailbox: Mailbox }) {
           </select>
           <button
             type="button"
-            className="btn"
+            className="g-button"
             disabled={add.isPending || !selected}
             onClick={() =>
               add.mutate(selected, {

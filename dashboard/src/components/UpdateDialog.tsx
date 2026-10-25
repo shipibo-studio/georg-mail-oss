@@ -64,7 +64,7 @@ export function UpdateSettings({ onUpdate }: { onUpdate(): void }) {
         <div className="update-row">
           <ExternalLink href={latest.url}>{t("updates.notes")}</ExternalLink>
           {status.repository ? (
-            <button type="button" className="btn primary" onClick={onUpdate}>
+            <button type="button" className="g-button g-button-primary" onClick={onUpdate}>
               {t("updates.review")}
             </button>
           ) : (
@@ -180,7 +180,12 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
         <header className="dialog-head">
           <h2 id="update-title">{t("updates.title")}</h2>
           {!working && (
-            <button type="button" className="btn ghost icon" aria-label={t("updates.close")} onClick={onClose}>
+            <button
+              type="button"
+              className="g-button g-button-ghost g-button-icon"
+              aria-label={t("updates.close")}
+              onClick={onClose}
+            >
               <IconX size={16} stroke={1.5} />
             </button>
           )}
@@ -196,10 +201,10 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
               <div className="import-actions">
                 {phase.plan.canApply ? (
                   <>
-                    <button type="button" className="btn ghost" onClick={onClose}>
+                    <button type="button" className="g-button g-button-ghost" onClick={onClose}>
                       {t("updates.cancel")}
                     </button>
-                    <button type="button" className="btn primary" onClick={() => void apply(phase.plan)}>
+                    <button type="button" className="g-button g-button-primary" onClick={() => void apply(phase.plan)}>
                       {t("updates.confirm", { version: phase.plan.to })}
                     </button>
                   </>
@@ -216,7 +221,8 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
                 {phase.name === "copying" ? t("updates.copying", { done: phase.done, total }) : t("updates.committing")}
               </p>
               <div
-                className="progress active"
+                className="g-progress"
+                data-state="running"
                 role="progressbar"
                 aria-label={t("updates.title")}
                 aria-valuemin={0}
@@ -224,7 +230,7 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
                 aria-valuenow={percent}
               >
                 <motion.span
-                  className="progress-bar"
+                  className="g-progress-bar spring-width"
                   animate={{ width: `${percent}%` }}
                   transition={{ type: "spring", stiffness: 120, damping: 24 }}
                 />
@@ -240,7 +246,7 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
               </p>
               <div className="import-actions">
                 <ExternalLink href={phase.commit.url}>{t("updates.seeCommit")}</ExternalLink>
-                <button type="button" className="btn primary" onClick={onClose}>
+                <button type="button" className="g-button g-button-primary" onClick={onClose}>
                   {t("updates.finish")}
                 </button>
               </div>
@@ -254,7 +260,7 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
                 {t("updates.failed", { message: phase.message })}
               </p>
               <div className="import-actions">
-                <button type="button" className="btn" onClick={() => void review()}>
+                <button type="button" className="g-button" onClick={() => void review()}>
                   {t("updates.retry")}
                 </button>
               </div>

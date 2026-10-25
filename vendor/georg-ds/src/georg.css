@@ -25,6 +25,7 @@
   /* Borders */
   --border: #e9e9e6;
   --border-strong: #dcdcd7;
+  --border-control: #85858d; /* form controls: 3:1 against every surface (WCAG 1.4.11) */
 
   /* Text */
   --text: #18181b;
@@ -48,8 +49,10 @@
   --on-accent: #fff;
 
   /* Status */
-  --success: #15803d;
-  --warn: #b45309;
+  --success: #13763a;
+  --success-soft: rgba(19, 118, 58, .08);
+  --warn: #a74c08;
+  --warn-soft: rgba(167, 76, 8, .08);
   --danger: #c41d1d;
   --danger-soft: rgba(196, 29, 29, .08);
 
@@ -100,6 +103,7 @@
   --bg-hover: #1a1a1d;
   --border: #222226;
   --border-strong: #2d2d32;
+  --border-control: #64646c;
   --text: #ededef;
   --text-2: #a5a5ae;
   --text-3: #878791;
@@ -116,7 +120,9 @@
   --accent-glow: 0 0 0 1px var(--accent-ring), 0 0 18px var(--accent-glow-color);
   --on-accent: #0b0b0c;
   --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, .1);
   --warn: #f59e0b;
+  --warn-soft: rgba(245, 158, 11, .1);
   --danger: #f87171;
   --danger-soft: rgba(248, 113, 113, .1);
   --shadow-1: 0 1px 2px rgba(0, 0, 0, .4);

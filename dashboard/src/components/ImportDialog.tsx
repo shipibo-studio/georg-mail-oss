@@ -11,6 +11,7 @@ import { keys } from "../api/queries";
 import type { ImportFolder } from "../api/types";
 import { useI18n } from "../i18n/I18nProvider";
 import type { MessageKey } from "../i18n/translate";
+import { formatBytes } from "../lib/format";
 import { type ArchiveMessage, collectMessages, isImportable, MAX_MESSAGE_BYTES } from "../lib/mail-archive";
 import { useNow } from "./controls";
 import { CHECK_ICON, DOWNLOAD_ICON, X_ICON } from "./morph-icons";
@@ -92,8 +93,9 @@ function ImportProgressView({
     return (
       <section className="settings-section import-progress" data-tone="running">
         <p className="import-of">{t("import.reading")}</p>
-        <div className="progress indeterminate" role="progressbar" aria-label={t("import.reading")}>
-          <span className="progress-bar" />
+        {/* No aria-valuenow: georg-ds draws it indeterminate until the total is known. */}
+        <div className="g-progress" role="progressbar" aria-label={t("import.reading")}>
+          <span className="g-progress-bar" />
         </div>
       </section>
     );
@@ -125,7 +127,9 @@ function ImportProgressView({
         )}
       </div>
       <div
-        className={`progress ${running && pauseSeconds === 0 ? "active" : ""}`}
+        className="g-progress"
+        data-state={running ? (pauseSeconds > 0 ? "paused" : "running") : undefined}
+        data-tone={finished ? (troubled ? "warn" : "success") : undefined}
         role="progressbar"
         aria-label={t("import.title")}
         aria-valuemin={0}
@@ -134,7 +138,7 @@ function ImportProgressView({
         aria-valuetext={counts}
       >
         <motion.span
-          className="progress-bar"
+          className="g-progress-bar spring-width"
           initial={false}
           animate={{ width: `${percent}%` }}
           transition={{ type: "spring", stiffness: 140, damping: 26 }}
@@ -172,12 +176,12 @@ function ImportProgressView({
       )}
       <div className="import-actions">
         {running ? (
-          <button type="button" className="btn ghost" onClick={onStop}>
+          <button type="button" className="g-button g-button-ghost" onClick={onStop}>
             <IconPlayerStop size={14} stroke={1.5} />
             {t("import.stop")}
           </button>
         ) : (
-          <button type="button" className="btn primary import-close" onClick={onClose}>
+          <button type="button" className="g-button g-button-primary import-close" onClick={onClose}>
             {t("import.close")}
           </button>
         )}
@@ -187,7 +191,7 @@ function ImportProgressView({
 }
 
 export function ImportDialog({ onClose }: { onClose(): void }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const client = useQueryClient();
   const [files, setFiles] = useState<File[]>([]);
   const [folder, setFolder] = useState<ImportFolder>("inbox");
@@ -298,7 +302,12 @@ export function ImportDialog({ onClose }: { onClose(): void }) {
       >
         <header className="dialog-head">
           <h2 id="import-title">{t("import.title")}</h2>
-          <button type="button" className="btn ghost icon" aria-label={t("import.close")} onClick={close}>
+          <button
+            type="button"
+            className="g-button g-button-ghost g-button-icon"
+            aria-label={t("import.close")}
+            onClick={close}
+          >
             <IconX size={16} stroke={1.5} />
           </button>
         </header>
@@ -306,25 +315,40 @@ export function ImportDialog({ onClose }: { onClose(): void }) {
         {phase === "pick" && (
           <section className="settings-section import-pick">
             <p className="muted small">{t("import.howTo")}</p>
-            <label className="btn import-files">
-              <IconFileZip size={16} stroke={1.5} />
-              {t("import.choose")}
+            {/* georg-ds's g-file: the native input covers the zone, so a click or a drop picks the files. */}
+            <label className="g-file import-files">
               <input
                 type="file"
                 multiple
-                className="sr-only"
                 accept=".zip,.mbox,.mbx,.eml"
+                aria-describedby="import-types"
                 data-testid="import-input"
                 onChange={(event) =>
+                  // A drop skips `accept`, so the extension is checked here too.
                   setFiles([...(event.target.files ?? [])].filter((file) => isImportable(file.name)))
                 }
               />
+              <span className="g-file-icon" aria-hidden="true">
+                <IconFileZip size={20} stroke={1.5} />
+              </span>
+              <span className="g-file-title">{t("import.choose")}</span>
+              <span className="g-hint" id="import-types">
+                {t("import.types")}
+              </span>
             </label>
             {files.length > 0 && (
-              <ul className="import-file-list">
+              <ul className="g-file-list" aria-label={t("import.chosen")}>
                 {files.map((file) => (
-                  <li key={`${file.name}-${file.size}`} className="mono small">
-                    {file.name}
+                  <li key={`${file.name}-${file.size}`} className="g-file-chip">
+                    <span className="g-file-name">{file.name}</span>
+                    <span className="g-file-size">{formatBytes(file.size, locale)}</span>
+                    <button
+                      type="button"
+                      aria-label={t("compose.removeFile", { name: file.name })}
+                      onClick={() => setFiles((current) => current.filter((chosen) => chosen !== file))}
+                    >
+                      <IconX size={12} stroke={2} />
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -335,7 +359,7 @@ export function ImportDialog({ onClose }: { onClose(): void }) {
               </label>
               <select
                 id="import-folder"
-                className="select"
+                className="g-input select"
                 value={folder}
                 onChange={(event) => setFolder(event.target.value as ImportFolder)}
               >
@@ -348,7 +372,12 @@ export function ImportDialog({ onClose }: { onClose(): void }) {
             </div>
             <p className="muted small">{t("import.note")}</p>
             <div className="import-actions">
-              <button type="button" className="btn primary" disabled={files.length === 0} onClick={() => void start()}>
+              <button
+                type="button"
+                className="g-button g-button-primary"
+                disabled={files.length === 0}
+                onClick={() => void start()}
+              >
                 {t("import.start")}
               </button>
             </div>

@@ -29,7 +29,7 @@ function ActionButton({ label, onClick, children }: { label: string; onClick(): 
     <Tip label={label}>
       <motion.button
         type="button"
-        className="btn ghost icon"
+        className="g-button g-button-ghost g-button-icon"
         aria-label={label}
         onClick={onClick}
         whileTap={{ scale: 0.92 }}

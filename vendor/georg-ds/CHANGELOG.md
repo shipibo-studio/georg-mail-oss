@@ -6,6 +6,70 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-24
+
+### Added
+
+- **Form controls** in `components.css`:
+  - **Checkbox** `g-checkbox` and **radio** `g-radio`: native inputs with `appearance: none`, a `--border-control` border at 3:1, the accent when checked, and a styled `indeterminate` state. They go inside a `g-check` label (with an optional `g-check-text` hint) and group in a `g-fieldset` with a `g-legend`.
+  - **File** `g-file`: a drop zone whose native input covers the whole label, so clicking and dropping work without JavaScript. There is also `g-file-button` for the compact form, and `g-file-list` / `g-file-chip` for the chosen files.
+  - `src/georg-file.js` adds the drag highlight, the `accept` filter for dropped files (which browsers skip), the error text, and chips with name, size and a remove button. It is unit-tested in happy-dom at 100% of lines and is part of the coverage gate.
+  `demo/components.html` has a forms section with end-to-end tests for keyboard, indeterminate, 3:1 borders, file listing, rejection, removal and drag. The text area was already covered by `g-input`. Consumer impact: none until adopted. **georg-mail** can move its import picker and Composer attachments to `g-file` / `g-file-button` and its `.file-chip` to `g-file-chip`; **Georg spendia** and **georg-app** can use the checkboxes and radios in settings.
+
+### Changed
+
+- Documentation caught up with 0.4.0 and 0.5.0: test commands and the testing guidance in README and AGENTS.md (component scripts in happy-dom, the components gallery in the end-to-end suite), the roadmap as a status table, the accessibility rules (soft fills on three surfaces, 3:1 controls), links from the patterns to their components, the promotion status in the React guide, Georg spendia in the brand architecture, and happy-dom in `CREDITS.md`. Documentation only; no consumer impact.
+
+## [0.5.0] - 2026-10-24
+
+### Added
+
+- **Second batch of components** in `components.css`, promoted from georg-mail, Georg spendia and the website:
+  - **Alert** `g-alert` with `data-tone` and `g-alert-action`.
+  - **Field** `g-field`, `g-label`, `g-input` (input, textarea, select) and `g-hint`, with `aria-invalid` errors.
+  - **Chip** `g-chip`, with `g-chip-mono` and `data-tone`, and **badge** `g-badge`.
+  - **Empty state** `g-empty`, with icon, title, body and actions.
+  - **Keyboard shortcut** `g-kbd`.
+  - **Copy button** `g-copy`, with `src/georg-copy.js`. It copies `data-copy` or the `data-copy-target` text, swaps to "Copied" for 1.6 s, keeps the accessible name in step, and announces the result or shows a toast.
+  - The `g-visually-hidden` utility.
+  Each component has a section in `demo/components.html`, end-to-end tests (contrast in both themes, wiring for assistive technology, clipboard), and its markup, rules and SwiftUI equivalent in `docs/components.md`. `georg-copy.js` is unit-tested in happy-dom and is part of the coverage gate.
+- **`--success-soft` and `--warn-soft`**, promoted from georg-port and Georg spendia (8% light, 10% dark, like `--danger-soft`). The contrast test checks success and warn text on them over `--bg`, `--bg-elev` and `--bg-sunken`.
+- **`--border-control`** (`#85858d` light, `#64646c` dark): the border of form controls, at 3:1 against every surface (WCAG 1.4.11). `--border-strong` was 1.3:1.
+
+### Changed
+
+- **Light `--success` is now `#13763a` (was `#15803d`) and light `--warn` is now `#a74c08` (was `#b45309`).** The old values could not reach AA on their own soft fills, even at 6%. Dark values are unchanged.
+
+### Consumer impact
+
+- **georg-mail:** green and amber text gets slightly deeper, with no code change. It can replace its own `.chip`, `.badge`, `.kbd`, `.empty`, `.blocked` notice and copy swap with the new components.
+- **Georg spendia:** delete the incubating `--warn-soft` from `src/style.css`. It can replace `.alert`, `.field`, `.hint` and `.empty` with the new components.
+- **georg-website:** can replace its `.copy-button` with `g-copy`.
+- **georg-port:** `--success-soft` and `--warn-soft` are official now, with the new light hues. Remap from `tokens.json` 0.5.0.
+- **georg-app:** no code yet.
+
+
+## [0.4.0] - 2026-10-24
+
+### Added
+
+- **Components, in a new `src/components.css`** (exported as `@shipibo-studio/georg-ds/components.css`, loaded after `georg.css`). Every class starts with `g-` so it never collides with a product's own classes, and state comes from native elements and ARIA. Built from the versions georg-mail, Georg spendia and the website already had:
+  - **Button** `g-button` with `-primary` (neutral), `-ghost`, `-danger`, `-icon` and `-small`.
+  - **Status** `g-status` with `data-status` (`live`, `success`, `warn`, `danger`): a dot plus its label.
+  - **Meter** `g-meter` with `--value` and `data-level`, for usage within a known range.
+  - **Progress** `g-progress` / `g-progress-bar`, promoted from georg-mail's import dialog. It is indeterminate (a sweeping segment) until the total is known, then determinate. `data-state="running"` adds a sheen and `"paused"` stops it; `data-tone` (`success`, `warn`, `danger`) turns the finished bar into a result. It has room for `aria-valuetext`, and the indeterminate bar becomes a still, dimmed full bar with reduced motion.
+  - **Tabs** `g-tabs` / `g-tab`, plus the compact `g-tabs-pill`, with `src/georg-tabs.js` for the WAI-ARIA keyboard model.
+  - **Segmented control** `g-segmented` / `g-segment` on native radios.
+  - **Switch** `g-switch` on a native `<input type="checkbox" role="switch">`, whose off track meets 3:1 against every surface.
+  - **Toast** `g-toasts` / `g-toast`, with `src/georg-toast.js` (`georgToast.show(message, { variant, key, duration })`).
+  - **Tooltip** `g-tooltip` / `g-tooltip-anchor`, with `src/georg-tooltip.js` for Escape. It works with plain HTML and with Radix `TooltipContent`.
+  `demo/components.html` shows every component in every state. `docs/components.md` has the markup, the rules, the Radix recipe and the SwiftUI equivalent of each. The three scripts are covered at 85% or more by unit tests in a real DOM (happy-dom, a new dev dependency), and every component has end-to-end tests. The contrast test adds `--bg` on `--danger` (error toast) and 3:1 checks for the switch and for meter and progress fills on their track. Consumer impact: none until adopted. **georg-mail** must switch `className="tooltip"` to `"g-tooltip"` and delete `dashboard/src/incubating/georg-ds-tooltip.css` when it bumps (it uses the incubating `.tooltip` today). It can replace its import `.progress` / `.progress-bar` with `g-progress`, and its own buttons, tabs, switch and toasts; **Georg spendia** can replace `.tabs`, `.segmented`, `.switch`, `.bar`, `.dot` and its buttons; **georg-website** its buttons and toasts; **georg-app** starts on them; **georg-port** keeps native controls.
+
+### Changed
+
+- georg-ds is licensed under **MIT** (`LICENSE`, `package.json`), so its files can ship inside the open-source georg-mail client. The repository stays private; 0.4.0 is the first version published under MIT. Consumer impact: none.
+- `docs/foundations.md` records an approved exception: georg-mail keeps accent primary buttons with a glow and an accent glow on focus; the rest of the family keeps neutral primary buttons and the outline focus ring. Documentation only. Consumer impact: **georg-mail** keeps its rules as they are; no change for georg-app, georg-website or georg-port.
+
 ## [0.3.0] - 2026-10-18
 
 ### Added
@@ -90,7 +154,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Bridge for Tailwind CSS v4 and shadcn/ui.
 - Interactive demo based on the georg-mail dashboard.
 
-[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/shipibo-studio/georg-ds/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/shipibo-studio/georg-ds/compare/v0.2.0...v0.2.1

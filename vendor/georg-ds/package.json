@@ -1,6 +1,6 @@
 {
   "name": "@shipibo-studio/georg-ds",
-  "version": "0.3.0",
+  "version": "0.6.0",
   "description": "georg design system: tokens, typography, theme, accents and interaction patterns",
   "license": "MIT",
   "author": "Jorge Epuñan",
@@ -19,17 +19,29 @@
   ],
   "exports": {
     "./georg.css": "./src/georg.css",
+    "./components.css": "./src/components.css",
     "./tailwind.css": "./src/tailwind.css",
     "./fonts.css": "./src/fonts.css",
     "./georg-theme.js": "./src/georg-theme.js",
+    "./georg-tooltip.js": "./src/georg-tooltip.js",
+    "./georg-tabs.js": "./src/georg-tabs.js",
+    "./georg-toast.js": "./src/georg-toast.js",
+    "./georg-copy.js": "./src/georg-copy.js",
+    "./georg-file.js": "./src/georg-file.js",
     "./tokens.json": "./src/tokens.json",
     "./package.json": "./package.json"
   },
   "sideEffects": [
     "*.css",
-    "./src/georg-theme.js"
+    "./src/georg-theme.js",
+    "./src/georg-tooltip.js",
+    "./src/georg-tabs.js",
+    "./src/georg-toast.js",
+    "./src/georg-copy.js",
+    "./src/georg-file.js"
   ],
   "devDependencies": {
+    "@happy-dom/global-registrator": "21.0.4",
     "@playwright/test": "1.64.1"
   }
 }

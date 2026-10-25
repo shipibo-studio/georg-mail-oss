@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@shipibo-studio/georg-ds/georg.css";
+@import "@shipibo-studio/georg-ds/components.css";
 @import "@shipibo-studio/georg-ds/tailwind.css";
 
 /* The @fontsource-variable packages name the families "… Variable" (georg-ds README). */
@@ -93,78 +94,16 @@ svg {
 }
 
 /* ── Buttons ────────────────────────────────────────────── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 30px;
-  padding: 0 10px;
-  border-radius: var(--r-1);
-  border: 1px solid var(--border);
-  background: var(--bg-elev);
-  box-shadow: var(--shadow-1);
-  font-weight: 500;
-  font-size: var(--text-sm);
-  white-space: nowrap;
-  transition:
-    background var(--dur-1),
-    border-color var(--dur-1),
-    color var(--dur-2),
-    transform var(--dur-1) var(--ease-out),
-    opacity var(--dur-1);
-}
-.btn:hover {
-  background: var(--bg-hover);
-  border-color: var(--border-strong);
-}
-.btn:active {
-  transform: scale(0.97);
-}
-.btn:disabled {
-  opacity: 0.6;
-}
-.btn.primary {
-  background: var(--text);
-  color: var(--bg);
-  border-color: transparent;
-}
-.btn.primary:hover {
-  opacity: 0.9;
-}
-.btn.ghost {
-  border-color: transparent;
-  box-shadow: none;
-  background: transparent;
-}
-.btn.ghost:hover {
-  background: var(--bg-hover);
-}
-.btn.icon {
-  width: 30px;
-  padding: 0;
-  justify-content: center;
-}
-.btn.copied {
+/* georg-ds's g-button; georg-mail's accent primary is in "Neon accents" below. */
+.g-button.copied {
   color: var(--success);
 }
-.kbd {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  padding: 1px 5px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  color: var(--text-3);
-  background: var(--bg-sunken);
-  line-height: 1.4;
-}
+/* The shortcut sits at the end of the Compose button; its colors invert with the button. */
 .kbd-on-primary {
   margin-left: auto;
-  background: transparent;
-  border-color: color-mix(in srgb, var(--bg) 30%, transparent);
-  color: color-mix(in srgb, var(--bg) 70%, transparent);
 }
 
-/* "Copy" → "Copied": the labels slide past each other */
+/* The composer's Send label: "Send", "Sending…" and "Sent" slide past each other */
 .swap-label {
   display: inline-grid;
   overflow: hidden;
@@ -174,14 +113,6 @@ svg {
   transition:
     opacity var(--dur-2),
     transform var(--dur-2) var(--ease-out);
-}
-.swap-label > span[aria-hidden="true"]:first-child {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-.swap-label > span:nth-child(2)[aria-hidden="true"] {
-  opacity: 0;
-  transform: translateY(6px);
 }
 
 /* ── Sidebar ────────────────────────────────────────────── */
@@ -271,20 +202,6 @@ svg {
 }
 .folder-name {
   flex: 1;
-}
-.badge {
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  border-radius: var(--r-pill);
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow: var(--accent-glow);
-  font-size: 10.5px;
-  font-weight: 600;
-  display: grid;
-  place-items: center;
-  font-variant-numeric: tabular-nums;
 }
 .badge-count {
   display: inline-block;
@@ -563,7 +480,7 @@ p.registered-email {
   align-items: center;
   gap: 8px;
 }
-.channel-form .btn {
+.channel-form .g-button {
   flex: none;
 }
 .channel-form input {
@@ -604,11 +521,6 @@ p.registered-email {
   gap: 8px;
 }
 .channel-state.state-failed {
-  color: var(--danger);
-}
-.chip.notify-failed,
-.chip.notify-deadline {
-  background: var(--danger-soft);
   color: var(--danger);
 }
 .notify-detail {
@@ -838,33 +750,6 @@ p.registered-email {
   gap: 6px;
   margin-top: 7px;
 }
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  height: 20px;
-  padding: 0 7px;
-  border-radius: var(--r-pill);
-  border: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text-2);
-  background: var(--bg-elev);
-}
-.chip.code {
-  font-family: var(--mono);
-  color: var(--accent);
-  border-color: var(--accent-ring);
-  background: var(--accent-soft);
-}
-.chip.risk-medium {
-  color: var(--warn);
-  border-color: color-mix(in srgb, var(--warn) 35%, transparent);
-}
-.chip.risk-high {
-  color: var(--danger);
-  border-color: color-mix(in srgb, var(--danger) 35%, transparent);
-  background: var(--danger-soft);
-}
 .skeleton-row {
   padding: 12px 14px;
   border-bottom: 1px solid var(--border);
@@ -878,37 +763,9 @@ p.registered-email {
   padding: 12px;
 }
 
-.empty,
-.detail-empty {
-  padding: 56px 28px;
-  text-align: center;
-  color: var(--text-3);
-  display: grid;
-  justify-items: center;
-  gap: 6px;
-}
+/* georg-ds's g-empty; a message pane's empty state also centers itself in the pane. */
 .detail-empty {
   margin: auto;
-}
-.empty-icon {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  background: var(--bg-sunken);
-  border: 1px solid var(--border);
-  color: var(--text-3);
-  margin-bottom: 8px;
-}
-.empty-title {
-  color: var(--text);
-  font-size: var(--text-md);
-}
-.empty-body {
-  font-size: var(--text-sm);
-  max-width: 280px;
-  text-wrap: balance;
 }
 .shortcut-hints {
   display: flex;
@@ -1058,7 +915,7 @@ p.registered-email {
 .code-value .digit.gap {
   margin-right: 0.35em;
 }
-.code-card .btn {
+.code-card .g-button {
   margin-left: auto;
   height: 34px;
   padding: 0 12px;
@@ -1187,9 +1044,6 @@ p.registered-email {
   gap: 6px;
   color: var(--warn);
 }
-a.btn {
-  text-decoration: none;
-}
 .expiry-ring {
   flex: none;
   transform: rotate(-90deg);
@@ -1244,20 +1098,12 @@ a.btn {
 .notice {
   margin-top: 10px;
 }
+/* georg-ds's g-alert, sliding open above the message. */
 .blocked {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: var(--r-2);
-  background: var(--bg-sunken);
-  color: var(--text-2);
-  font-size: 12px;
   margin-bottom: 10px;
   overflow: hidden;
 }
-.blocked .btn {
-  margin-left: auto;
+.blocked .g-button {
   height: 26px;
 }
 iframe.mail {
@@ -1450,43 +1296,15 @@ pre.raw {
   font-weight: 600;
   pointer-events: none;
 }
+/* Attachments are georg-ds's g-file-list and g-file-chip; these add the composer's spacing and states. */
 .composer-files {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0;
   padding: 0 16px 10px;
-  list-style: none;
-}
-.file-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  max-width: 100%;
-  height: 28px;
-  padding: 0 4px 0 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--r-pill);
-  background: var(--bg-sunken);
-  font-size: var(--text-sm);
-  color: var(--text-2);
 }
 .file-chip.failed {
   border-color: var(--danger);
   color: var(--danger);
 }
-.file-chip .file-name {
-  overflow: hidden;
-  max-width: 220px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text);
-}
-.file-chip .file-size {
-  color: var(--text-3);
-  font-size: var(--text-xs);
-}
-.file-chip button {
+.g-file-chip button {
   display: grid;
   place-items: center;
   width: 20px;
@@ -1497,7 +1315,7 @@ pre.raw {
   color: inherit;
   cursor: pointer;
 }
-.file-chip button:hover {
+.g-file-chip button:hover {
   background: var(--bg-hover);
 }
 .spin {
@@ -1661,42 +1479,11 @@ pre.raw {
 .signed-in {
   padding: 8px 20px 0;
 }
+/* Selects are georg-ds's g-input, as wide as their options outside forms. */
 .select {
-  height: 30px;
+  width: auto;
+  min-height: 30px;
   padding: 0 8px;
-  border-radius: var(--r-1);
-  border: 1px solid var(--border);
-  background: var(--bg-elev);
-}
-
-.switch {
-  position: relative;
-  display: flex;
-  width: 34px;
-  height: 20px;
-  padding: 2px;
-  border-radius: var(--r-pill);
-  background: var(--border-strong);
-  transition: background var(--dur-2) var(--ease-out);
-  flex: none;
-  margin-top: 2px;
-}
-.switch.on {
-  background: var(--accent);
-  box-shadow: var(--accent-glow);
-}
-.switch:disabled {
-  opacity: 0.5;
-}
-.switch-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 99px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-.switch:not(:disabled):active .switch-thumb {
-  width: 19px;
 }
 
 /* ── Toasts, offline, fatal ─────────────────────────────── */
@@ -1814,7 +1601,7 @@ pre.raw {
   padding: 0;
   border: 0;
 }
-.setup-form .btn.primary {
+.setup-form .g-button-primary {
   justify-content: center;
   height: 36px;
 }
@@ -1863,7 +1650,7 @@ pre.raw {
   border-color: var(--border-strong);
   color: var(--text-2);
 }
-.search-trigger .kbd {
+.search-trigger .g-kbd {
   margin-left: auto;
 }
 .search-label {
@@ -2021,18 +1808,12 @@ button.row:hover {
   color: var(--text-3);
   font-size: 11.5px;
 }
+/* Form inputs are georg-ds's g-input; these line them up with the selects and buttons beside them. */
 .form-field input,
 .inbox-form input,
 .channel-form input {
   height: 34px;
-  padding: 0 10px;
-  border-radius: var(--r-1);
-  border: 1px solid var(--border);
-  background: var(--bg-elev);
   outline: none;
-  transition:
-    border-color var(--dur-1),
-    box-shadow var(--dur-1);
   min-width: 0;
 }
 .form-field input:focus,
@@ -2254,18 +2035,8 @@ button.row:hover {
   flex-wrap: wrap;
   margin-top: 3px;
 }
-.key-flags .chip {
+.key-flags .g-chip {
   height: 18px;
-}
-.access-codes {
-  color: var(--success);
-}
-.access-full {
-  color: var(--warn);
-}
-.chip-admin {
-  color: var(--danger);
-  border-color: color-mix(in srgb, var(--danger) 30%, transparent);
 }
 .danger-zone {
   display: grid;
@@ -2357,10 +2128,6 @@ button.row:hover {
 .activity-row .row-sub {
   flex-wrap: wrap;
 }
-.detail-chip {
-  height: 18px;
-  font-family: var(--mono);
-}
 .action-key_revoked,
 .action-keys_revoked_in_bulk,
 .action-inbox_deleted,
@@ -2451,7 +2218,7 @@ button.row:hover {
   border-radius: inherit;
   background: var(--bg-hover);
 }
-.palette-item .kbd {
+.palette-item .g-kbd {
   margin-left: auto;
 }
 .palette-item .mono {
@@ -2490,7 +2257,7 @@ button.row:hover {
   }
   .sidebar .brand-name,
   .search-label,
-  .search-trigger .kbd,
+  .search-trigger .g-kbd,
   .compose-row .compose > :not(svg),
   .section-title,
   .folder-name,
@@ -2505,7 +2272,7 @@ button.row:hover {
   .folder {
     justify-content: center;
   }
-  .folder .badge {
+  .folder .g-badge {
     position: absolute;
     top: 2px;
     right: 4px;
@@ -2556,10 +2323,10 @@ button.row:hover {
   .detail-inner {
     padding: env(safe-area-inset-top) 16px calc(48px + env(safe-area-inset-bottom));
   }
-  .btn {
+  .g-button {
     height: 36px;
   }
-  .btn.icon {
+  .g-button-icon {
     width: 36px;
   }
 
@@ -2611,7 +2378,7 @@ button.row:hover {
     display: grid;
     place-items: center;
   }
-  .mobile-tab-icon .badge {
+  .mobile-tab-icon .g-badge {
     position: absolute;
     top: -6px;
     right: -12px;
@@ -2705,7 +2472,7 @@ button.row:hover {
   .code-card {
     flex-wrap: wrap;
   }
-  .code-card .btn {
+  .code-card .g-button {
     margin-left: 0;
     width: 100%;
     justify-content: center;
@@ -2743,26 +2510,21 @@ button.row:hover {
     background var(--dur-1),
     border-color var(--dur-1);
 }
-.toggle-chip.on {
+.toggle-chip[aria-pressed="true"] {
   color: var(--accent);
   background: var(--accent-soft);
   border-color: var(--accent-ring);
 }
 .unverified-chip {
   margin-left: 6px;
-  color: var(--warn);
-  font-weight: 500;
 }
 
-.webhook-status.status-active,
 .webhook-status-line.status-active {
   color: var(--success);
 }
-.webhook-status.status-failing,
 .webhook-status-line.status-failing {
   color: var(--danger);
 }
-.webhook-status.status-off,
 .webhook-status-line.status-off {
   color: var(--text-3);
 }
@@ -2792,15 +2554,6 @@ button.row:hover {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.delivery-delivered {
-  color: var(--success);
-}
-.delivery-pending {
-  color: var(--warn);
-}
-.delivery-failed {
-  color: var(--danger);
-}
 @media (max-width: 760px) {
   .delivery-row {
     grid-template-columns: auto 1fr;
@@ -2821,16 +2574,21 @@ button.row:hover {
 /* ── Neon accents ───────────────────────────────────────── */
 /* georg-mail's use of the georg-ds neon accents (0.3): the accent carries the brand, with a glow
    where it is solid. Every text pairing here is covered by dashboard/test/neon-tokens.test.ts. */
-.btn.primary {
+/* An on switch glows like the other solid accent elements. */
+.g-switch:checked {
+  box-shadow: var(--accent-glow);
+}
+/* The approved exception (georg-ds foundations): primary buttons in the accent, with its glow. The hover
+   matches georg-ds's selector so it wins by coming later. */
+.g-button-primary {
   background: var(--accent);
   color: var(--on-accent);
   box-shadow: var(--accent-glow);
 }
-.btn.primary:hover {
-  opacity: 1;
+.g-button-primary:not(:disabled, [aria-disabled="true"]):hover {
   background: var(--accent-2);
 }
-.kbd-on-primary {
+.g-button-primary .g-kbd {
   border-color: color-mix(in srgb, var(--on-accent) 30%, transparent);
   color: color-mix(in srgb, var(--on-accent) 75%, transparent);
 }
@@ -2862,7 +2620,7 @@ button.row:hover {
   color: var(--accent);
   text-shadow: 0 0 22px var(--accent-glow-color);
 }
-.chip.code {
+.g-chip-mono[data-tone="accent"] {
   box-shadow: 0 0 12px -4px var(--accent-glow-color);
 }
 :focus-visible {
@@ -2941,55 +2699,11 @@ select:focus-visible {
   color: var(--text-3);
   font-size: var(--text-xs);
 }
-.progress {
-  position: relative;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--bg-sunken);
-  box-shadow: inset 0 0 0 1px var(--border);
-  overflow: hidden;
-}
-.progress-bar {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 0;
-  border-radius: inherit;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent-glow-color);
-  overflow: hidden;
-}
-.progress.active .progress-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.4), transparent);
-  transform: translateX(-100%);
-  animation: progress-sheen 1.4s var(--ease-out) infinite;
-}
-.progress.indeterminate .progress-bar {
-  width: 35%;
-  animation: progress-indeterminate 1.2s ease-in-out infinite;
-}
-@keyframes progress-sheen {
-  to {
-    transform: translateX(100%);
-  }
-}
-@keyframes progress-indeterminate {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(290%);
-  }
-}
-.import-progress[data-tone="done"] .progress-bar {
-  background: var(--success);
-  box-shadow: none;
-}
-.import-progress[data-tone="warn"] .progress-bar {
-  background: var(--warn);
-  box-shadow: none;
+/* The bar is georg-ds's g-progress; Motion animates its width with a spring, so CSS must not too. */
+.g-progress-bar.spring-width {
+  transition:
+    background var(--dur-2),
+    box-shadow var(--dur-2);
 }
 .import-progress[data-tone="done"] .import-percent {
   color: var(--success);
@@ -3049,47 +2763,11 @@ select:focus-visible {
   justify-content: flex-end;
 }
 
-/* Choosing what to import: the file picker tinted with the accent (the solid accent stays for
-   Start), the chosen files as pills, the destination between rules, buttons only as wide as their label. */
+/* Choosing what to import: georg-ds's g-file drop zone and file chips, the destination between rules,
+   buttons only as wide as their label. */
 .settings-section.import-pick {
   gap: 14px;
   padding: 6px 20px 20px;
-}
-.import-files {
-  justify-self: start;
-  height: 36px;
-  padding: 0 14px;
-  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  background: var(--accent-soft);
-  color: var(--accent);
-  box-shadow: none;
-  cursor: pointer;
-}
-.import-files:hover {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
-}
-.import-files:has(:focus-visible) {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-.import-file-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: -4px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.import-file-list li {
-  max-width: 100%;
-  padding: 3px 10px;
-  border-radius: var(--r-pill);
-  background: var(--bg-hover);
-  color: var(--text-2);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .import-pick .setting.compact {
   padding: 10px 0;
@@ -3098,15 +2776,9 @@ select:focus-visible {
 .import-pick .import-actions {
   margin-top: 4px;
 }
-.import-actions .btn {
+.import-actions .g-button {
   height: 34px;
   padding: 0 16px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .progress.active .progress-bar::after,
-  .progress.indeterminate .progress-bar {
-    animation: none;
-  }
 }
 
 /* ── Mailbox addresses: the main one and its aliases (Settings), and From in the composer ── */
@@ -3221,7 +2893,7 @@ select:focus-visible {
   background: color-mix(in srgb, var(--danger) 14%, transparent);
   color: var(--danger);
 }
-.import-progress[data-state="done"] .progress {
+.import-progress[data-state="done"] .g-progress {
   justify-self: stretch;
 }
 .import-progress[data-state="done"] .import-eta {
@@ -3331,4 +3003,10 @@ p.update-blocked {
 }
 .update-body .import-actions .update-link {
   margin-right: auto;
+}
+
+/* georg-mail only: link tooltips show a full URL, which has no spaces to wrap at. */
+.g-tooltip.tooltip-wrap-anywhere {
+  overflow-wrap: anywhere;
+  text-align: left;
 }

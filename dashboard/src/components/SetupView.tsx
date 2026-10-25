@@ -46,7 +46,7 @@ function SetupForm({
       ) : (
         <label className="form-field">
           <span>{t("setup.address")}</span>
-          <select className="select" value={address} onChange={(event) => setAddress(event.target.value)}>
+          <select className="g-input select" value={address} onChange={(event) => setAddress(event.target.value)}>
             {addresses.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -58,6 +58,7 @@ function SetupForm({
       <label className="form-field">
         <span>{t("setup.displayName")}</span>
         <input
+          className="g-input"
           // biome-ignore lint/a11y/noAutofocus: the only thing to type on this page
           autoFocus
           value={displayName}
@@ -94,7 +95,7 @@ function SetupForm({
           {taken ? t("setup.taken") : t("error.generic")}
         </p>
       )}
-      <button type="submit" className="btn primary" disabled={complete.isPending || !address}>
+      <button type="submit" className="g-button g-button-primary" disabled={complete.isPending || !address}>
         {complete.isPending ? t("setup.creating") : t("setup.create")}
       </button>
     </form>

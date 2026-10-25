@@ -2,7 +2,6 @@ import "@fontsource-variable/stack-sans-notch";
 import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
 import "./styles.css";
-import "./incubating/georg-ds-tooltip.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MotionConfig } from "motion/react";
 import { StrictMode } from "react";

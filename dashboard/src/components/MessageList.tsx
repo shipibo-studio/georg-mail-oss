@@ -96,7 +96,7 @@ function SearchField({ query, onSearch }: { query: string | null; onSearch(query
             event.currentTarget.blur();
           }}
         />
-        {!value && <span className="kbd">/</span>}
+        {!value && <kbd className="g-kbd">/</kbd>}
       </form>
     </search>
   );
@@ -129,7 +129,7 @@ function ListHeader({
             <Tip label={t("copy.address")}>
               <button
                 type="button"
-                className={`btn ghost address-chip ${copied ? "copied" : ""}`}
+                className={`g-button g-button-ghost address-chip ${copied ? "copied" : ""}`}
                 onClick={() => copy(mailbox.address)}
               >
                 <span className="mono">{mailbox.address}</span>
@@ -234,27 +234,27 @@ const MessageRow = memo(function MessageRow({
         {(message.codes.length > 0 || message.attachmentCount > 0 || risky || archived) && (
           <div className="chips">
             {archived && (
-              <span className="chip">
+              <span className="g-chip">
                 <IconArchive size={12} stroke={1.5} />
                 {t("nav.archive")}
               </span>
             )}
             {message.codes.slice(0, 1).map((code) => (
-              <span key={code} className="chip code">
+              <span key={code} className="g-chip g-chip-mono" data-tone="accent">
                 <IconKey size={12} stroke={1.5} />
                 {code}
               </span>
             ))}
             {message.attachmentCount > 0 && (
               <Tip label={t("list.attachments")}>
-                <span className="chip">
+                <span className="g-chip">
                   <IconPaperclip size={12} stroke={1.5} />
                   {message.attachmentCount}
                 </span>
               </Tip>
             )}
             {risky && (
-              <span className={`chip risk risk-${message.risk.level}`}>
+              <span className="g-chip" data-tone={message.risk.level === "high" ? "danger" : "warn"}>
                 <IconShieldExclamation size={12} stroke={1.5} />
                 {t(message.risk.level === "high" ? "detail.riskHigh" : "detail.riskMedium")}
               </span>
@@ -289,21 +289,21 @@ function EmptyState({ folder, query, address }: { folder: Folder; query: string 
   const { Icon, title, body } = query ? SEARCH_EMPTY_STATE : EMPTY_STATES[folder];
   return (
     <motion.div
-      className="empty"
+      className="g-empty"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.32, ease: EASE_OUT }}
     >
       <motion.span
-        className="empty-icon"
+        className="g-empty-icon"
         initial={{ scale: 0.8, rotate: -8 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", stiffness: 260, damping: 14, delay: 0.08 }}
       >
         <Icon size={26} stroke={1.5} />
       </motion.span>
-      <p className="display empty-title">{t(title)}</p>
-      <p className="empty-body">{t(body, { address, days: TRASH_RETENTION_DAYS, query: query ?? "" })}</p>
+      <p className="g-empty-title">{t(title)}</p>
+      <p className="g-empty-body">{t(body, { address, days: TRASH_RETENTION_DAYS, query: query ?? "" })}</p>
     </motion.div>
   );
 }
@@ -355,7 +355,7 @@ export function MessageList(props: MessageListProps) {
         )}
         {hasMore && (
           <div ref={sentinel} className="load-more">
-            <button type="button" className="btn ghost" onClick={onLoadMore} disabled={loadingMore}>
+            <button type="button" className="g-button g-button-ghost" onClick={onLoadMore} disabled={loadingMore}>
               {loadingMore ? t("list.loadingMore") : t("list.loadMore")}
             </button>
           </div>

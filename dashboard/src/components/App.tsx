@@ -205,7 +205,7 @@ export function App() {
       <div className="fatal">
         <IconAlertTriangle size={24} stroke={1.5} />
         <p>{t("error.mailbox")}</p>
-        <button type="button" className="btn" onClick={() => mailbox.refetch()}>
+        <button type="button" className="g-button" onClick={() => mailbox.refetch()}>
           {t("error.retry")}
         </button>
       </div>

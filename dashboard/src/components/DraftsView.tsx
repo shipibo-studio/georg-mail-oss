@@ -47,7 +47,7 @@ function DraftRow({ draft, index, onOpen }: { draft: SavedDraft; index: number; 
       <Tip label={t("drafts.delete")}>
         <button
           type="button"
-          className="btn ghost icon draft-delete"
+          className="g-button g-button-ghost g-button-icon draft-delete"
           aria-label={t("drafts.delete")}
           onClick={() => remove.mutate(draft.id, { onSuccess: () => toast(t("drafts.deleted")) })}
         >

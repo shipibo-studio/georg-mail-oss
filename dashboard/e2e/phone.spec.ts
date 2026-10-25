@@ -25,7 +25,7 @@ test("one column with a bottom navigation, and a swipe back from a message", asy
   await expect(page.locator(".sidebar")).toBeHidden();
   const nav = page.locator(".mobile-nav");
   await expect(nav).toBeVisible();
-  await expect(nav.locator(".badge")).toHaveText("3");
+  await expect(nav.locator(".g-badge")).toHaveText("3");
 
   await row(page, "Your verification code").tap();
   await expect(page.getByRole("heading", { name: "Your verification code" })).toBeVisible();
@@ -84,7 +84,7 @@ test("a tap on refresh brings in new mail without reloading the page", async ({ 
   expect(box?.width).toBeGreaterThanOrEqual(36);
   await refresh.tap();
   await expect(row(page, "GEO-42 moved to In review")).toBeVisible();
-  await expect(page.locator(".mobile-nav .badge")).toHaveText("4");
+  await expect(page.locator(".mobile-nav .g-badge")).toHaveText("4");
 });
 
 test("More reaches Archive and Trash on a phone", async ({ page }) => {

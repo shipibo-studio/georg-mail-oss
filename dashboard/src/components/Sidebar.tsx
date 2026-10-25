@@ -158,14 +158,19 @@ export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSea
       <button type="button" className="search-trigger" onClick={onSearch}>
         <IconSearch size={16} stroke={1.5} />
         <span className="search-label">{t("nav.search")}</span>
-        <span className="kbd">⌘K</span>
+        <kbd className="g-kbd">⌘K</kbd>
       </button>
 
       <div className="compose-row">
-        <motion.button type="button" className="btn primary compose" onClick={onCompose} whileTap={{ scale: 0.97 }}>
+        <motion.button
+          type="button"
+          className="g-button g-button-primary compose"
+          onClick={onCompose}
+          whileTap={{ scale: 0.97 }}
+        >
           <IconPencilPlus size={16} stroke={1.5} />
           {t("nav.compose")}
-          <span className="kbd kbd-on-primary">C</span>
+          <kbd className="g-kbd kbd-on-primary">C</kbd>
         </motion.button>
       </div>
 
@@ -196,7 +201,7 @@ export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSea
           <Tip label={t("nav.settings")}>
             <motion.button
               type="button"
-              className="btn ghost icon settings-button"
+              className="g-button g-button-ghost g-button-icon settings-button"
               aria-label={t("nav.settings")}
               onClick={onSettings}
               whileHover={{ rotate: 45 }}

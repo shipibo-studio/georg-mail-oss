@@ -195,7 +195,9 @@ export const es419: Translations = {
   "import.close": "Cerrar",
   "import.howTo":
     "En Zoho Mail, abre Configuración › Importar/Exportar › Exportar y exporta una carpeta a la vez; obtendrás un .zip con archivos .eml. También sirve cualquier archivo .mbox o archivos .eml sueltos.",
-  "import.choose": "Elegir archivos .zip, .mbox o .eml",
+  "import.choose": "Elige archivos o suéltalos aquí",
+  "import.types": "Archivos .zip, .mbox o .eml",
+  "import.chosen": "Archivos elegidos",
   "import.folder": "Guardarlos en",
   "import.note":
     "Cada mensaje conserva su fecha y llega como leído. Los mensajes que ya están aquí se omiten, así que puedes repetir la importación si se detiene.",

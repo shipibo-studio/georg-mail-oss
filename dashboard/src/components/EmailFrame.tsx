@@ -67,7 +67,8 @@ export function EmailFrame({ html, messageId }: { html: string; messageId: strin
       <AnimatePresence initial={false}>
         {prepared.hasRemoteContent && !allowRemoteImages && (
           <motion.div
-            className="blocked"
+            className="g-alert blocked"
+            role="status"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0, marginBottom: 0 }}
@@ -77,7 +78,7 @@ export function EmailFrame({ html, messageId }: { html: string; messageId: strin
             <span>{t("detail.imagesBlocked")}</span>
             <button
               type="button"
-              className="btn"
+              className="g-button g-alert-action"
               onClick={() => {
                 setAllowRemoteImages(true);
                 toast(t("toast.imagesLoaded"), { kind: "info" });

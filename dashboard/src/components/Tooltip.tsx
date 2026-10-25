@@ -29,7 +29,7 @@ export function Tip({ label, children, side = "top", wrapAnywhere = false }: Tip
       <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
       <RadixTooltip.Portal>
         <RadixTooltip.Content
-          className={`tooltip fade-in${wrapAnywhere ? " tooltip-wrap-anywhere" : ""}`}
+          className={`g-tooltip fade-in${wrapAnywhere ? " tooltip-wrap-anywhere" : ""}`}
           side={side}
           sideOffset={TOOLTIP_OFFSET_PX}
           collisionPadding={8}

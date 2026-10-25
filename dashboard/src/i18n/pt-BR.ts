@@ -194,7 +194,9 @@ export const ptBR: Translations = {
   "import.close": "Fechar",
   "import.howTo":
     "No Zoho Mail, abra Configurações › Importar/Exportar › Exportar e exporte uma pasta por vez; você recebe um .zip com arquivos .eml. Qualquer arquivo .mbox ou arquivos .eml soltos também servem.",
-  "import.choose": "Escolher arquivos .zip, .mbox ou .eml",
+  "import.choose": "Escolha arquivos ou solte-os aqui",
+  "import.types": "Arquivos .zip, .mbox ou .eml",
+  "import.chosen": "Arquivos escolhidos",
   "import.folder": "Colocar em",
   "import.note":
     "Cada mensagem mantém sua data e chega como lida. Mensagens que já estão aqui são ignoradas, então você pode repetir a importação se ela parar.",

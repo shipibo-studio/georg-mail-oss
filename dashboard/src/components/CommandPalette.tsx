@@ -222,7 +222,7 @@ export function CommandPalette(props: CommandPaletteProps) {
                 aria-expanded="true"
                 spellCheck={false}
               />
-              <span className="kbd">Esc</span>
+              <kbd className="g-kbd">Esc</kbd>
             </div>
             <div className="palette-list" id="palette-results" role="listbox" ref={listRef}>
               {results.length === 0 && <div className="palette-empty">{t("palette.empty")}</div>}
@@ -251,7 +251,7 @@ export function CommandPalette(props: CommandPaletteProps) {
                       )}
                       {item.icon}
                       <span className={item.mono ? "mono" : undefined}>{item.label}</span>
-                      {item.hint && <span className="kbd">{item.hint}</span>}
+                      {item.hint && <kbd className="g-kbd">{item.hint}</kbd>}
                     </button>
                   </div>
                 );

@@ -221,7 +221,7 @@ function FileChip({ file, onRemove }: { file: DraftFile; onRemove(): void }) {
   return (
     <motion.li
       layout
-      className={`file-chip ${file.status}`}
+      className={`g-file-chip file-chip ${file.status}`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.14 } }}
@@ -235,9 +235,9 @@ function FileChip({ file, onRemove }: { file: DraftFile; onRemove(): void }) {
         <IconPaperclip size={14} stroke={1.5} />
       )}
       <Tip label={file.error ?? file.name} wrapAnywhere>
-        <span className="file-name">{file.name}</span>
+        <span className="g-file-name">{file.name}</span>
       </Tip>
-      <span className="file-size">{formatBytes(file.sizeBytes, locale)}</span>
+      <span className="g-file-size">{formatBytes(file.sizeBytes, locale)}</span>
       <button type="button" aria-label={t("compose.removeFile", { name: file.name })} onClick={onRemove}>
         <IconX size={12} stroke={2} />
       </button>
@@ -268,7 +268,6 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
   const autosave = useDraftAutosave(state, onChange, sent);
   const removeDraft = useDeleteDraft();
   const body = useRef<HTMLTextAreaElement>(null);
-  const picker = useRef<HTMLInputElement>(null);
   const { draft } = state;
   const isReply = draft.inReplyTo !== null;
   const limits = mailbox
@@ -411,7 +410,12 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
         <header className="composer-head">
           <span className="composer-title">{t(isReply ? "compose.reply" : "compose.newMessage")}</span>
           <Tip label={`${t("compose.close")} (Esc)`}>
-            <button type="button" className="btn ghost icon" aria-label={t("compose.close")} onClick={onClose}>
+            <button
+              type="button"
+              className="g-button g-button-ghost g-button-icon"
+              aria-label={t("compose.close")}
+              onClick={onClose}
+            >
               <IconMinus size={16} stroke={1.5} />
             </button>
           </Tip>
@@ -421,7 +425,7 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
           <label className="field from-field">
             <span className="field-label">{t("compose.from")}</span>
             <select
-              className="from-select mono"
+              className="g-input from-select mono"
               value={draft.from ?? mailbox.address}
               onChange={(event) => update({ from: event.target.value === mailbox.address ? null : event.target.value })}
             >
@@ -447,7 +451,7 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
             invalid={Boolean(error) && draft.to.length === 0}
           />
           {!showCc && (
-            <button type="button" className="btn ghost cc-toggle" onClick={() => setShowCc(true)}>
+            <button type="button" className="g-button g-button-ghost cc-toggle" onClick={() => setShowCc(true)}>
               {t("compose.addCc")}
             </button>
           )}
@@ -484,7 +488,7 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
         />
 
         {draft.files.length > 0 && (
-          <ul className="composer-files" aria-label={t("compose.attachments")}>
+          <ul className="g-file-list composer-files" aria-label={t("compose.attachments")}>
             <AnimatePresence initial={false}>
               {draft.files.map((file) => (
                 <FileChip key={file.key} file={file} onRemove={() => removeFile(file)} />
@@ -496,7 +500,7 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
         <footer className="composer-foot">
           <motion.button
             type="button"
-            className={`btn primary send ${sent ? "sent" : ""}`}
+            className={`g-button g-button-primary send ${sent ? "sent" : ""}`}
             onClick={() => void submit()}
             disabled={send.isPending}
             whileTap={{ scale: 0.96 }}
@@ -522,27 +526,22 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
               </AnimatePresence>
             </span>
           </motion.button>
+          {/* georg-ds's g-file-button: the native input covers the button, so a click or a drop on it picks files. */}
           <Tip label={t("compose.attach")}>
-            <button
-              type="button"
-              className="btn ghost icon"
-              aria-label={t("compose.attach")}
-              onClick={() => picker.current?.click()}
-            >
-              <IconPaperclip size={16} stroke={1.5} />
-            </button>
+            <label className="g-button g-button-ghost g-button-icon g-file-button">
+              <IconPaperclip size={16} stroke={1.5} aria-hidden="true" />
+              <input
+                type="file"
+                multiple
+                aria-label={t("compose.attach")}
+                data-testid="attach-input"
+                onChange={(event) => {
+                  addFiles([...(event.target.files ?? [])]);
+                  event.target.value = "";
+                }}
+              />
+            </label>
           </Tip>
-          <input
-            ref={picker}
-            type="file"
-            multiple
-            hidden
-            data-testid="attach-input"
-            onChange={(event) => {
-              addFiles([...(event.target.files ?? [])]);
-              event.target.value = "";
-            }}
-          />
           <span className="muted small hint">{t("compose.shortcut", { key: IS_MAC ? "⌘" : "Ctrl" })}</span>
           {autosave.status !== "idle" && (
             <span className={`muted small draft-status status-${autosave.status}`} aria-live="polite">
@@ -564,7 +563,12 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
             )}
           </AnimatePresence>
           <Tip label={t("compose.discard")}>
-            <button type="button" className="btn ghost icon" aria-label={t("compose.discard")} onClick={discard}>
+            <button
+              type="button"
+              className="g-button g-button-ghost g-button-icon"
+              aria-label={t("compose.discard")}
+              onClick={discard}
+            >
               <IconTrash size={16} stroke={1.5} />
             </button>
           </Tip>

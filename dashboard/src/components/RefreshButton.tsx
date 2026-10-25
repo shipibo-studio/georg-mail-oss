@@ -43,7 +43,7 @@ export function useRefresh() {
   return { state, refresh };
 }
 
-export function RefreshButton({ className = "btn ghost icon" }: { className?: string }) {
+export function RefreshButton({ className = "g-button g-button-ghost g-button-icon" }: { className?: string }) {
   const { t } = useI18n();
   const { state, refresh } = useRefresh();
   return (

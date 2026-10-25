@@ -40,22 +40,22 @@ function uniqueLinks(links: MessageLink[]): MessageLink[] {
 function EmptyDetail() {
   const { t } = useI18n();
   return (
-    <div className="detail-empty">
+    <div className="g-empty detail-empty">
       <motion.span
-        className="empty-icon"
+        className="g-empty-icon"
         animate={{ y: [0, -3, 0] }}
         transition={{ duration: 3.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
       >
         <IconInbox size={28} stroke={1.5} />
       </motion.span>
-      <p className="display empty-title">{t("detail.emptyTitle")}</p>
-      <p className="empty-body">{t("detail.emptyHint")}</p>
+      <p className="g-empty-title">{t("detail.emptyTitle")}</p>
+      <p className="g-empty-body">{t("detail.emptyHint")}</p>
       <div className="shortcut-hints" aria-hidden="true">
-        <span className="kbd">J</span>
-        <span className="kbd">K</span>
-        <span className="kbd">C</span>
-        <span className="kbd">R</span>
-        <span className="kbd">E</span>
+        <kbd className="g-kbd">J</kbd>
+        <kbd className="g-kbd">K</kbd>
+        <kbd className="g-kbd">C</kbd>
+        <kbd className="g-kbd">R</kbd>
+        <kbd className="g-kbd">E</kbd>
       </div>
     </div>
   );
@@ -269,13 +269,13 @@ export function MessageDetail({
         >
           <div className="toolbar">
             {backLabel ? (
-              <button type="button" className="btn ghost" onClick={onBack}>
+              <button type="button" className="g-button g-button-ghost" onClick={onBack}>
                 <IconArrowLeft size={16} stroke={1.5} /> {backLabel}
               </button>
             ) : (
               <button
                 type="button"
-                className="btn ghost icon back-button"
+                className="g-button g-button-ghost g-button-icon back-button"
                 onClick={onBack}
                 aria-label={t("detail.back")}
               >
@@ -286,7 +286,7 @@ export function MessageDetail({
               <Tip label={`${t("detail.reply")} (R)`}>
                 <motion.button
                   type="button"
-                  className="btn"
+                  className="g-button"
                   onClick={() => onReply(message)}
                   whileTap={{ scale: 0.97 }}
                 >
@@ -297,7 +297,7 @@ export function MessageDetail({
             {message.originalAvailable && (
               <Tip label={t("detail.downloadOriginal")}>
                 <a
-                  className="btn ghost icon"
+                  className="g-button g-button-ghost g-button-icon"
                   href={files.original(message.id)}
                   download
                   aria-label={t("detail.downloadOriginal")}
@@ -405,7 +405,7 @@ export function MessageDetail({
                 <p className="muted small">{t("detail.largeBody", { size: formatBytes(message.sizeBytes, locale) })}</p>
               </div>
               {message.originalAvailable && (
-                <a className="btn" href={files.original(message.id)} download>
+                <a className="g-button" href={files.original(message.id)} download>
                   <IconDownload size={16} stroke={1.5} /> {t("detail.downloadOriginal")}
                 </a>
               )}

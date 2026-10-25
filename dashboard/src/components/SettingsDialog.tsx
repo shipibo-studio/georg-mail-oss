@@ -69,7 +69,12 @@ export function SettingsDialog({
         <span className="sheet-grabber" aria-hidden="true" />
         <header className="dialog-head">
           <h2 id="settings-title">{t("settings.title")}</h2>
-          <button type="button" className="btn ghost icon" aria-label={t("settings.close")} onClick={onClose}>
+          <button
+            type="button"
+            className="g-button g-button-ghost g-button-icon"
+            aria-label={t("settings.close")}
+            onClick={onClose}
+          >
             <IconX size={16} stroke={1.5} />
           </button>
         </header>
@@ -92,7 +97,7 @@ export function SettingsDialog({
             </label>
             <select
               id="language-select"
-              className="select"
+              className="g-input select"
               value={locale}
               onChange={(event) => setLocale(event.target.value as Locale)}
             >
@@ -109,7 +114,7 @@ export function SettingsDialog({
             </label>
             <select
               id="avatar-select"
-              className="select"
+              className="g-input select"
               value={avatarStyle}
               onChange={(event) => setAvatarStyle(event.target.value as AvatarStyle)}
             >
@@ -126,7 +131,7 @@ export function SettingsDialog({
             </label>
             <select
               id="clock-select"
-              className="select"
+              className="g-input select"
               value={clock}
               onChange={(event) => setClock(event.target.value as Clock)}
             >
@@ -153,7 +158,7 @@ export function SettingsDialog({
           </div>
           <div className="setting compact">
             <span className="setting-text">{t("import.description")}</span>
-            <button type="button" className="btn" onClick={onImport}>
+            <button type="button" className="g-button" onClick={onImport}>
               <IconFileImport size={16} stroke={1.5} />
               {t("import.open")}
             </button>
@@ -165,7 +170,7 @@ export function SettingsDialog({
             {t("settings.signedInAs")} <span className="registered-email">{mailbox.owner}</span>
           </span>
           {/* Cloudflare Access ends the session on this path of any protected app. */}
-          <a className="btn ghost sign-out" href={ACCESS_LOGOUT_PATH}>
+          <a className="g-button g-button-ghost sign-out" href={ACCESS_LOGOUT_PATH}>
             <IconLogout size={16} stroke={1.5} /> {t("settings.signOut")}
           </a>
         </div>

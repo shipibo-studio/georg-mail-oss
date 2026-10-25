@@ -38,13 +38,16 @@ export function CopyIcon({ copied, size = 16 }: { copied: boolean; size?: number
   );
 }
 
-/** Copy, then the icon morphs into a check and the label slides from "Copy" to "Copied". */
+/**
+ * georg-ds's g-copy: copy, then the icon morphs into a check and the label slides from "Copy" to
+ * "Copied". React sets data-copied itself, so georg-copy.js is not needed.
+ */
 export function CopyButton({
   text,
   label,
   copiedLabel,
   onCopied,
-  className = "btn",
+  className = "g-button",
 }: {
   text: string;
   label: string;
@@ -54,11 +57,20 @@ export function CopyButton({
 }) {
   const { copied, copy } = useCopy(onCopied);
   return (
-    <button type="button" className={`${className} ${copied ? "copied" : ""}`} onClick={() => copy(text)}>
+    <button
+      type="button"
+      className={`${className} g-copy`}
+      data-copied={copied || undefined}
+      onClick={() => copy(text)}
+    >
       <CopyIcon copied={copied} />
-      <span className="swap-label" aria-live="polite">
-        <span aria-hidden={copied}>{label}</span>
-        <span aria-hidden={!copied}>{copiedLabel}</span>
+      <span className="g-copy-swap" aria-live="polite">
+        <span className="g-copy-idle" aria-hidden={copied}>
+          {label}
+        </span>
+        <span className="g-copy-done" aria-hidden={!copied}>
+          {copiedLabel}
+        </span>
       </span>
     </button>
   );
@@ -77,24 +89,20 @@ export function Switch({
   label: string;
   id?: string;
 }) {
+  // georg-ds's g-switch: a native checkbox, so Space toggles it and forms read it. aria-checked is
+  // implied by `checked`; it is set too so the state reads the same as every other switch.
   return (
-    <button
+    <input
       id={id}
-      type="button"
+      type="checkbox"
       role="switch"
+      className="g-switch"
       aria-checked={checked}
       aria-label={label}
+      checked={checked}
       disabled={disabled}
-      className={`switch ${checked ? "on" : ""}`}
-      onClick={() => onChange(!checked)}
-    >
-      <motion.span
-        className="switch-thumb"
-        layout
-        transition={{ type: "spring", stiffness: 700, damping: 32 }}
-        style={{ marginLeft: checked ? "auto" : 0 }}
-      />
-    </button>
+      onChange={(event) => onChange(event.target.checked)}
+    />
   );
 }
 
@@ -106,7 +114,7 @@ export function HoldButton({
   onConfirm,
   label,
   children,
-  className = "btn ghost icon",
+  className = "g-button g-button-ghost g-button-icon",
 }: {
   onConfirm(): void;
   label: string;
@@ -192,7 +200,7 @@ export function CountBadge({ count }: { count: number }) {
       {count > 0 && (
         <motion.span
           key="badge"
-          className="badge"
+          className="g-badge"
           initial={{ scale: 0.4, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.4, opacity: 0 }}
@@ -266,21 +274,21 @@ export function ExpiryRing({
 export function EmptyPanel({ icon, title, body }: { icon: ReactNode; title: string; body?: string }) {
   return (
     <motion.div
-      className="empty"
+      className="g-empty"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
     >
       <motion.span
-        className="empty-icon"
+        className="g-empty-icon"
         initial={{ scale: 0.8, rotate: -8 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", stiffness: 260, damping: 14, delay: 0.08 }}
       >
         {icon}
       </motion.span>
-      <p className="display empty-title">{title}</p>
-      {body && <p className="empty-body">{body}</p>}
+      <p className="g-empty-title">{title}</p>
+      {body && <p className="g-empty-body">{body}</p>}
     </motion.div>
   );
 }

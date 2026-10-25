@@ -2,7 +2,7 @@
 
 The **georg** design system: tokens, typography, color, motion, and interaction patterns for every georg interface (georg-mail is the first).
 
-> **Version 0.3** (October 2026). It grew out of the georg-mail dashboard mockup, which serves as its reference demo: [`demo/dashboard.html`](demo/dashboard.html) (open it in a browser). Its consumers today are [georg-mail](https://github.com/shipibo-studio/georg-mail) and [georg-app](https://github.com/shipibo-studio/georg-app).
+> **Version 0.6** (October 2026). It grew out of the georg-mail dashboard mockup, which serves as its reference demo: [`demo/dashboard.html`](demo/dashboard.html) (open it in a browser). Its consumers today are [georg-mail](https://github.com/shipibo-studio/georg-mail) and [georg-app](https://github.com/shipibo-studio/georg-app).
 
 See [CHANGELOG.md](CHANGELOG.md).
 
@@ -22,11 +22,14 @@ See [CHANGELOG.md](CHANGELOG.md).
 | --- | --- |
 | [`src/georg.css`](src/georg.css) | Tokens (light, dark, 5 accents), typographic base, and motion primitives |
 | [`src/georg-theme.js`](src/georg-theme.js) | Theme and accent control: flash-free initialization, persistence, `window.georgTheme` API |
+| [`src/components.css`](src/components.css) | Components: button, status, meter, progress, tabs, segmented control, switch, toast, tooltip, alert, field, checkbox and radio, file drop zone, chip and badge, empty state, keyboard shortcut, copy button (`g-` classes) |
+| [`src/georg-tabs.js`](src/georg-tabs.js), [`src/georg-toast.js`](src/georg-toast.js), [`src/georg-tooltip.js`](src/georg-tooltip.js), [`src/georg-copy.js`](src/georg-copy.js), [`src/georg-file.js`](src/georg-file.js) | Opt-in behavior for tabs, toasts, tooltips, copy buttons and file drop zones (not needed with Radix) |
 | [`src/fonts.css`](src/fonts.css) | Fonts from Google Fonts, for prototypes |
 | [`src/tailwind.css`](src/tailwind.css) | Bridge for Tailwind CSS v4 and mapping to shadcn/ui variables |
 | [`src/tokens.json`](src/tokens.json) | Every token resolved per theme and accent, for native apps (also attached to each GitHub release) |
 | [`docs/`](docs/) | Guides: foundations, theming, patterns, components, accessibility, React implementation, brand identity |
 | [`demo/dashboard.html`](demo/dashboard.html) | Interactive demo: theme, accents, and all interaction patterns |
+| [`demo/components.html`](demo/components.html) | Every component in every state |
 | [`demo/styleguide.html`](demo/styleguide.html) | Styleguide of every version: tokens, type, shape and motion, with the token changes and changelog between any two versions |
 | [`test/`](test/) | Unit tests (`test/unit/`), end-to-end tests (`test/e2e/`) and shared helpers (`test/support/`) |
 
@@ -39,7 +42,7 @@ Only `src/` is shipped to consumers. The package exports keep short import paths
 | [Foundations](docs/foundations.md) | Color, typography, icons, shape and elevation, motion |
 | [Theme and accent](docs/theming.md) | `data-theme` attributes, the `georgTheme` API, React hook |
 | [Interaction patterns](docs/patterns.md) | Copy, arrivals, live waiting, countdown, hold to delete, ⌘K and more; external content rules |
-| [Base components](docs/components.md) | shadcn/ui bridge and allowed component sources |
+| [Components](docs/components.md) | The components georg-ds ships (markup, rules, Radix recipes, SwiftUI equivalents), the shadcn/ui bridge and allowed sources |
 | [Accessibility](docs/accessibility.md) | Contrast, focus, keyboard and reduced motion requirements |
 | [React implementation](docs/react-implementation.md) | How georg-mail builds georg-ds in React: motion values, patterns, responsive, tests |
 | [Brand identity](docs/brand-identity.md) | Name, architecture, slogan, logo, voice and tone of the georg family |
@@ -66,7 +69,7 @@ The package is **`@shipibo-studio/georg-ds`**, published privately to GitHub Pac
 **3. Install a pinned version:**
 
 ```bash
-pnpm add @shipibo-studio/georg-ds@0.3.0
+pnpm add @shipibo-studio/georg-ds@0.6.0
 
 # During development, with the repository cloned next to the project
 pnpm add @shipibo-studio/georg-ds@link:../georg-ds
@@ -78,6 +81,7 @@ pnpm add @shipibo-studio/georg-ds@link:../georg-ds
 <head>
   <link rel="stylesheet" href="node_modules/@shipibo-studio/georg-ds/src/fonts.css">
   <link rel="stylesheet" href="node_modules/@shipibo-studio/georg-ds/src/georg.css">
+  <link rel="stylesheet" href="node_modules/@shipibo-studio/georg-ds/src/components.css">
   <!-- No defer or async: resolves theme and accent before the first paint -->
   <script src="node_modules/@shipibo-studio/georg-ds/src/georg-theme.js"></script>
 </head>
@@ -86,7 +90,7 @@ pnpm add @shipibo-studio/georg-ds@link:../georg-ds
 ### App (Vite + React + Tailwind v4)
 
 ```bash
-pnpm add @shipibo-studio/georg-ds@0.3.0
+pnpm add @shipibo-studio/georg-ds@0.6.0
 pnpm add @fontsource-variable/stack-sans-notch @fontsource-variable/geist @fontsource-variable/geist-mono @tabler/icons-react morphicons motion
 ```
 
@@ -102,6 +106,7 @@ import "./index.css";
 /* index.css */
 @import "tailwindcss";
 @import "@shipibo-studio/georg-ds/georg.css";
+@import "@shipibo-studio/georg-ds/components.css";
 @import "@shipibo-studio/georg-ds/tailwind.css";
 ```
 
@@ -117,17 +122,22 @@ npx playwright install chromium    # browser for the end-to-end tests, once
 npm test                           # unit tests with coverage, then end-to-end tests
 open demo/dashboard.html           # visual check
 open demo/styleguide.html          # tokens of every version, and what changed between them
+open demo/components.html          # every component in every state
 ```
 
 | Command | Purpose |
 | --- | --- |
-| `npm run test:unit` | Unit tests only: WCAG AA contrast for every theme and accent, and `georg-theme.js` against a simulated browser |
+| `npm run test:unit` | Unit tests only: WCAG AA contrast for every theme and accent, `tokens.json` and the styleguide data, `georg-theme.js` against a simulated browser, and the component scripts in happy-dom |
 | `npm run test:coverage` | Unit tests with a minimum of 85% line, branch and function coverage of `georg-theme.js` |
 | `npm run generate` | Regenerates `src/tokens.json` and `demo/styleguide-data.js`; unit tests fail when they are stale |
-| `npm run test:e2e` | End-to-end tests in Chromium through `demo/dashboard.html`: first paint, persistence, cross-tab sync, keyboard, reduced motion |
+| `npm run test:e2e` | End-to-end tests in Chromium through `demo/dashboard.html`, `demo/components.html` and `demo/styleguide.html`: first paint, persistence, cross-tab sync, keyboard, every component state, contrast, reduced motion |
 
 No build step and no runtime dependencies. Requires Node.js 24 or later (see `.nvmrc`).
 
 ## Contributing
 
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md): English only, Clean Code, Conventional Commits, and a `CHANGELOG.md` entry for every user-visible change. Security reports: [`SECURITY.md`](SECURITY.md).
+
+## License
+
+[MIT](LICENSE). The license covers the code and tokens, not the "georg" name.

@@ -193,7 +193,9 @@ export const en = {
   "import.close": "Close",
   "import.howTo":
     "In Zoho Mail, open Settings › Import/Export › Export and export one folder at a time; you get a .zip of .eml files. Any .mbox file or loose .eml files work too.",
-  "import.choose": "Choose .zip, .mbox or .eml files",
+  "import.choose": "Choose files or drop them here",
+  "import.types": ".zip, .mbox or .eml files",
+  "import.chosen": "Chosen files",
   "import.folder": "Put them in",
   "import.note":
     "Each message keeps its date and arrives as read. Messages already here are skipped, so you can run an import again if it stops.",
