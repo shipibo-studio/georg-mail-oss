@@ -53,6 +53,8 @@ export function dashboard(owner: Owner, path: string, request: DashboardRequest 
 }
 
 export interface Delivery {
+  /** The sender's address; friend@acme.test by default. */
+  from?: string;
   attachment?: { filename: string; contentType: string; sizeBytes: number };
   subject?: string;
   text?: string;
@@ -69,14 +71,14 @@ export async function deliver(owner: Owner, delivery: Delivery = {}) {
   const forwards: string[] = [];
   const raw = buildEmail({
     to: owner.address,
-    from: "friend@acme.test",
+    from: delivery.from ?? "friend@acme.test",
     subject: delivery.subject ?? "Hello",
     text: delivery.text ?? "Hi there",
     ...(delivery.html ? { html: delivery.html } : {}),
     ...(delivery.attachment ? { attachment: delivery.attachment } : {}),
     headers: delivery.headers ?? [],
   });
-  const base = inboundEmail(raw, { to: owner.address, from: "friend@acme.test" });
+  const base = inboundEmail(raw, { to: owner.address, from: delivery.from ?? "friend@acme.test" });
   const email: InboundEmail & { rejection: string | null } = {
     ...base,
     rawSize: delivery.rawSize ?? base.rawSize,

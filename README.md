@@ -10,7 +10,7 @@ A mail client for your own domain that you host on your Cloudflare account, and 
 - **Sending** through [Resend](https://resend.com) (free plan available) or Mailtrap, with replies that thread, recipients as chips and attachments up to 5 MB per message.
 - **Drafts** saved on the server as you type, so they follow you to every device.
 - **Spam filtering** without a third-party service: forged senders (DMARC), risky content from strangers, and your own Spam / Not spam choices per sender.
-- **Search** across subject, sender and the visible text, ignoring case and accents. Search terms never leave your browser in a URL.
+- **Search** across subject, sender and the visible text, ignoring case and accents, with `"exact phrases"`, `-word` to leave words out, and `from:`, `has:attachment`, `after:` and `before:` filters. Search terms never leave your browser in a URL.
 - **Import** your old mail: a Zoho Mail export, `.mbox` or `.eml` files, with dates kept and duplicates skipped.
 - **A forwarded copy** of every new email to the address you sign in with, if you want one.
 - **Email HTML is safe to open**: it runs no code and loads no tracker until you ask for images.

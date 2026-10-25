@@ -3,6 +3,7 @@
 // `pnpm dashboard:mock` starts Vite with it; it is never part of the production build.
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Connect, Plugin } from "vite";
+import { parseSearch, type SearchTerm, startOfDay } from "../../src/worker/dashboard/mail-search-query";
 import { mockV1 } from "./mock-v1";
 
 const MINUTE = 60_000;
@@ -331,17 +332,35 @@ const fold = (text: string) =>
     .replace(/\p{Mn}/gu, "")
     .toLowerCase();
 
-/** Every term must start a word of the subject, the people or the text, as in the FTS5 index. */
-function matchesSearch(message: MockMessage, query: string) {
+/** The Worker's search, on the mock's messages: the same parser, the FTS5 matching imitated. */
+function matchesSearch(message: MockMessage, query: string, timezoneOffset = 0) {
+  const search = parseSearch(query);
+  if (!search) return false;
   const words = fold(
     [message.subject, message.fromName ?? "", message.fromAddress, ...(message.recipients ?? []), message.text].join(
       " ",
     ),
-  ).split(/[^\p{L}\p{N}]+/u);
-  const terms = fold(query)
+  )
     .split(/[^\p{L}\p{N}]+/u)
     .filter(Boolean);
-  return terms.length > 0 && terms.every((term) => words.some((word) => word.startsWith(term)));
+  const termWords = (text: string) =>
+    fold(text)
+      .split(/[^\p{L}\p{N}]+/u)
+      .filter(Boolean);
+  const hasTerm = (term: SearchTerm) => {
+    const wanted = termWords(term.text);
+    if (!term.phrase) return wanted.every((part) => words.some((word) => word.startsWith(part)));
+    return words.some((_, start) => wanted.every((part, offset) => words[start + offset] === part));
+  };
+  const sender = fold(`${message.fromName ?? ""} ${message.fromAddress}`);
+  const received = message.receivedAt;
+  return (
+    search.terms.every((term) => hasTerm(term) !== term.negated) &&
+    search.senders.every((filter) => sender.includes(fold(filter.text)) !== filter.negated) &&
+    (search.hasAttachment === null || message.attachments.length > 0 === search.hasAttachment) &&
+    (!search.after || received >= startOfDay(search.after, timezoneOffset)) &&
+    (!search.before || received < startOfDay(search.before, timezoneOffset))
+  );
 }
 
 function mailbox() {
@@ -638,12 +657,12 @@ export function mockApi(): Plugin {
           return send(response, uploads.delete(uploadMatch[1] ?? "") ? 204 : 404);
         }
         if (url.pathname === "/messages/search" && method === "POST") {
-          const body = (await readBody(request)) as { q: string; folder?: string };
+          const body = (await readBody(request)) as { q: string; folder?: string; timezoneOffset?: number };
           const list = messages
             .filter((message) =>
               body.folder ? inFolder(message, body.folder) : message.box === null || message.box === "archive",
             )
-            .filter((message) => matchesSearch(message, body.q))
+            .filter((message) => matchesSearch(message, body.q, body.timezoneOffset))
             .sort((a, b) => b.receivedAt - a.receivedAt);
           return send(response, 200, { messages: list.map(summary), nextCursor: null });
         }

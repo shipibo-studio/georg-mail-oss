@@ -137,7 +137,8 @@ export const api = {
   search: (q: string, cursor: string | null) =>
     request<MessagePage>("/messages/search", {
       method: "POST",
-      body: cursor ? { q, limit: 40, cursor } : { q, limit: 40 },
+      // The offset lets after: and before: mean days where the owner is.
+      body: { q, limit: 40, timezoneOffset: new Date().getTimezoneOffset(), ...(cursor ? { cursor } : {}) },
     }),
   message: (id: string) => request<FullMessage>(`/messages/${encodeURIComponent(id)}`),
   send: (message: SendRequest, idempotencyKey: string) =>

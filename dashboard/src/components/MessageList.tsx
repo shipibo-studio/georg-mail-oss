@@ -141,6 +141,7 @@ function ListHeader({
         </div>
       </div>
       <SearchField query={query} onSearch={onSearch} />
+      {query && <p className="search-tips">{t("search.tips")}</p>}
       <div className="meta-row">
         <span>{plural("list.count", count)}</span>
         {query && (

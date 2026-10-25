@@ -118,6 +118,7 @@ test("search works on a phone", async ({ page }) => {
   await expect(page.locator(".subject-title")).toContainText("CI passed on main");
   await page.getByRole("button", { name: "Back" }).tap();
   await expect(page).toHaveURL(/\/dashboard\/search#q=github$/);
+  await expect(page.locator(".search-tips")).toBeVisible();
 });
 
 test("files can be attached on a phone", async ({ page }) => {

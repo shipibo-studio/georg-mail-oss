@@ -3000,3 +3000,11 @@ p.update-blocked {
     animation: none;
   }
 }
+
+/* While searching: the operators the search understands, under the field. */
+.search-tips {
+  margin: 6px 16px 0;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}

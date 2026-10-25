@@ -56,7 +56,7 @@ import {
   updateDraft,
 } from "./mail-drafts";
 import { IMPORT_FOLDER_HEADER, IMPORT_FOLDERS, importMessage } from "./mail-import";
-import { MAX_SEARCH_LENGTH, matchesSearch, searchMatchQuery } from "./mail-search";
+import { MAX_SEARCH_LENGTH, parseSearch, searchConditions } from "./mail-search";
 import {
   cleanContentType,
   cleanFilename,
@@ -117,6 +117,13 @@ const searchSchema = z.strictObject({
   ...pageQuerySchema.shape,
   q: z.string().trim().min(1).max(MAX_SEARCH_LENGTH),
   folder: z.enum(MAIL_FOLDERS).optional(),
+  // The browser's getTimezoneOffset(), so after: and before: mean days where the owner is.
+  timezoneOffset: z
+    .number()
+    .int()
+    .min(-14 * 60)
+    .max(14 * 60)
+    .optional(),
 });
 const moveSchema = z.strictObject({
   // null puts a message back in its natural folder (Inbox or Sent).
@@ -382,12 +389,12 @@ export const createMailboxRoutes = (hooks: MailboxHooks = {}) =>
     // POST so the search terms stay out of URLs and request logs; it changes nothing.
     .post("/messages/search", validate("json", searchSchema), async (context) => {
       const mailbox = await personalMailbox(context);
-      const { q, folder, limit, cursor } = context.req.valid("json");
-      const matchQuery = searchMatchQuery(q);
-      if (!matchQuery) return context.json({ messages: [], nextCursor: null });
+      const { q, folder, timezoneOffset, limit, cursor } = context.req.valid("json");
+      const search = parseSearch(q);
+      if (!search) return context.json({ messages: [], nextCursor: null });
       // Everywhere but Spam and Trash unless a folder is given, as in other mail clients.
       const where = and(
-        matchesSearch(matchQuery),
+        searchConditions(search, timezoneOffset),
         folder ? folderCondition(folder) : or(isNull(messages.box), eq(messages.box, "archive")),
       );
       return context.json(await listMessages(context, mailbox, where, limit, cursor));

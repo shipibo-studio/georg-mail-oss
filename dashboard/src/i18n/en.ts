@@ -62,6 +62,8 @@ export const en = {
   "list.emptySearchBody": "Nothing in your mail matches “{query}”. Try fewer or shorter words.",
   "search.placeholder": "Search mail",
   "search.label": "Search mail",
+  "search.tips":
+    'Try "exact words", -word to leave out, from:name, has:attachment, after:2026-10-01 and before:2026-10-31.',
   "list.emptyTrashTitle": "Trash is empty",
   "list.emptyTrashBody": "Deleted messages wait here for {days} days before they are gone for good.",
   "list.trashRetention": "Deleted for good after {days} days",

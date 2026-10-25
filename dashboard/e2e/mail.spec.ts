@@ -337,6 +337,32 @@ test("search covers Archive and Sent, marks archived results, and says when noth
   await expect(page.getByText("Nothing in your mail matches “zzzz”")).toBeVisible();
 });
 
+test("search understands phrases, exclusions, senders, attachments and days, and shows how", async ({ page }) => {
+  await openInbox(page);
+  const search = page.getByRole("searchbox", { name: "Search mail" });
+  const searchRequest = page.waitForRequest((request) => request.url().includes("/messages/search"));
+  await search.fill("from:banco");
+  await search.press("Enter");
+  // after: and before: mean days where the browser is.
+  expect((await searchRequest).postDataJSON()).toMatchObject({ q: "from:banco", timezoneOffset: expect.any(Number) });
+  await expect(page.locator(".search-tips")).toContainText("has:attachment");
+  await expect(page.locator("button.msg")).toHaveCount(1);
+  await expect(row(page, "Urgente: confirme sus datos")).toBeVisible();
+
+  await search.fill('"sitio de georg" -re');
+  await search.press("Enter");
+  await expect(page.locator("button.msg")).toHaveCount(1);
+  await expect(row(page, "Propuesta para el sitio de Georg")).toBeVisible();
+
+  await search.fill("propuesta has:attachment");
+  await search.press("Enter");
+  await expect(page.locator("button.msg")).toHaveCount(1);
+
+  await search.fill("propuesta before:2000-01-01");
+  await search.press("Enter");
+  await expect(page.getByText("No results")).toBeVisible();
+});
+
 test("⌘K searches the mail for whatever was typed", async ({ page }) => {
   await openInbox(page);
   await page.keyboard.press("ControlOrMeta+k");

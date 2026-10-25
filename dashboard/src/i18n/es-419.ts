@@ -62,6 +62,8 @@ export const es419: Translations = {
   "list.emptySearchBody": "Nada en tu correo coincide con “{query}”. Prueba con menos palabras o más cortas.",
   "search.placeholder": "Buscar en el correo",
   "search.label": "Buscar en el correo",
+  "search.tips":
+    'Prueba "palabras exactas", -palabra para excluir, from:nombre, has:attachment, after:2026-10-01 y before:2026-10-31.',
   "list.emptyTrashTitle": "La papelera está vacía",
   "list.emptyTrashBody": "Los mensajes eliminados esperan aquí {days} días antes de borrarse para siempre.",
   "list.trashRetention": "Se borran para siempre a los {days} días",

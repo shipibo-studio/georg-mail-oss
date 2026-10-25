@@ -62,6 +62,8 @@ export const ptBR: Translations = {
   "list.emptySearchBody": "Nada no seu e-mail corresponde a “{query}”. Tente menos palavras ou palavras mais curtas.",
   "search.placeholder": "Pesquisar e-mails",
   "search.label": "Pesquisar e-mails",
+  "search.tips":
+    'Experimente "palavras exatas", -palavra para excluir, from:nome, has:attachment, after:2026-10-01 e before:2026-10-31.',
   "list.emptyTrashTitle": "A lixeira está vazia",
   "list.emptyTrashBody": "Mensagens excluídas ficam aqui por {days} dias antes de sumir de vez.",
   "list.trashRetention": "Excluídas de vez após {days} dias",

@@ -30,7 +30,7 @@
       "mode": "100644"
     },
     "README.md": {
-      "sha": "3354b9ee92bfbfb07c5b8c31a12e4606d29c7c6c",
+      "sha": "812a239e452bfd0ce4a1c20b25c9fbbd9523805f",
       "mode": "100644"
     },
     "SECURITY.md": {
@@ -50,7 +50,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "90bcaf4852552f8c585fcddd81ccf176bc3fdcab",
+      "sha": "9f9f11e2f05f8f58248c09e8f936a56773cfb52e",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -58,7 +58,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/phone.spec.ts": {
-      "sha": "b13ca47cada42eb2fa50469540fb329ffd7d5e29",
+      "sha": "4b62189beb3d3ad14a3d10009eaead54810ffddd",
       "mode": "100644"
     },
     "dashboard/index.html": {
@@ -66,7 +66,7 @@
       "mode": "100644"
     },
     "dashboard/mock/mock-api.ts": {
-      "sha": "1031dff5e4994e4e535fb5bd5acb59660b658de6",
+      "sha": "907a3d18c4c86558bdae18a7d972e55b9a8fa7c3",
       "mode": "100644"
     },
     "dashboard/mock/mock-v1.ts": {
@@ -86,7 +86,7 @@
       "mode": "100644"
     },
     "dashboard/src/api/client.ts": {
-      "sha": "d54f3690d4f7436b88310199617c53c6cd553bbd",
+      "sha": "6cf26149ce6912436d3becc0d603bb50b8b81832",
       "mode": "100644"
     },
     "dashboard/src/api/queries.ts": {
@@ -134,7 +134,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/MessageList.tsx": {
-      "sha": "a7d65bf135ace581ed696ecc3c7e3615238ea0af",
+      "sha": "7accdbde9a98e27b0df506318055754d23575c49",
       "mode": "100644"
     },
     "dashboard/src/components/MobileNav.tsx": {
@@ -210,15 +210,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "aa1ebaf2c87e9d683b532957d7080638e326df17",
+      "sha": "d7476178c1cca28b790997d6e51f80d6751bff20",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "a7709628930260e442e046d19e38a27e90e911be",
+      "sha": "55f938a211cc2c2691d624fbe27bb5fb767c0208",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "44c1bf432231a69b4a99750c8d0dcb5d89924cd2",
+      "sha": "b43915ea2accab4970c86b6e4e2b97a1e8555fe0",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {
@@ -290,7 +290,7 @@
       "mode": "100644"
     },
     "dashboard/src/styles.css": {
-      "sha": "04738bab727a436fcb664bc02129dc6a099360f2",
+      "sha": "8ba5f7b9937448292973a9b3a65b67c23d966d7a",
       "mode": "100644"
     },
     "dashboard/test/aliases-and-retry.test.ts": {
@@ -745,8 +745,12 @@
       "sha": "ead08ea3b436651c0e90faae2d6a1705deefe2a2",
       "mode": "100644"
     },
+    "src/worker/dashboard/mail-search-query.ts": {
+      "sha": "727371b974a77574fba834cb332bc90f4008377a",
+      "mode": "100644"
+    },
     "src/worker/dashboard/mail-search.ts": {
-      "sha": "22a2d9a9a3815158a86b296267e827b1b822e51d",
+      "sha": "746c97686ec2ab94831d315fe18a7d4f29a4c6d3",
       "mode": "100644"
     },
     "src/worker/dashboard/mail-uploads.ts": {
@@ -754,7 +758,7 @@
       "mode": "100644"
     },
     "src/worker/dashboard/mailbox-routes.ts": {
-      "sha": "f65a0a486b6cc0c8160a864da4f55f9531f115ea",
+      "sha": "ffeed001329911e96c2695538d34fb7133066dd2",
       "mode": "100644"
     },
     "src/worker/dashboard/preferences.ts": {
@@ -981,6 +985,10 @@
       "sha": "32ff6690781dc3768321ad59caa1c2a2aee80882",
       "mode": "100644"
     },
+    "test/e2e/mail-search-operators.test.ts": {
+      "sha": "af95708c73a8ef385e4f30082dafca3f7f6f621d",
+      "mode": "100644"
+    },
     "test/e2e/personal-mailbox.test.ts": {
       "sha": "5e096074e12854c23fbf52d73018ee88458938da",
       "mode": "100644"
@@ -1010,7 +1018,7 @@
       "mode": "100644"
     },
     "test/mailbox-owner.ts": {
-      "sha": "4ae15a251f08b3a89e1e4d0c54805e70f6dba2b2",
+      "sha": "8558c7fd6820ab7676d83352a66bc22b650570a0",
       "mode": "100644"
     },
     "test/unit/cloudflare-sender.test.ts": {
@@ -1046,7 +1054,7 @@
       "mode": "100644"
     },
     "test/unit/mail-search.test.ts": {
-      "sha": "ddb176a7ac1e13cbae03e2c8f61910c8deb52765",
+      "sha": "f8114b8ba6ceeb8a23861985fb51ec1786ac07eb",
       "mode": "100644"
     },
     "test/unit/mail-uploads.test.ts": {
