@@ -208,6 +208,8 @@ export const MAIL_SEND_TIMEOUT_MS = 10_000;
 export const UPDATE_FETCH_TIMEOUT_MS = 10_000;
 /** How long the newest release, once looked up, is trusted before asking GitHub again. */
 export const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
+/** A check the owner asks for asks GitHub again, but no more often than this, however often it is pressed. */
+export const UPDATE_MANUAL_CHECK_INTERVAL_MS = 60 * 1000;
 
 /** Events stay queryable (GET /v1/events) and retryable for this long. */
 export const EVENT_RETENTION_DAYS = 7;

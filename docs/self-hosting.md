@@ -179,7 +179,7 @@ To export from Zoho: **Settings → Import/Export → Export**, choose the folde
 
 ## Upgrading
 
-New versions are published as [releases](https://github.com/shipibo-studio/georg-mail-oss/releases) of this repository. The mail client looks for them (at most every six hours) and says **Version X is available** in the sidebar and in **Settings → Updates**, with a link to the release notes. Read them before updating: they say when a release needs a new variable or secret.
+New versions are published as [releases](https://github.com/shipibo-studio/georg-mail-oss/releases) of this repository. The foot of the sidebar (the **More** sheet on a phone) shows the installed version, which links to this repository, and a **Check for updates** button. The app looks for a new release on its own at most every six hours, or right away when you press that button, and then says **Version X is available** there; the review that follows links to the release notes. Read them before updating: they say when a release needs a new variable or secret.
 
 ### From the app
 
@@ -197,7 +197,7 @@ The Deploy button made a copy of this repository in your GitHub or GitLab accoun
    ```
 
    or in **Workers & Pages → georg-mail → Settings → Variables and Secrets**, as secrets (plain variables there are replaced by the next deploy).
-3. When a version is out, press **Update…**. The app compares the release with your copy and says what changes. Nothing is written until you press **Update to X**: then it copies the release's files and makes one commit on the branch, and Cloudflare builds and deploys it, applying new database migrations first. It takes a few minutes; mail keeps arriving meanwhile.
+3. When a version is out, press **Version X is available**. The app compares the release with your copy and says what changes. Nothing is written until you press **Update to X**: then it copies the release's files and makes one commit on the branch, and Cloudflare builds and deploys it, applying new database migrations first. It takes a few minutes; mail keeps arriving meanwhile.
 
 What an update never does:
 

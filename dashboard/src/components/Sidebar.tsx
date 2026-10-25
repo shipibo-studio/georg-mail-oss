@@ -13,7 +13,7 @@ import { DESKTOP_ICON, MOON_ICON, SUN_ICON } from "./morph-icons";
 import { ACCOUNT_ITEMS, MAIL_ITEMS, type NavItem } from "./nav-items";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
-import { UpdateNotice } from "./UpdateDialog";
+import { VersionPanel } from "./UpdateDialog";
 
 const THEME_OPTIONS: { pref: ThemePref; label: MessageKey }[] = [
   { pref: "system", label: "appearance.system" },
@@ -184,7 +184,7 @@ export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSea
       <NavGroup title={t("nav.account")} items={ACCOUNT_ITEMS} route={route} navigate={navigate} unread={0} />
 
       <div className="side-spacer" />
-      <UpdateNotice onOpen={onUpdate} />
+      <VersionPanel onUpdate={onUpdate} />
 
       <div className="side-foot">
         <div className="me">

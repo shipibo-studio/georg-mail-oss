@@ -14,7 +14,7 @@
       "mode": "100644"
     },
     ".github/ISSUE_TEMPLATE/bug_report.yml": {
-      "sha": "6009a368e7253de57f86053652c6515b8bcb6f7c",
+      "sha": "f0191c34d3f12c00f0cf208a8f6891bee1df9ad9",
       "mode": "100644"
     },
     ".github/ISSUE_TEMPLATE/config.yml": {
@@ -58,7 +58,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "cc4d8d2241b04fc9014daf67ab2a37fda8a8dd6c",
+      "sha": "6a8dffb122c8faaa8a8e0efe142189b267def259",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -66,7 +66,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/phone.spec.ts": {
-      "sha": "f6a4cf384c7be9b0779b390b950d497c83f35a3f",
+      "sha": "5bdd6860f59c19ad24b4b5e46dedd15cde77ff2b",
       "mode": "100644"
     },
     "dashboard/index.html": {
@@ -74,7 +74,7 @@
       "mode": "100644"
     },
     "dashboard/mock/mock-api.ts": {
-      "sha": "c58aaf2d112ef66ee431580455893fdd75409c76",
+      "sha": "e9547411fe0884f8b04d45a58a54f1f188f73565",
       "mode": "100644"
     },
     "dashboard/mock/mock-v1.ts": {
@@ -94,11 +94,11 @@
       "mode": "100644"
     },
     "dashboard/src/api/client.ts": {
-      "sha": "6cf26149ce6912436d3becc0d603bb50b8b81832",
+      "sha": "69aeb8a42e4e4ba99e8d8506bf90c259ee75be62",
       "mode": "100644"
     },
     "dashboard/src/api/queries.ts": {
-      "sha": "7e2502887b09d02e0405ba4e18b02de711dd04fd",
+      "sha": "b627859951d24701c2f06fbd0ac26d374dd1b6df",
       "mode": "100644"
     },
     "dashboard/src/api/types.ts": {
@@ -110,7 +110,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/App.tsx": {
-      "sha": "44861f362c2863089413fdda8fd63bc30e903d4d",
+      "sha": "8a910467565feffe1a66856e19e7438edaf63d6c",
       "mode": "100644"
     },
     "dashboard/src/components/CommandPalette.tsx": {
@@ -146,7 +146,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/MobileNav.tsx": {
-      "sha": "8edfe4b7bd2e6449623b46914285666709ca5dd2",
+      "sha": "d72750f8c692ce56c6a0583512c47475159a4fee",
       "mode": "100644"
     },
     "dashboard/src/components/NotificationsView.tsx": {
@@ -162,7 +162,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/SettingsDialog.tsx": {
-      "sha": "8cd1e676f8c998c64f147d233caecee8c0a6ebfd",
+      "sha": "c9127bce7afca2cacd4585df1b562c7d504e2b51",
       "mode": "100644"
     },
     "dashboard/src/components/SetupView.tsx": {
@@ -170,7 +170,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/Sidebar.tsx": {
-      "sha": "ba8106837fb331acfe58fcf2500fe41f0210028b",
+      "sha": "1dc96284f40b3c7db402879ea74f0b0d7c4e7264",
       "mode": "100644"
     },
     "dashboard/src/components/Toasts.tsx": {
@@ -182,7 +182,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/UpdateDialog.tsx": {
-      "sha": "2a09731a689354cdcbb7238e0eb37da0f1bce340",
+      "sha": "63f573fe2871499f4a170625e1dffd35fc868af1",
       "mode": "100644"
     },
     "dashboard/src/components/controls.tsx": {
@@ -218,15 +218,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "1f2551c95bb1a0bb947c7a675fd8b44efbb32354",
+      "sha": "e62723a64be5458d64294d740fd35727604e2e45",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "f086a0e6838f517f1f6bc9be38637dde1ca8f18a",
+      "sha": "b5f8b6188b259379bf404a0008b543d7e4ce0999",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "7a6282eeadd3b67cf7b037d2a404fda32d6c2b99",
+      "sha": "fd0965211bd42b52beaef0c3b70c859ed83f4529",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {
@@ -298,7 +298,7 @@
       "mode": "100644"
     },
     "dashboard/src/styles.css": {
-      "sha": "59a500acaafcd891938586f56c623f54f7819770",
+      "sha": "c668a799eeb0b5afb7e989f25317052744c0c171",
       "mode": "100644"
     },
     "dashboard/test/aliases-and-retry.test.ts": {
@@ -410,7 +410,7 @@
       "mode": "100644"
     },
     "docs/self-hosting.md": {
-      "sha": "9ed2b5e3cca2a6418ac45cb7d49586c4bca9efd3",
+      "sha": "1e381483e1247fe239c4804f7eac94036a1e7fb3",
       "mode": "100644"
     },
     "drizzle.config.ts": {
@@ -714,11 +714,11 @@
       "mode": "100644"
     },
     "skills/install-georg-mail/SKILL.md": {
-      "sha": "119950aeea7fd72601b379ade11e3852bf6baa5e",
+      "sha": "22aff16a9524c5397b60ac5dfaf640b807b57a56",
       "mode": "100644"
     },
     "src/worker/config.ts": {
-      "sha": "bfc3df82f41653ff897da4696cb86f674a6d02cb",
+      "sha": "90045362f90185974956839522d2342901021b38",
       "mode": "100644"
     },
     "src/worker/crypto.ts": {
@@ -782,7 +782,7 @@
       "mode": "100644"
     },
     "src/worker/dashboard/update-routes.ts": {
-      "sha": "80ccb6cd2c770752dead94079b2c81914cae2d90",
+      "sha": "481e7585446b9e5a5928767aa0bc32fce0844fb0",
       "mode": "100644"
     },
     "src/worker/db/client.ts": {
@@ -1014,7 +1014,7 @@
       "mode": "100644"
     },
     "test/e2e/updates.test.ts": {
-      "sha": "0ae6dd4fd49fbab0e69c1c04f376766b8294db65",
+      "sha": "0854267b9451d2110f2e78ccae3f297343ff2531",
       "mode": "100644"
     },
     "test/env.d.ts": {

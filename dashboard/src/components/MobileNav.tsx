@@ -8,6 +8,7 @@ import { isSwipeDown } from "../lib/media";
 import type { Route } from "../lib/route";
 import { CountBadge } from "./controls";
 import { ACCOUNT_ITEMS, MAIL_ITEMS, type NavItem } from "./nav-items";
+import { VersionPanel } from "./UpdateDialog";
 
 const [INBOX_ITEM, ...OTHER_FOLDERS] = MAIL_ITEMS;
 const WORKSPACE_TABS = WORKSPACE_DESTINATIONS.filter((destination) => destination.phoneTab);
@@ -23,6 +24,7 @@ interface MobileNavProps {
   navigate(route: Route): void;
   onCompose(): void;
   onSettings(): void;
+  onUpdate(): void;
 }
 
 function Tab({
@@ -62,10 +64,12 @@ function MoreSheet({
   open,
   onClose,
   items,
+  onUpdate,
 }: {
   open: boolean;
   onClose(): void;
   items: { label: string; icon: ReactNode; run(): void }[];
+  onUpdate(): void;
 }) {
   const { t } = useI18n();
   return (
@@ -114,6 +118,13 @@ function MoreSheet({
                 {item.label}
               </motion.button>
             ))}
+            {/* The sidebar's version panel, which phones do not show. */}
+            <VersionPanel
+              onUpdate={() => {
+                onClose();
+                onUpdate();
+              }}
+            />
           </motion.div>
         </motion.div>
       )}
@@ -122,7 +133,7 @@ function MoreSheet({
 }
 
 /** Phones only (hidden by CSS elsewhere): the sidebar's destinations within thumb reach. */
-export function MobileNav({ route, unread, navigate, onCompose, onSettings }: MobileNavProps) {
+export function MobileNav({ route, unread, navigate, onCompose, onSettings, onUpdate }: MobileNavProps) {
   const { t } = useI18n();
   const [moreOpen, setMoreOpen] = useState(false);
   const inMore = MORE_ITEMS.some((item) => item.active(route));
@@ -158,6 +169,7 @@ export function MobileNav({ route, unread, navigate, onCompose, onSettings }: Mo
       <MoreSheet
         open={moreOpen}
         onClose={() => setMoreOpen(false)}
+        onUpdate={onUpdate}
         items={[
           ...MORE_ITEMS.map((item) => ({
             label: t(item.label),

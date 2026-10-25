@@ -28,6 +28,15 @@ export function useUpdateStatus() {
   });
 }
 
+/** "Check for updates": the answer replaces the status every view shows. */
+export function useCheckForUpdates() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: updatesApi.check,
+    onSuccess: (status) => client.setQueryData(keys.updates, status),
+  });
+}
+
 export function useMailbox() {
   return useQuery({ queryKey: keys.mailbox, queryFn: api.mailbox });
 }

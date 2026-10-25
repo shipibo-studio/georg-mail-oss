@@ -4,7 +4,7 @@
 import { createExecutionContext, env, waitOnExecutionContext } from "cloudflare:test";
 import { eq } from "drizzle-orm";
 import { beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
-import { UPDATE_CHECK_INTERVAL_MS } from "../../src/worker/config";
+import { UPDATE_CHECK_INTERVAL_MS, UPDATE_MANUAL_CHECK_INTERVAL_MS } from "../../src/worker/config";
 import { DASHBOARD_REQUEST_HEADER } from "../../src/worker/dashboard/dashboard-session";
 import { LATEST_RELEASE_JOB } from "../../src/worker/dashboard/update-routes";
 import { createDatabase } from "../../src/worker/db/client";
@@ -269,6 +269,33 @@ describe("checking for a new release", () => {
     expect(upstream.latestLookups).toBe(2);
   });
 
+  test("the owner can check now: GitHub is asked again, but at most once a minute", async () => {
+    const owner = await setupOwner();
+    upstream.latest = null;
+    expect(await json(await call(owner, ""))).toMatchObject({ available: false });
+    expect(upstream.latestLookups).toBe(1);
+
+    // A release out since the last look: a check sees it at once, without waiting six hours.
+    upstream.latest = NEXT;
+    await db
+      .update(jobCursors)
+      .set({ updatedAt: Date.now() - UPDATE_MANUAL_CHECK_INTERVAL_MS - 1 })
+      .where(eq(jobCursors.name, LATEST_RELEASE_JOB));
+    const checked = await call(owner, "/check", { body: {} });
+    expect(checked.status).toBe(200);
+    expect(await json(checked)).toMatchObject({
+      installed: INSTALLED_VERSION,
+      latest: { version: NEXT },
+      available: true,
+    });
+    expect(upstream.latestLookups).toBe(2);
+
+    // Pressing it again within the minute answers from the last look.
+    await call(owner, "/check", { body: {} });
+    await call(owner, "/check", { body: {} });
+    expect(upstream.latestLookups).toBe(2);
+  });
+
   test("a failed lookup keeps the last answer and says so", async () => {
     const owner = await setupOwner();
     await call(owner, "");
@@ -447,6 +474,10 @@ describe("who may update", () => {
     expect((await call(owner, "", { member: "stranger@example.test" })).status).toBe(403);
     const unmarked = await call(owner, "/plan", { body: { version: NEXT }, vars: GITHUB, marker: false });
     expect(unmarked.status).toBe(403);
+    expect((await call(owner, "/check", { body: {}, member: null })).status).toBe(401);
+    expect((await call(owner, "/check", { body: {}, member: "stranger@example.test" })).status).toBe(403);
+    expect((await call(owner, "/check", { body: {}, marker: false })).status).toBe(403);
+    expect(upstream.latestLookups).toBe(0);
     expect(repository.commits).toEqual([]);
   });
 });

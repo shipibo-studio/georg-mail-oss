@@ -180,12 +180,12 @@ export function App() {
     setImportOpen(true);
   }, []);
 
-  // With a repository to commit to, the update is reviewed right away; without one, Settings says how.
+  // Only with a repository to commit to; without one, the version panel links to the hand update.
   const canUpdateHere = Boolean(updates.data?.repository);
   const openUpdate = useCallback(() => {
-    // Updates live in the Mailbox tab.
-    setSettingsTab(canUpdateHere ? null : "mailbox");
-    setUpdateOpen(canUpdateHere);
+    if (!canUpdateHere) return;
+    setSettingsTab(null);
+    setUpdateOpen(true);
   }, [canUpdateHere]);
 
   const overlayOpen = settingsOpen || importOpen || paletteOpen || composerOpen || updateOpen;
@@ -246,7 +246,14 @@ export function App() {
       )}
       <WorkspaceSection route={route} navigate={navigate} />
       {route.section === "notifications" && <NotificationsView />}
-      <MobileNav route={route} unread={unread} navigate={navigate} onCompose={compose} onSettings={openSettings} />
+      <MobileNav
+        route={route}
+        unread={unread}
+        navigate={navigate}
+        onCompose={compose}
+        onSettings={openSettings}
+        onUpdate={openUpdate}
+      />
       <PreferenceSync saved={mailbox.data?.preferences} />
 
       <AnimatePresence>
@@ -289,7 +296,6 @@ export function App() {
             initialTab={settingsTab}
             onClose={() => setSettingsTab(null)}
             onImport={openImport}
-            onUpdate={openUpdate}
           />
         )}
       </AnimatePresence>

@@ -6,7 +6,7 @@
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
-import { UPDATE_CHECK_INTERVAL_MS } from "../config";
+import { UPDATE_CHECK_INTERVAL_MS, UPDATE_MANUAL_CHECK_INTERVAL_MS } from "../config";
 import type { Database } from "../db/client";
 import { jobCursors } from "../db/schema";
 import { ApiError } from "../errors";
@@ -39,10 +39,14 @@ interface LatestRelease {
   checkedAt: number;
 }
 
-/** The newest release, looked up at most once per interval; a failed lookup keeps the last answer. */
-async function latestRelease(db: Database, now: number): Promise<LatestRelease & { failed: boolean }> {
+/** The newest release, looked up at most once per `maxAgeMs`; a failed lookup keeps the last answer. */
+async function latestRelease(
+  db: Database,
+  now: number,
+  maxAgeMs = UPDATE_CHECK_INTERVAL_MS,
+): Promise<LatestRelease & { failed: boolean }> {
   const [cached] = await db.select().from(jobCursors).where(eq(jobCursors.name, LATEST_RELEASE_JOB));
-  if (cached && now - cached.updatedAt < UPDATE_CHECK_INTERVAL_MS) {
+  if (cached && now - cached.updatedAt < maxAgeMs) {
     return { version: cached.position || null, checkedAt: cached.updatedAt, failed: false };
   }
   try {
@@ -85,25 +89,33 @@ async function reviewUpdate(host: RepositoryHost, version: string, head: string)
   return { plan: planUpdate(from, to, files), manifest: to };
 }
 
+/** What is installed, the newest release and where an update would go. */
+async function updateStatus(db: Database, env: Env, maxAgeMs?: number) {
+  const latest = await latestRelease(db, Date.now(), maxAgeMs);
+  const available = latest.version !== null && compareVersions(latest.version, INSTALLED_VERSION) > 0;
+  let repository: string | null = null;
+  try {
+    repository = repositoryHost(env)?.label ?? null;
+  } catch {
+    // A malformed UPDATE_REPOSITORY shows as not set up here; reviewing the update says why.
+  }
+  return {
+    installed: INSTALLED_VERSION,
+    latest: latest.version ? { version: latest.version, url: releaseUrl(latest.version) } : null,
+    available,
+    checkedAt: latest.checkedAt || null,
+    checkFailed: latest.failed,
+    repository,
+  };
+}
+
 export const updateRoutes = new Hono<MailEnv>()
-  .get("/", async (context) => {
-    const latest = await latestRelease(context.get("db"), Date.now());
-    const available = latest.version !== null && compareVersions(latest.version, INSTALLED_VERSION) > 0;
-    let repository: string | null = null;
-    try {
-      repository = repositoryHost(context.env)?.label ?? null;
-    } catch {
-      // A malformed UPDATE_REPOSITORY shows as not set up here; reviewing the update says why.
-    }
-    return context.json({
-      installed: INSTALLED_VERSION,
-      latest: latest.version ? { version: latest.version, url: releaseUrl(latest.version) } : null,
-      available,
-      checkedAt: latest.checkedAt || null,
-      checkFailed: latest.failed,
-      repository,
-    });
-  })
+  .get("/", async (context) => context.json(await updateStatus(context.get("db"), context.env)))
+
+  // "Check for updates": asks GitHub now rather than within six hours, at most once a minute.
+  .post("/check", async (context) =>
+    context.json(await updateStatus(context.get("db"), context.env, UPDATE_MANUAL_CHECK_INTERVAL_MS)),
+  )
 
   .post("/plan", validate("json", planSchema), async (context) => {
     const { version } = context.req.valid("json");

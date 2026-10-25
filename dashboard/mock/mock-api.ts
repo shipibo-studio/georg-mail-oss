@@ -216,13 +216,15 @@ let visitor = OWNER;
 
 /**
  * In-app updates: up to date unless a test asks for a release (/__mock/update-available), one that
- * only a hand update can apply (/__mock/update-blocked), or an install without UPDATE_TOKEN
- * (/__mock/update-manual).
+ * only a hand update can apply (/__mock/update-blocked), an install without UPDATE_TOKEN
+ * (/__mock/update-manual), or a release published since the last look, which only "Check for updates"
+ * finds (/__mock/update-unseen).
  */
 const INSTALLED = "0.1.0";
 const RELEASE = "0.2.0";
 type UpdateScenario = "current" | "available" | "blocked" | "manual";
 let updateScenario: UpdateScenario = "current";
+let unseenRelease = false;
 const RELEASE_FILES = Array.from({ length: 45 }, (_, index) => `src/file-${index}.ts`);
 
 /** Browser tests start every case from the same mailbox. */
@@ -237,6 +239,7 @@ function resetMock() {
   aliases.length = 0;
   preferences = null;
   updateScenario = "current";
+  unseenRelease = false;
 }
 
 function updateStatus() {
@@ -461,6 +464,7 @@ export function mockApi(): Plugin {
       else if (request.url === "/update-available") updateScenario = "available";
       else if (request.url === "/update-blocked") updateScenario = "blocked";
       else if (request.url === "/update-manual") updateScenario = "manual";
+      else if (request.url === "/update-unseen") unseenRelease = true;
       else if (request.url === "/fresh-same-domain") {
         claimed = false;
         visitor = `someone@${ADDRESS.split("@")[1]}`;
@@ -475,6 +479,11 @@ export function mockApi(): Plugin {
         if (request.method === "GET" && path === "/") return send(response, 200, updateStatus());
         if (request.method !== "POST") return send(response, 405);
         await readBody(request);
+        if (path === "/check") {
+          if (unseenRelease) updateScenario = "available";
+          unseenRelease = false;
+          return send(response, 200, updateStatus());
+        }
         if (path === "/plan") return send(response, 200, updatePlan());
         if (path === "/stage") return send(response, 200, { staged: 20 });
         if (path === "/apply") {

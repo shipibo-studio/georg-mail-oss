@@ -1,5 +1,6 @@
 // Settings in two tabs: Appearance, which people change now and then, and Mailbox, set up once
-// (addresses, importing old mail, updates, signing out), so the dialog stays short.
+// (addresses, importing old mail, signing out), so the dialog stays short. The version and updates
+// live at the foot of the sidebar.
 import { EASE_OUT, GESTURE, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { IconFileImport, IconLogout, IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -14,7 +15,6 @@ import { play, setSounds, useSounds } from "../lib/sounds";
 import { AliasSettings } from "./AliasSettings";
 import { HoldButton, Switch, TabBar } from "./controls";
 import { AccentControl, ThemeControl } from "./Sidebar";
-import { UpdateSettings } from "./UpdateDialog";
 
 const ACCESS_LOGOUT_PATH = "/cdn-cgi/access/logout";
 
@@ -124,7 +124,7 @@ function AppearanceSettings() {
   );
 }
 
-function MailboxSettings({ mailbox, onImport, onUpdate }: { mailbox: Mailbox; onImport(): void; onUpdate(): void }) {
+function MailboxSettings({ mailbox, onImport }: { mailbox: Mailbox; onImport(): void }) {
   const { t } = useI18n();
   return (
     <>
@@ -143,7 +143,6 @@ function MailboxSettings({ mailbox, onImport, onUpdate }: { mailbox: Mailbox; on
           </button>
         </div>
       </section>
-      <UpdateSettings onUpdate={onUpdate} />
       <div className="signed-in">
         <span className="muted small">
           {t("settings.signedInAs")} <span className="registered-email">{mailbox.owner}</span>
@@ -159,13 +158,11 @@ export function SettingsDialog({
   initialTab = "appearance",
   onClose,
   onImport,
-  onUpdate,
 }: {
   mailbox: Mailbox;
   initialTab?: SettingsTab;
   onClose(): void;
   onImport(): void;
-  onUpdate(): void;
 }) {
   const { t } = useI18n();
   const [tab, setTab] = useState<SettingsTab>(initialTab);
@@ -242,11 +239,7 @@ export function SettingsDialog({
             exit={{ opacity: 0, transition: { duration: 0.1 } }}
             transition={{ duration: 0.24, ease: EASE_OUT }}
           >
-            {tab === "appearance" ? (
-              <AppearanceSettings />
-            ) : (
-              <MailboxSettings mailbox={mailbox} onImport={onImport} onUpdate={onUpdate} />
-            )}
+            {tab === "appearance" ? <AppearanceSettings /> : <MailboxSettings mailbox={mailbox} onImport={onImport} />}
           </motion.div>
         </AnimatePresence>
       </motion.div>

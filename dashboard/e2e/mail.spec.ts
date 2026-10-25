@@ -912,11 +912,33 @@ test("the import form: a drop zone reachable from the keyboard, chosen files as 
   await expect(start).toBeEnabled();
 });
 
-test("an install that is up to date says so in Settings, with no notice", async ({ page }) => {
+test("the sidebar shows the version, links to the repository and checks for updates", async ({ page }) => {
   await openInbox(page);
-  await expect(page.locator(".update-notice")).toHaveCount(0);
+  const panel = page.locator(".sidebar .version-panel");
+  await expect(panel.locator(".update-notice")).toHaveCount(0);
+  const repository = panel.getByRole("link", { name: /Georg mail 0\.1\.0/ });
+  await expect(repository).toHaveAttribute("href", "https://github.com/shipibo-studio/georg-mail-oss");
+  await expect(repository).toHaveAttribute("target", "_blank");
+  // Settings no longer carries the version: it lives here.
   await page.getByRole("button", { name: "Settings" }).click();
-  await expect((await openMailboxTab(page)).getByText("Georg mail 0.1.0, up to date.")).toBeVisible();
+  await expect((await openMailboxTab(page)).getByText(/up to date/)).toHaveCount(0);
+  await page.keyboard.press("Escape");
+
+  // Nothing new: a check says so.
+  const check = panel.getByRole("button", { name: "Check for updates" });
+  await check.click();
+  await expect(page.locator(".toast", { hasText: "Georg mail 0.1.0 is the latest version" })).toBeVisible();
+
+  // A release published since the last look shows up as soon as the owner checks.
+  await page.request.post("/dashboard/api/__mock/update-unseen");
+  await page.route("**/dashboard/api/updates/check", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    await route.fallback();
+  });
+  await check.click();
+  await expect(check).toHaveAttribute("aria-busy", "true");
+  await expect(panel.getByRole("button", { name: "Version 0.2.0 is available" })).toBeVisible();
+  await expect(check).not.toHaveAttribute("aria-busy");
 });
 
 test("a new release: the notice opens the review, which asks first, then copies the files and commits", async ({
@@ -963,14 +985,15 @@ test("a release that would overwrite the owner's own changes is left to a hand u
   await expect(dialog).toHaveCount(0);
 });
 
-test("without an update token, the notice leads to Settings and the hand update", async ({ page }) => {
+test("without an update token, the notice links to the hand update", async ({ page }) => {
   await page.request.post("/dashboard/api/__mock/update-manual");
   await openInbox(page);
-  await page.getByRole("button", { name: "Version 0.2.0 is available" }).click();
-  const settings = page.getByRole("dialog", { name: "Settings" });
-  await expect(settings.getByText("Georg mail 0.2.0 is available. This install has 0.1.0.")).toBeVisible();
-  await expect(settings.getByRole("link", { name: "How to update" })).toBeVisible();
-  await expect(settings.getByRole("button", { name: "Update…" })).toHaveCount(0);
+  const notice = page.locator(".sidebar").getByRole("link", { name: "Version 0.2.0 is out: how to update" });
+  await expect(notice).toHaveAttribute(
+    "href",
+    "https://github.com/shipibo-studio/georg-mail-oss/blob/main/docs/self-hosting.md#upgrading",
+  );
+  await expect(page.getByRole("button", { name: "Version 0.2.0 is available" })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "Update Georg mail" })).toHaveCount(0);
 });
 

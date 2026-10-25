@@ -28,7 +28,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Settings → Mailbox → Updates shows it.
+      description: The foot of the sidebar shows it (the More sheet on a phone).
       placeholder: "0.2.0"
     validations:
       required: true

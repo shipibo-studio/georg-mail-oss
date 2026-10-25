@@ -234,12 +234,15 @@ test("a preference changed on a phone is saved for every device", async ({ page 
   expect((await saved).postDataJSON()).toMatchObject({ clock: "12h" });
 });
 
-test("a new release can be applied from the Settings sheet on a phone", async ({ page }) => {
+test("a new release can be applied from the More sheet on a phone, which shows the version", async ({ page }) => {
   await page.request.post("/dashboard/api/__mock/update-available");
   await openInbox(page);
-  await goTo(page, "Settings");
-  const settings = await openMailboxTab(page);
-  await settings.getByRole("button", { name: "Update…" }).tap();
+  await page.locator(".mobile-nav").getByRole("button", { name: "More" }).tap();
+  const more = page.getByRole("dialog", { name: "More" });
+  await expect(more.getByRole("link", { name: /Georg mail 0\.1\.0/ })).toBeVisible();
+  await expect(more.getByRole("button", { name: "Check for updates" })).toBeVisible();
+  await more.getByRole("button", { name: "Version 0.2.0 is available" }).tap();
+  await expect(more).toHaveCount(0);
   const dialog = page.getByRole("dialog", { name: "Update Georg mail" });
   await dialog.getByRole("button", { name: "Update to 0.2.0" }).tap();
   await expect(dialog.getByText(/is committed to github\.com\/owner\/mail/)).toBeVisible();

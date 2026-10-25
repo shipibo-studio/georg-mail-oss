@@ -4,15 +4,25 @@
 // none of it: its status query answers null and nothing renders.
 
 import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
-import { IconAlertTriangle, IconCircleCheck, IconExternalLink, IconRefresh, IconX } from "@tabler/icons-react";
+import {
+  IconAlertTriangle,
+  IconBrandGithub,
+  IconCircleCheck,
+  IconExternalLink,
+  IconRefresh,
+  IconX,
+} from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ApiError, updatesApi } from "../api/client";
-import { keys, useUpdateStatus } from "../api/queries";
+import { keys, useCheckForUpdates, useUpdateStatus } from "../api/queries";
 import type { UpdateCommit, UpdatePlan } from "../api/types";
 import { useI18n } from "../i18n/I18nProvider";
 import { play } from "../lib/sounds";
+import { BusyLabel, ButtonSpinner, busyButton } from "./controls";
+import { useToast } from "./Toasts";
+import { Tip } from "./Tooltip";
 
 /** Where a hand update is explained (the open-source repository's guide). */
 const MANUAL_UPDATE_URL = "https://github.com/shipibo-studio/georg-mail-oss/blob/main/docs/self-hosting.md#upgrading";
@@ -35,48 +45,71 @@ function ExternalLink({ href, children }: { href: string; children: React.ReactN
   );
 }
 
-/** A line in the sidebar while a newer release is out. */
-export function UpdateNotice({ onOpen }: { onOpen(): void }) {
-  const { t } = useI18n();
-  const status = useUpdateStatus().data;
-  if (!status?.available || !status.latest) return null;
-  return (
-    <button type="button" className="update-notice" onClick={onOpen}>
-      <IconRefresh size={14} stroke={1.5} aria-hidden="true" />
-      {t("updates.notice", { version: status.latest.version })}
-    </button>
-  );
-}
+/** Where the open-source mail client lives: its code, its releases and its issues. */
+const REPOSITORY_URL = "https://github.com/shipibo-studio/georg-mail-oss";
 
-/** Settings → Updates: the installed version, and what to do when a newer one is out. */
-export function UpdateSettings({ onUpdate }: { onUpdate(): void }) {
+/**
+ * At the foot of the sidebar (and of the More sheet on phones): the installed version with a link to
+ * the repository, a button that checks for a new release now, and the update once one is out. With
+ * no repository to commit to, the update links to the guide for updating by hand.
+ */
+export function VersionPanel({ onUpdate }: { onUpdate(): void }) {
   const { t } = useI18n();
+  const toast = useToast();
   const status = useUpdateStatus().data;
+  const check = useCheckForUpdates();
   if (!status) return null;
-  const latest = status.latest;
+  const latest = status.available ? status.latest : null;
+
+  const checkNow = () =>
+    check.mutate(undefined, {
+      onSuccess: (next) => {
+        if (next.checkFailed) toast(t("updates.checkFailed"), { kind: "error" });
+        // A newer release shows itself in the panel; only "nothing new" needs saying.
+        else if (!next.available) toast(t("updates.upToDate", { version: next.installed }), { kind: "info" });
+      },
+      onError: () => toast(t("updates.checkFailed"), { kind: "error" }),
+    });
+
   return (
-    <section className="settings-section update-settings">
-      <div className="label">{t("updates.section")}</div>
-      <p className="small">
-        {status.available && latest
-          ? t("updates.available", { version: latest.version, installed: status.installed })
-          : t("updates.current", { version: status.installed })}
-      </p>
-      {status.checkFailed && <p className="muted small">{t("updates.checkFailed")}</p>}
-      {status.available && latest && (
-        <div className="update-row">
-          <ExternalLink href={latest.url}>{t("updates.notes")}</ExternalLink>
-          {status.repository ? (
-            <button type="button" className="g-button g-button-primary" onClick={onUpdate}>
-              {t("updates.review")}
-            </button>
-          ) : (
-            <ExternalLink href={MANUAL_UPDATE_URL}>{t("updates.manual")}</ExternalLink>
-          )}
-        </div>
-      )}
-      {status.available && !status.repository && <p className="muted small">{t("updates.manualHint")}</p>}
-    </section>
+    <div className="version-panel">
+      {latest &&
+        (status.repository ? (
+          <button type="button" className="update-notice" onClick={onUpdate}>
+            <IconRefresh size={14} stroke={1.5} aria-hidden="true" />
+            {t("updates.notice", { version: latest.version })}
+          </button>
+        ) : (
+          <a className="update-notice" href={MANUAL_UPDATE_URL} target="_blank" rel="noreferrer noopener">
+            <IconRefresh size={14} stroke={1.5} aria-hidden="true" />
+            {t("updates.noticeManual", { version: latest.version })}
+          </a>
+        ))}
+      <div className="version-row">
+        <Tip label={t("updates.repository")}>
+          <a className="version-link" href={REPOSITORY_URL} target="_blank" rel="noreferrer noopener">
+            <IconBrandGithub size={14} stroke={1.5} aria-hidden="true" />
+            <span>
+              Georg mail <span className="mono">{status.installed}</span>
+            </span>
+          </a>
+        </Tip>
+        <Tip label={t("updates.check")}>
+          <button
+            type="button"
+            className="g-button g-button-ghost g-button-icon g-button-small"
+            aria-label={t("updates.check")}
+            {...busyButton(check.isPending)}
+            onClick={checkNow}
+          >
+            <ButtonSpinner />
+            <BusyLabel>
+              <IconRefresh size={14} stroke={1.5} />
+            </BusyLabel>
+          </button>
+        </Tip>
+      </div>
+    </div>
   );
 }
 

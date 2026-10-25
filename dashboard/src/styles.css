@@ -2889,7 +2889,40 @@ select:focus-visible {
   justify-content: center;
 }
 
-/* ── Updates of the self-hosted mail client: the sidebar notice, Settings → Updates, the dialog ── */
+/* ── Updates of the self-hosted mail client: the version panel and its notice, the dialog ── */
+.version-panel {
+  display: grid;
+  gap: 2px;
+  padding: 0 0 6px;
+}
+.version-panel .update-notice {
+  text-decoration: none;
+}
+.version-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 8px 0 14px;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+.version-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--dur-1);
+}
+.version-link:hover {
+  color: var(--text);
+}
+.more-sheet .version-panel {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
 .update-notice {
   display: flex;
   align-items: center;

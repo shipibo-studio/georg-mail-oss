@@ -98,7 +98,7 @@ Check: the email shows in the inbox, and the reply arrives with SPF and DKIM pas
 
 ## 9. Optional: updates from the app
 
-To update from Settings → Updates, the person creates a token that may write their copy's contents (GitHub fine-grained: Contents read and write, only that repository), then runs `pnpm wrangler secret put UPDATE_REPOSITORY` (`github.com/owner/repo`) and `pnpm wrangler secret put UPDATE_TOKEN`. See `docs/self-hosting.md#upgrading`.
+To update from the app (the version at the foot of the sidebar), the person creates a token that may write their copy's contents (GitHub fine-grained: Contents read and write, only that repository), then runs `pnpm wrangler secret put UPDATE_REPOSITORY` (`github.com/owner/repo`) and `pnpm wrangler secret put UPDATE_TOKEN`. See `docs/self-hosting.md#upgrading`.
 
 ## When something fails
 
