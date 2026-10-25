@@ -173,10 +173,9 @@ export const en = {
   "settings.forwardOffWarning":
     "Without the copy, emails over {size} are kept without a preview: download their original to read them.",
   "settings.appearance": "Appearance",
+  "settings.mailbox": "Mailbox",
   "settings.saved": "Settings saved",
   "settings.close": "Close settings",
-  "settings.scopeMail": "Mail",
-  "settings.scopeEverywhere": "Mail and workspace",
   "settings.signOut": "Sign out",
   "settings.holdToSignOut": "Hold to sign out",
   "settings.signedInAs": "Signed in as",

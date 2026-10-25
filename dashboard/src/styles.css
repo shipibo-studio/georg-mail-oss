@@ -391,17 +391,6 @@ svg {
 .address-chip:hover {
   color: var(--text);
 }
-.settings-section .label .scope {
-  margin-left: 6px;
-  padding: 1px 6px;
-  border-radius: var(--r-pill);
-  background: var(--bg-sunken);
-  color: var(--text-3);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-}
 .draft-row {
   position: relative;
   display: flex;
@@ -643,6 +632,13 @@ p.registered-email {
   font-weight: 500;
 }
 
+/* Around the scrolling list: georg-ds's busy region, so the busy line stays at the top while it scrolls. */
+.messages-pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
 .messages {
   flex: 1;
   overflow: auto;
@@ -1300,19 +1296,6 @@ pre.raw {
 .composer-files {
   padding: 0 16px 10px;
 }
-.spin {
-  animation: spin 0.9s linear infinite;
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .spin {
-    animation-duration: 2.4s;
-  }
-}
 .composer-foot {
   display: flex;
   align-items: center;
@@ -1379,6 +1362,15 @@ pre.raw {
   box-shadow: var(--shadow-3);
   padding: 6px 0 14px;
   outline: none;
+}
+
+/* Settings: the tabs under the title, and each tab's sections below them. */
+.dialog > .tabs {
+  margin: 4px 20px 6px;
+}
+.settings-tab {
+  display: grid;
+  gap: 6px;
 }
 .dialog-head {
   display: flex;
@@ -2126,7 +2118,7 @@ button.row:hover {
   color: var(--success);
 }
 
-/* Manual refresh: arrows that spin while loading, then a green check */
+/* Manual refresh: georg-ds's busy spinner while loading, then a green check */
 .refresh-icon {
   display: grid;
   place-items: center;
@@ -3007,4 +2999,11 @@ p.update-blocked {
   color: var(--text-3);
   font-size: var(--text-xs);
   line-height: 1.5;
+}
+
+/* A busy button's label (georg-ds busy state): icon and text slide out together, spaced like the button. */
+.busy-label {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
 }

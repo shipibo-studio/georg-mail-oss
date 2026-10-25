@@ -51,6 +51,8 @@ describe("which sound a click makes", () => {
     expect(soundForClick(element('<button data-sound="send">Send</button>'))).toBe("send");
     expect(soundForClick(element('<button data-sound="boom">?</button>'))).toBeNull();
     expect(soundForClick(element('<button class="g-button" disabled>Wait</button>'))).toBeNull();
+    // A busy button ignores presses, so it is quiet too.
+    expect(soundForClick(element('<button class="g-button" aria-busy="true">Saving</button>'))).toBeNull();
     expect(soundForClick(element('<a class="g-button" aria-disabled="true">Docs</a>'))).toBeNull();
     expect(soundForClick(element("<select><option>A</option></select>"))).toBeNull();
     expect(soundForClick(element("<p>Just text</p>"))).toBeNull();

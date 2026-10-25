@@ -7,6 +7,7 @@ import { ApiError } from "../api/client";
 import { useAliasChange } from "../api/queries";
 import type { Mailbox } from "../api/types";
 import { useI18n } from "../i18n/I18nProvider";
+import { BusyLabel, ButtonSpinner, busyButton } from "./controls";
 import { useToast } from "./Toasts";
 
 export function AliasSettings({ mailbox }: { mailbox: Mailbox }) {
@@ -42,7 +43,8 @@ export function AliasSettings({ mailbox }: { mailbox: Mailbox }) {
                 type="button"
                 className="g-button g-button-ghost g-button-icon"
                 aria-label={t("aliases.remove", { address: alias })}
-                disabled={remove.isPending}
+                {...busyButton(remove.isPending && remove.variables === alias)}
+                disabled={remove.isPending && remove.variables !== alias}
                 onClick={() =>
                   remove.mutate(alias, {
                     onSuccess: () => toast(t("aliases.removed", { address: alias })),
@@ -50,7 +52,10 @@ export function AliasSettings({ mailbox }: { mailbox: Mailbox }) {
                   })
                 }
               >
-                <IconX size={14} stroke={1.5} />
+                <ButtonSpinner />
+                <BusyLabel>
+                  <IconX size={14} stroke={1.5} />
+                </BusyLabel>
               </button>
             </motion.li>
           ))}
@@ -73,7 +78,8 @@ export function AliasSettings({ mailbox }: { mailbox: Mailbox }) {
           <button
             type="button"
             className="g-button"
-            disabled={add.isPending || !selected}
+            {...busyButton(add.isPending)}
+            disabled={!selected}
             onClick={() =>
               add.mutate(selected, {
                 onSuccess: () => toast(t("aliases.added", { address: selected })),

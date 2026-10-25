@@ -1,5 +1,5 @@
 import { strToU8, zipSync } from "fflate";
-import { expect, openInbox, row, test } from "./fixtures";
+import { expect, openInbox, openMailboxTab, row, test } from "./fixtures";
 
 test.use({ permissions: ["clipboard-read", "clipboard-write"] });
 
@@ -63,6 +63,51 @@ test("composes with recipient chips, validates and sends", async ({ page }) => {
 
   await page.getByRole("button", { name: "Sent" }).first().click();
   await expect(row(page, "Hola Camila")).toBeVisible();
+});
+
+test("the send button says it is sending, with a spinner, and a second press sends nothing more", async ({ page }) => {
+  let sends = 0;
+  await page.route("**/dashboard/api/mailbox/messages", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    sends += 1;
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    await route.fallback();
+  });
+  await openInbox(page);
+  await page.keyboard.press("c");
+  const composer = page.getByRole("dialog", { name: "New message" });
+  await composer.locator(".chip-input input").first().fill("camila@estudio.cl,");
+  await composer.getByLabel("Subject").fill("Busy");
+  await composer.locator("textarea").fill("Hola");
+  const send = composer.locator("button.send");
+  await send.click();
+  await expect(send).toHaveAttribute("aria-busy", "true");
+  await expect(send).toHaveAttribute("data-busy", "label");
+  await expect(send).toBeEnabled();
+  await expect(send).toContainText("Sending");
+  await expect(send.locator(".g-spinner")).toHaveCSS("opacity", "1");
+  await send.press("Enter");
+  await expect(composer).toBeHidden();
+  await expect(page.getByText("Message sent")).toBeVisible();
+  expect(sends).toBe(1);
+});
+
+test("a list that reloads with mail on screen dims under a busy line instead of blanking", async ({ page }) => {
+  await openInbox(page);
+  const pane = page.locator(".list .messages-pane");
+  await expect(pane).not.toHaveAttribute("aria-busy");
+  await page.route("**/dashboard/api/mailbox/messages?*", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    await route.fallback();
+  });
+  await page.locator(".list").getByRole("button", { name: "Refresh" }).click();
+  await expect(pane).toHaveAttribute("aria-busy", "true");
+  await expect(page.locator("button.msg").first()).toBeVisible();
+  // georg-ds dims the content after its 300 ms delay, so a quick reload never flashes.
+  await expect
+    .poll(() => pane.locator(".messages").evaluate((element) => getComputedStyle(element).opacity))
+    .toBe("0.6");
+  await expect(pane).not.toHaveAttribute("aria-busy");
 });
 
 test("attaches files, sends them, and keeps them with the Sent copy", async ({ page }) => {
@@ -425,7 +470,7 @@ test("imports a Zoho export zip with dates kept, and skips what is already here"
 
   await openInbox(page);
   await page.getByRole("button", { name: "Settings" }).click();
-  await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).click();
+  await (await openMailboxTab(page)).getByRole("button", { name: "Import mail" }).click();
   let dialog = await importZip();
   await expect(dialog.getByText("Done: 2 messages imported.")).toBeVisible();
   const bar = dialog.getByRole("progressbar");
@@ -487,14 +532,21 @@ test("imports an mbox into Sent", async ({ page }) => {
   await expect(row(page, "Propuesta enviada 2020")).toBeVisible();
 });
 
-test("settings say what is shared, show who is signed in and offer to sign out", async ({ page }) => {
+test("settings open on Appearance, keep the one-time settings in Mailbox, and offer to sign out", async ({ page }) => {
   await openInbox(page);
   await page.getByRole("button", { name: "Settings" }).click();
   const dialog = page.getByRole("dialog", { name: "Settings" });
-  await expect(dialog.locator(".label", { hasText: "Appearance" })).toContainText("Mail and workspace");
+  await expect(dialog.getByRole("tab", { name: "Appearance" })).toHaveAttribute("aria-selected", "true");
   // The forwarded copy lives in Notifications now; the only switch here is for sounds.
   await expect(dialog.getByRole("switch")).toHaveAccessibleName("Interface sounds");
   await expect(dialog.getByText("Delivery")).toHaveCount(0);
+  // What is set up once waits in the other tab, so the dialog stays short.
+  await expect(dialog.locator(".alias-row")).toHaveCount(0);
+  await expect(dialog.getByRole("button", { name: "Import mail" })).toHaveCount(0);
+  await openMailboxTab(page);
+  await expect(dialog.getByRole("tab", { name: "Mailbox" })).toHaveAttribute("aria-selected", "true");
+  await expect(dialog.getByRole("switch")).toHaveCount(0);
+  await expect(dialog.locator(".alias-row")).toHaveCount(1);
   await expect(dialog.locator(".signed-in .registered-email")).toHaveText("owner@example.org");
   // Signing out takes a press and hold: a click alone keeps the session.
   const signOut = dialog.getByRole("button", { name: "Hold to sign out" });
@@ -569,14 +621,15 @@ test("the command palette refreshes what is on screen", async ({ page }) => {
   await expect(row(page, "GEO-42 moved to In review")).toBeVisible();
 });
 
-test("the refresh button spins, then shows a check for a moment", async ({ page }) => {
+test("the refresh button shows a spinner, then a check for a moment", async ({ page }) => {
   await page.clock.install();
   await openInbox(page);
   await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 1_000);
   const refresh = page.locator(".list").getByRole("button", { name: "Refresh" });
-  await expect(refresh).toHaveAttribute("aria-busy", "false");
+  await expect(refresh).not.toHaveAttribute("aria-busy");
   await refresh.click();
   await expect(refresh).toHaveAttribute("aria-busy", "true");
+  await expect(refresh.locator(".g-spinner")).toHaveCount(1);
   // It keeps spinning for a minimum time even when the answer is instant.
   await expect
     .poll(async () => {
@@ -683,7 +736,7 @@ function mbox(count: number, prefix: string): Buffer {
 async function startImport(page: import("@playwright/test").Page, file: Buffer, name: string) {
   await openInbox(page);
   await page.getByRole("button", { name: "Settings" }).click();
-  await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).click();
+  await (await openMailboxTab(page)).getByRole("button", { name: "Import mail" }).click();
   const dialog = page.getByRole("dialog", { name: "Import mail" });
   await dialog.getByTestId("import-input").setInputFiles({ name, mimeType: "application/mbox", buffer: file });
   await dialog.getByRole("button", { name: "Start import" }).click();
@@ -739,7 +792,7 @@ test("an import that ends with failures says so with an X and how to retry them"
 test("aliases: add one in Settings, reply from the alias the mail reached, and remove it", async ({ page }) => {
   await openInbox(page);
   await page.getByRole("button", { name: "Settings" }).click();
-  const settings = page.getByRole("dialog", { name: "Settings" });
+  const settings = await openMailboxTab(page);
   await expect(settings.locator(".alias-row")).toHaveCount(1);
   await expect(settings.locator(".alias-row").first()).toContainText("hello@example.com");
   await expect(settings.locator(".alias-row").first()).toContainText("Main");
@@ -761,6 +814,7 @@ test("aliases: add one in Settings, reply from the alias the mail reached, and r
   await expect(page.getByText("Message sent")).toBeVisible();
 
   await page.getByRole("button", { name: "Settings" }).click();
+  await openMailboxTab(page);
   await settings.getByRole("button", { name: "Remove contact@example.com" }).click();
   await expect(page.getByText("contact@example.com no longer receives mail")).toBeVisible();
   await expect(settings.locator(".alias-row")).toHaveCount(1);
@@ -829,7 +883,7 @@ test("the import form: a drop zone reachable from the keyboard, chosen files as 
 }) => {
   await openInbox(page);
   await page.getByRole("button", { name: "Settings" }).click();
-  await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).click();
+  await (await openMailboxTab(page)).getByRole("button", { name: "Import mail" }).click();
   const dialog = page.getByRole("dialog", { name: "Import mail" });
   const dialogWidth = (await dialog.boundingBox())?.width ?? 0;
   const start = dialog.getByRole("button", { name: "Start import" });
@@ -862,7 +916,7 @@ test("an install that is up to date says so in Settings, with no notice", async 
   await openInbox(page);
   await expect(page.locator(".update-notice")).toHaveCount(0);
   await page.getByRole("button", { name: "Settings" }).click();
-  await expect(page.getByRole("dialog", { name: "Settings" }).getByText("Georg mail 0.1.0, up to date.")).toBeVisible();
+  await expect((await openMailboxTab(page)).getByText("Georg mail 0.1.0, up to date.")).toBeVisible();
 });
 
 test("a new release: the notice opens the review, which asks first, then copies the files and commits", async ({

@@ -46,11 +46,11 @@
       "mode": "100644"
     },
     "dashboard/e2e/fixtures.ts": {
-      "sha": "ab3efa805a5e2051a01ee4d4c7636c4dfdd84c99",
+      "sha": "a3c9b979aa4e0e76905b91abf499d9b20b2d7a9d",
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "9f9f11e2f05f8f58248c09e8f936a56773cfb52e",
+      "sha": "a8d911ca7ca09c807621dfe931ef0afb12fdc9de",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -58,7 +58,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/phone.spec.ts": {
-      "sha": "4b62189beb3d3ad14a3d10009eaead54810ffddd",
+      "sha": "f6a4cf384c7be9b0779b390b950d497c83f35a3f",
       "mode": "100644"
     },
     "dashboard/index.html": {
@@ -98,11 +98,11 @@
       "mode": "100644"
     },
     "dashboard/src/components/AliasSettings.tsx": {
-      "sha": "6634ef25bf9ad1c4d015326efd83aa48418736a4",
+      "sha": "0e1a54d9c78eb19300fa972cfaaba68c7356c75e",
       "mode": "100644"
     },
     "dashboard/src/components/App.tsx": {
-      "sha": "20ac460aed5100f74198b2d823b9f5cab231352c",
+      "sha": "44861f362c2863089413fdda8fd63bc30e903d4d",
       "mode": "100644"
     },
     "dashboard/src/components/CommandPalette.tsx": {
@@ -110,7 +110,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/Composer.tsx": {
-      "sha": "6dbc6cdd77886073eed470103c922834aff42b37",
+      "sha": "9e77c6541edb18eb04be875bc7869ffb048151cf",
       "mode": "100644"
     },
     "dashboard/src/components/DraftsView.tsx": {
@@ -126,7 +126,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/MailView.tsx": {
-      "sha": "5f191df7e946853894e967dabc6f7855a31e553f",
+      "sha": "e62dde7b86ce1f6e8137beca477af3f4ae7cbf8a",
       "mode": "100644"
     },
     "dashboard/src/components/MessageDetail.tsx": {
@@ -134,7 +134,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/MessageList.tsx": {
-      "sha": "7accdbde9a98e27b0df506318055754d23575c49",
+      "sha": "956daebee4945e226343c3385a0b38184949c5ad",
       "mode": "100644"
     },
     "dashboard/src/components/MobileNav.tsx": {
@@ -150,15 +150,15 @@
       "mode": "100644"
     },
     "dashboard/src/components/RefreshButton.tsx": {
-      "sha": "0da15b12164c7c9cd5985e1e9f29d87f27dbbe97",
+      "sha": "527e1887d19cc43583220dfec90c9f4679c3d1dc",
       "mode": "100644"
     },
     "dashboard/src/components/SettingsDialog.tsx": {
-      "sha": "ac5ba10e95233bb5efa1279a11f80b86067d408f",
+      "sha": "8cd1e676f8c998c64f147d233caecee8c0a6ebfd",
       "mode": "100644"
     },
     "dashboard/src/components/SetupView.tsx": {
-      "sha": "1f416acfd0373539bf989f47f259d7e1c8a9bdd9",
+      "sha": "31debb2a9a1a38288d552be9ee02721cedb0fcb0",
       "mode": "100644"
     },
     "dashboard/src/components/Sidebar.tsx": {
@@ -178,7 +178,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/controls.tsx": {
-      "sha": "6b7cd2d672785967e3e3d8d80e9285b96f623501",
+      "sha": "4d8d98a2a6272c7d3e7a22f8ceb8262845753952",
       "mode": "100644"
     },
     "dashboard/src/components/keyboard.ts": {
@@ -210,15 +210,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "d7476178c1cca28b790997d6e51f80d6751bff20",
+      "sha": "cd44ec65a26cef6d407d5df6ee8092dd474df503",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "55f938a211cc2c2691d624fbe27bb5fb767c0208",
+      "sha": "678695b44ce89b716fe220b285efe2153c64c70b",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "b43915ea2accab4970c86b6e4e2b97a1e8555fe0",
+      "sha": "77ee1fed6dcf932e2e16c1a610814415d432fb3f",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {
@@ -278,7 +278,7 @@
       "mode": "100644"
     },
     "dashboard/src/lib/sounds.ts": {
-      "sha": "874614a05d7f89d1ec292dff7a7eb4e4ba507f31",
+      "sha": "0898ef8cb2c7627a42968130a3a5d23c6d7a6428",
       "mode": "100644"
     },
     "dashboard/src/lib/theme.ts": {
@@ -290,7 +290,7 @@
       "mode": "100644"
     },
     "dashboard/src/styles.css": {
-      "sha": "8ba5f7b9937448292973a9b3a65b67c23d966d7a",
+      "sha": "34fbb69b17a35d8b25bf747a0c963ee13bef6000",
       "mode": "100644"
     },
     "dashboard/test/aliases-and-retry.test.ts": {
@@ -307,6 +307,10 @@
     },
     "dashboard/test/avatar.test.ts": {
       "sha": "3e3c596fb4f3c1eb281461bece307ee6a4d66f7d",
+      "mode": "100644"
+    },
+    "dashboard/test/busy-button.test.ts": {
+      "sha": "74cee716f725750957e6a437fa09f7ebd72eaf55",
       "mode": "100644"
     },
     "dashboard/test/drafts.test.ts": {
@@ -346,7 +350,7 @@
       "mode": "100644"
     },
     "dashboard/test/sounds.test.ts": {
-      "sha": "8d77641c7237233524cb146832c6620a62e7be00",
+      "sha": "541ca595e8d71d2dd1bcef535f713fc9c3a51bdb",
       "mode": "100644"
     },
     "dashboard/test/theme.test.ts": {
@@ -1122,7 +1126,7 @@
       "mode": "100644"
     },
     "vendor/georg-ds/CHANGELOG.md": {
-      "sha": "894457d80c3ef90a6e80bf64c8044c9b65ea6941",
+      "sha": "15536b2a821f5eab45762a00a3cfa5706537f803",
       "mode": "100644"
     },
     "vendor/georg-ds/LICENSE": {
@@ -1130,15 +1134,15 @@
       "mode": "100644"
     },
     "vendor/georg-ds/README.md": {
-      "sha": "98f259cbcb061b4ad169ca8df18b9671115ea5b5",
+      "sha": "384a46241957314f76f27d041f3a2d1d730fbba1",
       "mode": "100644"
     },
     "vendor/georg-ds/package.json": {
-      "sha": "9e0e680b83c7ca7e270839176d2151392e745cad",
+      "sha": "52f7f1f191f8904eb549bdb648d7f6616e3a0103",
       "mode": "100644"
     },
     "vendor/georg-ds/src/components.css": {
-      "sha": "2ab5f28f449ddcfa7d38a2ff42c5269c3869cc17",
+      "sha": "a67ddfc721810f84694714bc88e6f4aa941c9d21",
       "mode": "100644"
     },
     "vendor/georg-ds/src/fonts.css": {
@@ -1186,11 +1190,11 @@
       "mode": "100644"
     },
     "vendor/georg-ds/src/tokens.json": {
-      "sha": "795e6131aa31923f90193cb4c979aca454bef845",
+      "sha": "c57da034de545a8d811ed95418c9c210db6aaf09",
       "mode": "100644"
     },
     "vitest.config.ts": {
-      "sha": "999dfd018235de4dc05f5c64a06ab5c6a292b9f0",
+      "sha": "484416488c8f891f4540ac58dbe1e052f2224133",
       "mode": "100644"
     },
     "wrangler.jsonc": {

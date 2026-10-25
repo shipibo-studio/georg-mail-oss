@@ -2,7 +2,7 @@
 
 The **georg** design system: tokens, typography, color, motion, and interaction patterns for every georg interface (georg-mail is the first).
 
-> **Version 0.7** (October 2026). It grew out of the georg-mail dashboard mockup, which serves as its reference demo: [`demo/dashboard.html`](demo/dashboard.html) (open it in a browser). Its consumers today are [georg-mail](https://github.com/shipibo-studio/georg-mail) and [georg-app](https://github.com/shipibo-studio/georg-app).
+> **Version 0.8** (October 2026). It grew out of the georg-mail dashboard mockup, which serves as its reference demo: [`demo/dashboard.html`](demo/dashboard.html) (open it in a browser). Its consumers today are [georg-mail](https://github.com/shipibo-studio/georg-mail) and [georg-app](https://github.com/shipibo-studio/georg-app).
 
 See [CHANGELOG.md](CHANGELOG.md).
 
@@ -71,7 +71,7 @@ The package is **`@shipibo-studio/georg-ds`**, published privately to GitHub Pac
 **3. Install a pinned version:**
 
 ```bash
-pnpm add @shipibo-studio/georg-ds@0.7.0
+pnpm add @shipibo-studio/georg-ds@0.8.0
 
 # During development, with the repository cloned next to the project
 pnpm add @shipibo-studio/georg-ds@link:../georg-ds
@@ -92,7 +92,7 @@ pnpm add @shipibo-studio/georg-ds@link:../georg-ds
 ### App (Vite + React + Tailwind v4)
 
 ```bash
-pnpm add @shipibo-studio/georg-ds@0.7.0
+pnpm add @shipibo-studio/georg-ds@0.8.0
 pnpm add @fontsource-variable/stack-sans-notch @fontsource-variable/geist @fontsource-variable/geist-mono @tabler/icons-react morphicons motion
 ```
 

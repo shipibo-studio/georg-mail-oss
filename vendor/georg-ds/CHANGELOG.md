@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-10-25
+
+### Added
+
+- **Spinner and busy states** in `components.css`, CSS only:
+  - `g-spinner`: four dots stepping around an eight-dot ring, in `currentColor`, at 11, 14 or 18 px. It is a single element that draws its dots with `box-shadow`. The motion reference is recorded in `CREDITS.md`.
+  - `g-button[aria-busy="true"]`: the label slides out while the spinner slides in, with the copy swap's timing, and the width stays the same. Add `data-busy="label"` to keep a changing label ("Saving…") next to the spinner.
+  - `g-busy[aria-busy="true"]` for a card or region refreshing content it already shows: the content dims and a 2 px accent line sweeps along the top.
+  Spinners and regions wait 300 ms before showing, so quick work never flashes a loader. Every state fades in and out. With reduced motion the dots keep stepping slowly and the line stands still. `demo/components.html` has a section for them, and the end-to-end tests cover the swap, stable width, focus, the delay, the fades, 3:1 dots on every button variant in both themes, and reduced motion.
+  Consumer impact: none until adopted. **georg-mail** can replace its `.spin` refresh icon and busy buttons with `g-spinner`. **Georg spendia**, **georg-app** and **georg-website** get a loader that works in plain HTML.
+
 ## [0.7.0] - 2026-10-24
 
 ### Fixed
@@ -177,7 +188,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Bridge for Tailwind CSS v4 and shadcn/ui.
 - Interactive demo based on the georg-mail dashboard.
 
-[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.4.0...v0.5.0

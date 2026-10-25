@@ -175,10 +175,9 @@ export const es419: Translations = {
   "settings.forwardOffWarning":
     "Sin la copia, los correos de más de {size} se guardan sin vista previa: descarga su original para leerlos.",
   "settings.appearance": "Apariencia",
+  "settings.mailbox": "Buzón",
   "settings.saved": "Ajustes guardados",
   "settings.close": "Cerrar ajustes",
-  "settings.scopeMail": "Correo",
-  "settings.scopeEverywhere": "Correo y workspace",
   "settings.signOut": "Cerrar sesión",
   "settings.holdToSignOut": "Mantén presionado para cerrar sesión",
   "settings.signedInAs": "Sesión iniciada como",

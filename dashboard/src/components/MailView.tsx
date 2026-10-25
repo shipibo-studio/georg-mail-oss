@@ -240,6 +240,7 @@ export function MailView({ route, mailbox, freshIds, shortcutsEnabled, navigate,
         freshIds={route.folder === "inbox" && !query ? freshIds : new Set()}
         hasMore={Boolean(listQuery.hasNextPage)}
         loadingMore={listQuery.isFetchingNextPage}
+        refreshing={listQuery.isRefetching}
         onLoadMore={() => void listQuery.fetchNextPage()}
         onSelect={select}
         onSearch={search}

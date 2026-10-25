@@ -46,3 +46,10 @@ export async function openInbox(page: Page) {
 export function row(page: Page, text: string) {
   return page.locator("button.msg", { hasText: text });
 }
+
+/** Settings → Mailbox, the tab of what is set up once: addresses, import, updates and signing out. */
+export async function openMailboxTab(page: Page) {
+  const settings = page.getByRole("dialog", { name: "Settings" });
+  await settings.getByRole("tab", { name: "Mailbox" }).click();
+  return settings;
+}

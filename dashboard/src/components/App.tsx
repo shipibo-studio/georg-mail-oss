@@ -25,7 +25,7 @@ import { MailView } from "./MailView";
 import { MobileNav } from "./MobileNav";
 import { NotificationsView } from "./NotificationsView";
 import { PreferenceSync } from "./PreferenceSync";
-import { SettingsDialog } from "./SettingsDialog";
+import { SettingsDialog, type SettingsTab } from "./SettingsDialog";
 import { SetupGate } from "./SetupView";
 import { Sidebar } from "./Sidebar";
 import { useToast } from "./Toasts";
@@ -104,7 +104,9 @@ export function App() {
   }, [route, navigate]);
   const [composer, setComposer] = useState<ComposerState | null>(null);
   const [composerOpen, setComposerOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  // The tab Settings opens on, or null while it is closed.
+  const [settingsTab, setSettingsTab] = useState<SettingsTab | null>(null);
+  const settingsOpen = settingsTab !== null;
   const [importOpen, setImportOpen] = useState(false);
   // A new dialog for every opening: reopening during the close animation would otherwise bring the
   // finished import back instead of a fresh one.
@@ -171,9 +173,9 @@ export function App() {
     setComposerOpen(false);
     setComposer(null);
   }, []);
-  const openSettings = useCallback(() => setSettingsOpen(true), []);
+  const openSettings = useCallback(() => setSettingsTab("appearance"), []);
   const openImport = useCallback(() => {
-    setSettingsOpen(false);
+    setSettingsTab(null);
     setImportRun((run) => run + 1);
     setImportOpen(true);
   }, []);
@@ -181,7 +183,8 @@ export function App() {
   // With a repository to commit to, the update is reviewed right away; without one, Settings says how.
   const canUpdateHere = Boolean(updates.data?.repository);
   const openUpdate = useCallback(() => {
-    setSettingsOpen(!canUpdateHere);
+    // Updates live in the Mailbox tab.
+    setSettingsTab(canUpdateHere ? null : "mailbox");
     setUpdateOpen(canUpdateHere);
   }, [canUpdateHere]);
 
@@ -280,10 +283,11 @@ export function App() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {settingsOpen && mailbox.data && (
+        {settingsTab && mailbox.data && (
           <SettingsDialog
             mailbox={mailbox.data}
-            onClose={() => setSettingsOpen(false)}
+            initialTab={settingsTab}
+            onClose={() => setSettingsTab(null)}
             onImport={openImport}
             onUpdate={openUpdate}
           />

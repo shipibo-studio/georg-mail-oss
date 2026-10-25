@@ -155,6 +155,109 @@
   .g-progress:not([aria-valuenow]) .g-progress-bar { width: 100%; opacity: .45; }
 }
 
+/* ── Spinner and busy states ─────────────────────────────── */
+/* Waiting with no measurable end. Three uses, all from ARIA:
+   - .g-spinner alone: four dots chasing each other around an eight-dot ring, in currentColor. Give it
+     role="status" and a hidden label, or aria-hidden when its container already says it is busy.
+   - .g-button[aria-busy="true"] with a .g-spinner inside: the label slides up and out while the spinner
+     slides in, like the copy swap; the button keeps its width. data-busy="label" keeps the label next to
+     the spinner instead, for a label that changes ("Saving…"). The app ignores presses meanwhile
+     (pointer-events covers the mouse, not Enter or Space).
+   - .g-busy[aria-busy="true"] on a card or region that already has content: the content dims and a
+     2 px line sweeps along the top. For a first load with nothing to show, use .skeleton instead.
+   Spinners and regions wait --g-loader-delay (300 ms) before showing, so quick work never flashes a
+   loader. Buttons react at once: the person just pressed them. */
+.g-spinner {
+  /* The ring sits on a 4 × 4 grid: three pitches plus one dot. */
+  --g-dot: 2px;
+  --g-dot-pitch: 4px;
+  --g-dot-1: var(--g-dot-pitch);
+  --g-dot-2: calc(2 * var(--g-dot-pitch));
+  --g-dot-3: calc(3 * var(--g-dot-pitch));
+  display: inline-block;
+  flex: none;
+  position: relative;
+  width: calc(var(--g-dot-3) + var(--g-dot));
+  height: calc(var(--g-dot-3) + var(--g-dot));
+  animation: g-loader-in var(--dur-2) var(--ease-out) var(--g-loader-delay, 300ms) both;
+}
+/* One transparent dot whose shadows are the lit dots, so the spinner needs no child elements. */
+.g-spinner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--g-dot);
+  height: var(--g-dot);
+  border-radius: 50%;
+  animation: g-dots 640ms steps(1, end) infinite;
+}
+.g-spinner-small { --g-dot-pitch: 3px; }
+.g-spinner-large { --g-dot: 3px; --g-dot-pitch: 5px; }
+/* Eight steps of 80 ms (steps(1, end) holds each frame): the dots jump, they do not glide. Ring positions
+   clockwise from the top: (1,0) (2,0) (3,1) (3,2) (2,3) (1,3) (0,2) (0,1); four are lit at a time. */
+@keyframes g-dots {
+  0% { box-shadow: 0 var(--g-dot-2) currentColor, 0 var(--g-dot-1) currentColor, var(--g-dot-1) 0 currentColor, var(--g-dot-2) 0 currentColor; }
+  12.5% { box-shadow: 0 var(--g-dot-1) currentColor, var(--g-dot-1) 0 currentColor, var(--g-dot-2) 0 currentColor, var(--g-dot-3) var(--g-dot-1) currentColor; }
+  25% { box-shadow: var(--g-dot-1) 0 currentColor, var(--g-dot-2) 0 currentColor, var(--g-dot-3) var(--g-dot-1) currentColor, var(--g-dot-3) var(--g-dot-2) currentColor; }
+  37.5% { box-shadow: var(--g-dot-2) 0 currentColor, var(--g-dot-3) var(--g-dot-1) currentColor, var(--g-dot-3) var(--g-dot-2) currentColor, var(--g-dot-2) var(--g-dot-3) currentColor; }
+  50% { box-shadow: var(--g-dot-3) var(--g-dot-1) currentColor, var(--g-dot-3) var(--g-dot-2) currentColor, var(--g-dot-2) var(--g-dot-3) currentColor, var(--g-dot-1) var(--g-dot-3) currentColor; }
+  62.5% { box-shadow: var(--g-dot-3) var(--g-dot-2) currentColor, var(--g-dot-2) var(--g-dot-3) currentColor, var(--g-dot-1) var(--g-dot-3) currentColor, 0 var(--g-dot-2) currentColor; }
+  75% { box-shadow: var(--g-dot-2) var(--g-dot-3) currentColor, var(--g-dot-1) var(--g-dot-3) currentColor, 0 var(--g-dot-2) currentColor, 0 var(--g-dot-1) currentColor; }
+  87.5% { box-shadow: var(--g-dot-1) var(--g-dot-3) currentColor, 0 var(--g-dot-2) currentColor, 0 var(--g-dot-1) currentColor, var(--g-dot-1) 0 currentColor; }
+  100% { box-shadow: 0 var(--g-dot-2) currentColor, 0 var(--g-dot-1) currentColor, var(--g-dot-1) 0 currentColor, var(--g-dot-2) 0 currentColor; }
+}
+@keyframes g-loader-in { from { opacity: 0; } }
+
+/* Busy button: the spinner waits in the middle, hidden and paused, and swaps with the label. */
+.g-button:has(> .g-spinner) { position: relative; }
+.g-button > * { transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-3) var(--ease-spring); }
+.g-button > .g-spinner { position: absolute; inset: 0; margin: auto; color: var(--text); animation: none; opacity: 0; transform: translateY(6px); }
+.g-button > .g-spinner::before { animation-play-state: paused; }
+.g-button-primary > .g-spinner { color: var(--bg); }
+.g-button-danger > .g-spinner { color: var(--danger); }
+.g-button-small > .g-spinner { --g-dot-pitch: 3px; }
+.g-button[aria-busy="true"] { pointer-events: none; }
+.g-button[aria-busy="true"] > .g-spinner { opacity: 1; transform: none; }
+.g-button[aria-busy="true"] > .g-spinner::before { animation-play-state: running; }
+/* A bare text label cannot move, so it fades through color; wrapped labels and icons also slide. */
+.g-button[aria-busy="true"]:not([data-busy="label"]) { color: transparent; }
+.g-button[aria-busy="true"]:not([data-busy="label"]) > :not(.g-spinner) { opacity: 0; transform: translateY(-6px); }
+/* data-busy="label": the spinner joins the row before the label. */
+.g-button[data-busy="label"]:not([aria-busy="true"]) > .g-spinner { display: none; }
+.g-button[data-busy="label"][aria-busy="true"] > .g-spinner { position: relative; inset: auto; margin: 0; color: inherit; animation: g-loader-in var(--dur-2) var(--ease-out) both; }
+
+/* Busy region: the line is always there, invisible and paused, so it can fade both ways. */
+.g-busy { position: relative; }
+.g-busy > * { transition: opacity var(--dur-2) var(--ease-out); }
+.g-busy[aria-busy="true"] > * { opacity: .6; transition-delay: var(--g-loader-delay, 300ms); }
+.g-busy::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  /* Inset by the corner radius, so the line never pokes past a rounded card. */
+  inset-inline: var(--r-3);
+  height: 2px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent) no-repeat;
+  background-size: 40% 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-2) var(--ease-out);
+  animation: g-busy-sweep 1.2s ease-in-out infinite paused;
+}
+.g-busy[aria-busy="true"]::before { opacity: 1; transition-delay: var(--g-loader-delay, 300ms); animation-play-state: running; }
+@keyframes g-busy-sweep { from { background-position-x: -70%; } to { background-position-x: 170%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still dots read as frozen, so they keep stepping, slowly. !important beats the global rule in
+     georg.css that stops every other animation. */
+  .g-spinner::before { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
+  /* The sweeping line becomes a still, dimmed one. */
+  .g-busy[aria-busy="true"]::before { background: var(--accent); opacity: .45; }
+}
+
 /* ── Tabs ────────────────────────────────────────────────── */
 /* role="tablist" > role="tab" with aria-selected; georg-tabs.js adds arrow keys and panel switching. */
 .g-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); }

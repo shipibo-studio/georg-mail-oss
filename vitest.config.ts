@@ -46,7 +46,7 @@ export default defineConfig(async () => {
       coverage: {
         // istanbul instruments the code, so it works inside workerd (the V8 provider does not).
         provider: "istanbul" as const,
-        include: ["src/worker/**/*.ts", "dashboard/src/lib/**/*.ts", "dashboard/src/i18n/**/*.ts"],
+        include: ["src/worker/**/*.ts", "dashboard/src/lib/**/*.ts", "dashboard/src/i18n/**/*.ts", "sdk/src/**/*.ts"],
         exclude: ["src/worker/worker-configuration.d.ts"],
         reporter: ["text-summary", "text", "html"],
         // Minimum required by AGENTS.md; CI fails below it.

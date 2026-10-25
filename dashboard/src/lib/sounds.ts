@@ -103,7 +103,8 @@ const MOVING = ".folder, .mobile-tab, button.msg, .palette-item, .g-tab, .tab";
  */
 export function soundForClick(target: Element): Sound | null {
   const control = target.closest(CLICKABLE);
-  if (!control || control.matches(':disabled, [aria-disabled="true"]')) return null;
+  // A busy button ignores presses (georg-ds's busy state), so it makes no sound either.
+  if (!control || control.matches(':disabled, [aria-disabled="true"], [aria-busy="true"]')) return null;
   const chosen = control.getAttribute("data-sound");
   if (chosen) return chosen in SOUND_RECIPES ? (chosen as Sound) : null;
   // A select sounds when an option is chosen, not when it opens.

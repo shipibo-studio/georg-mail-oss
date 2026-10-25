@@ -1,5 +1,5 @@
 import { SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
-import { IconAlertTriangle, IconLoader2, IconMinus, IconPaperclip, IconTrash, IconX } from "@tabler/icons-react";
+import { IconAlertTriangle, IconMinus, IconPaperclip, IconTrash, IconX } from "@tabler/icons-react";
 import { MorphIcon } from "morphicons/react";
 import { AnimatePresence, motion, useAnimationControls } from "motion/react";
 import {
@@ -22,6 +22,7 @@ import { useIsPhone } from "../lib/media";
 import { isValidAddress, splitRecipients, uniqueRecipients } from "../lib/recipients";
 import type { Draft } from "../lib/reply";
 import { play } from "../lib/sounds";
+import { ButtonSpinner, busyButton } from "./controls";
 import { CHECK_ICON, SEND_ICON } from "./morph-icons";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
@@ -231,7 +232,9 @@ function FileChip({ file, onRemove }: { file: DraftFile; onRemove(): void }) {
       transition={SPRING.chip}
     >
       {file.status === "uploading" ? (
-        <IconLoader2 size={14} stroke={1.5} className="spin" aria-label={t("compose.uploading")} />
+        <span className="g-spinner g-spinner-small" role="status">
+          <span className="g-visually-hidden">{t("compose.uploading")}</span>
+        </span>
       ) : file.status === "failed" ? (
         <IconAlertTriangle size={14} stroke={1.5} />
       ) : (
@@ -508,17 +511,22 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
             className={`g-button g-button-primary send ${sent ? "sent" : ""}`}
             // It sounds when the message leaves, or fails to.
             data-sound="none"
+            // georg-ds's busy state with its label kept: the spinner stands in for the icon while "Sending…".
+            data-busy="label"
+            {...busyButton(send.isPending)}
             onClick={() => void submit()}
-            disabled={send.isPending}
             whileTap={{ scale: 0.96 }}
           >
-            <MorphIcon
-              icon={sent ? CHECK_ICON : SEND_ICON}
-              size={16}
-              strokeWidth={1.5}
-              spring="bouncy"
-              reducedMotion="user"
-            />
+            <ButtonSpinner />
+            {!send.isPending && (
+              <MorphIcon
+                icon={sent ? CHECK_ICON : SEND_ICON}
+                size={16}
+                strokeWidth={1.5}
+                spring="bouncy"
+                reducedMotion="user"
+              />
+            )}
             <span className="swap-label">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.span

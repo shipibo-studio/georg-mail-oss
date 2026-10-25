@@ -4,7 +4,7 @@
 import { EASE_OUT, SPRING } from "@shipibo-studio/georg-ds/georg-motion.mjs";
 import { MorphIcon } from "morphicons/react";
 import { AnimatePresence, motion } from "motion/react";
-import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { type KeyboardEvent, type MouseEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { avatarSeed, senderAvatarUri } from "../lib/avatar";
 import { useAvatarStyle } from "../lib/avatar-style";
 import { avatarHue, expiryLevel, initials } from "../lib/format";
@@ -14,6 +14,32 @@ import { Tip } from "./Tooltip";
 
 const COPIED_FOR_MS = 1600;
 const HOLD_TO_CONFIRM_MS = 900;
+
+/**
+ * georg-ds's busy button: spread on a g-button whose first child is <ButtonSpinner /> and whose
+ * label is wrapped in <BusyLabel>. The label slides out and the spinner in, keeping the width.
+ * The button stays enabled so focus stays on it; a press while busy (Enter and Space included,
+ * which pointer-events cannot stop) does nothing, and does not submit its form.
+ */
+export function busyButton(pending: boolean) {
+  return {
+    "aria-busy": pending || undefined,
+    onClickCapture: (event: MouseEvent) => {
+      if (!pending) return;
+      event.preventDefault();
+      event.stopPropagation();
+    },
+  };
+}
+
+export function ButtonSpinner() {
+  return <span className="g-spinner" aria-hidden="true" />;
+}
+
+/** A button's label, icon included, as the one element that slides out while it is busy. */
+export function BusyLabel({ children }: { children: ReactNode }) {
+  return <span className="busy-label">{children}</span>;
+}
 
 export function useCopy(onCopied?: () => void) {
   const [copied, setCopied] = useState(false);

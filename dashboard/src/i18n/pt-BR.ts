@@ -174,10 +174,9 @@ export const ptBR: Translations = {
   "settings.forwardOffWarning":
     "Sem a cópia, e-mails acima de {size} são guardados sem visualização: baixe o original para lê-los.",
   "settings.appearance": "Aparência",
+  "settings.mailbox": "Caixa de correio",
   "settings.saved": "Configurações salvas",
   "settings.close": "Fechar configurações",
-  "settings.scopeMail": "E-mail",
-  "settings.scopeEverywhere": "E-mail e workspace",
   "settings.signOut": "Sair",
   "settings.holdToSignOut": "Segure para sair",
   "settings.signedInAs": "Conectado como",

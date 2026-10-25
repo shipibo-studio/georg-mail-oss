@@ -1,5 +1,5 @@
-// Manual refresh: the dashboard does not poll. The arrows spin while the visible data reloads,
-// then morph into a check for a moment, so the owner knows it is current.
+// Manual refresh: the dashboard does not poll. georg-ds's busy spinner takes the arrows' place while
+// the visible data reloads, then they morph into a check for a moment, so the owner knows it is current.
 import { useQueryClient } from "@tanstack/react-query";
 import { MorphIcon } from "morphicons/react";
 import { motion } from "motion/react";
@@ -11,7 +11,7 @@ import { Tip } from "./Tooltip";
 
 type RefreshState = "idle" | "refreshing" | "done";
 
-// A refresh that answers instantly still spins once, so the press always feels acknowledged.
+// A refresh that answers instantly still shows the spinner a moment, so the press always feels acknowledged.
 const MIN_SPIN_MS = 450;
 const DONE_FOR_MS = 900;
 
@@ -52,19 +52,12 @@ export function RefreshButton({ className = "g-button g-button-ghost g-button-ic
         type="button"
         className={`${className} refresh-button refresh-${state}`}
         aria-label={t("nav.refresh")}
-        aria-busy={state === "refreshing"}
+        aria-busy={state === "refreshing" || undefined}
         onClick={() => void refresh()}
         whileTap={{ scale: 0.92 }}
       >
-        <motion.span
-          className="refresh-icon"
-          animate={{ rotate: state === "refreshing" ? 360 : 0 }}
-          transition={
-            state === "refreshing"
-              ? { repeat: Number.POSITIVE_INFINITY, ease: "linear", duration: 0.7 }
-              : { duration: 0 }
-          }
-        >
+        <span className="g-spinner" aria-hidden="true" />
+        <span className="refresh-icon">
           <MorphIcon
             icon={state === "done" ? CHECK_ICON : REFRESH_ICON}
             size={16}
@@ -72,7 +65,7 @@ export function RefreshButton({ className = "g-button g-button-ghost g-button-ic
             spring="bouncy"
             reducedMotion="user"
           />
-        </motion.span>
+        </span>
       </motion.button>
     </Tip>
   );

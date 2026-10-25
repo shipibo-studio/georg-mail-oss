@@ -18,7 +18,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import type { MessageKey } from "../i18n/translate";
 import { formatListTime } from "../lib/format";
 import { type Folder, MAX_QUERY_LENGTH } from "../lib/route";
-import { Avatar, CopyIcon, useCopy } from "./controls";
+import { Avatar, ButtonSpinner, busyButton, CopyIcon, useCopy } from "./controls";
 import { RefreshButton } from "./RefreshButton";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
@@ -56,6 +56,8 @@ interface MessageListProps {
   freshIds: ReadonlySet<string>;
   hasMore: boolean;
   loadingMore: boolean;
+  /** The list reloads with mail on screen: it dims under georg-ds's busy line instead of blanking. */
+  refreshing: boolean;
   onLoadMore(): void;
   onSelect(id: string): void;
   /** An empty search goes back to the inbox. */
@@ -305,7 +307,19 @@ function EmptyState({ folder, query, address }: { folder: Folder; query: string 
 }
 
 export function MessageList(props: MessageListProps) {
-  const { folder, query, mailbox, messages, selectedId, freshIds, hasMore, loadingMore, onLoadMore, onSelect } = props;
+  const {
+    folder,
+    query,
+    mailbox,
+    messages,
+    selectedId,
+    freshIds,
+    hasMore,
+    loadingMore,
+    refreshing,
+    onLoadMore,
+    onSelect,
+  } = props;
   const { t } = useI18n();
   const sentinel = useRef<HTMLDivElement>(null);
 
@@ -329,33 +343,42 @@ export function MessageList(props: MessageListProps) {
         count={messages?.length ?? 0}
         onSearch={props.onSearch}
       />
-      <div className="messages" key={query ? `search:${query}` : folder}>
-        {!messages ? (
-          <SkeletonRows />
-        ) : messages.length === 0 ? (
-          <EmptyState folder={folder} query={query} address={mailbox?.address ?? ""} />
-        ) : (
-          <AnimatePresence>
-            {messages.map((message, index) => (
-              <MessageRow
-                key={message.id}
-                message={message}
-                showBox={query !== null}
-                index={index}
-                selected={message.id === selectedId}
-                fresh={freshIds.has(message.id)}
-                onSelect={onSelect}
-              />
-            ))}
-          </AnimatePresence>
-        )}
-        {hasMore && (
-          <div ref={sentinel} className="load-more">
-            <button type="button" className="g-button g-button-ghost" onClick={onLoadMore} disabled={loadingMore}>
-              {loadingMore ? t("list.loadingMore") : t("list.loadMore")}
-            </button>
-          </div>
-        )}
+      <div className="messages-pane g-busy" aria-busy={refreshing || undefined}>
+        <div className="messages" key={query ? `search:${query}` : folder}>
+          {!messages ? (
+            <SkeletonRows />
+          ) : messages.length === 0 ? (
+            <EmptyState folder={folder} query={query} address={mailbox?.address ?? ""} />
+          ) : (
+            <AnimatePresence>
+              {messages.map((message, index) => (
+                <MessageRow
+                  key={message.id}
+                  message={message}
+                  showBox={query !== null}
+                  index={index}
+                  selected={message.id === selectedId}
+                  fresh={freshIds.has(message.id)}
+                  onSelect={onSelect}
+                />
+              ))}
+            </AnimatePresence>
+          )}
+          {hasMore && (
+            <div ref={sentinel} className="load-more">
+              <button
+                type="button"
+                className="g-button g-button-ghost"
+                data-busy="label"
+                {...busyButton(loadingMore)}
+                onClick={onLoadMore}
+              >
+                <ButtonSpinner />
+                <span>{loadingMore ? t("list.loadingMore") : t("list.loadMore")}</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

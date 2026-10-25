@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, openInbox, row, test } from "./fixtures";
+import { expect, openInbox, openMailboxTab, row, test } from "./fixtures";
 
 async function swipe(page: Page, selector: string, dx: number, dy: number) {
   const box = await page.locator(selector).boundingBox();
@@ -53,6 +53,24 @@ test("the composer covers the screen and keeps the draft when minimized", async 
   await expect(pill).toHaveText("Borrador desde el teléfono");
   await pill.tap();
   await expect(composer.getByLabel("Subject")).toHaveValue("Borrador desde el teléfono");
+});
+
+test("sending on a phone shows the busy send button until the message leaves", async ({ page }) => {
+  await page.route("**/dashboard/api/mailbox/messages", async (route) => {
+    if (route.request().method() === "POST") await new Promise((resolve) => setTimeout(resolve, 800));
+    await route.fallback();
+  });
+  await openInbox(page);
+  await page.getByRole("button", { name: "Compose" }).tap();
+  const composer = page.getByRole("dialog", { name: "New message" });
+  await composer.locator(".chip-input input").first().fill("camila@estudio.cl,");
+  await composer.getByLabel("Subject").fill("Desde el teléfono");
+  await composer.locator("textarea").fill("Hola");
+  const send = composer.locator("button.send");
+  await send.tap();
+  await expect(send).toHaveAttribute("aria-busy", "true");
+  await expect(send.locator(".g-spinner")).toHaveCSS("opacity", "1");
+  await expect(page.getByText("Message sent")).toBeVisible();
 });
 
 test("settings open as a bottom sheet that closes with a swipe down", async ({ page }) => {
@@ -139,7 +157,7 @@ test("old mail can be imported from a phone", async ({ page }) => {
   await openInbox(page);
   await page.locator(".mobile-nav").getByRole("button", { name: "More" }).tap();
   await page.getByRole("dialog", { name: "More" }).getByRole("button", { name: "Settings" }).tap();
-  await page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Import mail" }).tap();
+  await (await openMailboxTab(page)).getByRole("button", { name: "Import mail" }).tap();
   const dialog = page.getByRole("dialog", { name: "Import mail" });
   await dialog.getByTestId("import-input").setInputFiles({
     name: "uno.eml",
@@ -188,7 +206,7 @@ test("first-run setup fits a phone", async ({ page }) => {
 test("aliases can be added from the Settings sheet on a phone", async ({ page }) => {
   await openInbox(page);
   await goTo(page, "Settings");
-  const settings = page.getByRole("dialog", { name: "Settings" });
+  const settings = await openMailboxTab(page);
   await settings.getByRole("button", { name: "Add alias" }).tap();
   await expect(settings.locator(".alias-row")).toHaveCount(2);
   const added = settings.locator(".alias-row").nth(1);
@@ -220,7 +238,7 @@ test("a new release can be applied from the Settings sheet on a phone", async ({
   await page.request.post("/dashboard/api/__mock/update-available");
   await openInbox(page);
   await goTo(page, "Settings");
-  const settings = page.getByRole("dialog", { name: "Settings" });
+  const settings = await openMailboxTab(page);
   await settings.getByRole("button", { name: "Update…" }).tap();
   const dialog = page.getByRole("dialog", { name: "Update Georg mail" });
   await dialog.getByRole("button", { name: "Update to 0.2.0" }).tap();
@@ -249,7 +267,7 @@ test("taps sound on a phone, and the Settings sheet can silence them", async ({ 
 test("signing out from the Settings sheet takes a press and hold", async ({ page }) => {
   await openInbox(page);
   await goTo(page, "Settings");
-  const signOut = page.getByRole("dialog", { name: "Settings" }).getByRole("button", { name: "Hold to sign out" });
+  const signOut = (await openMailboxTab(page)).getByRole("button", { name: "Hold to sign out" });
   await signOut.tap();
   await page.waitForTimeout(1_100);
   await expect(page).toHaveURL(/\/dashboard\//);

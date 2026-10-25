@@ -9,7 +9,7 @@ import { motion } from "motion/react";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { ApiError, setupApi } from "../api/client";
 import { useI18n } from "../i18n/I18nProvider";
-import { Switch } from "./controls";
+import { ButtonSpinner, busyButton, Switch } from "./controls";
 
 const MAX_DISPLAY_NAME_LENGTH = 100;
 
@@ -97,8 +97,15 @@ function SetupForm({
           {taken ? t("setup.taken") : t("error.generic")}
         </p>
       )}
-      <button type="submit" className="g-button g-button-primary" disabled={complete.isPending || !address}>
-        {complete.isPending ? t("setup.creating") : t("setup.create")}
+      <button
+        type="submit"
+        className="g-button g-button-primary"
+        data-busy="label"
+        {...busyButton(complete.isPending)}
+        disabled={!address}
+      >
+        <ButtonSpinner />
+        <span>{complete.isPending ? t("setup.creating") : t("setup.create")}</span>
       </button>
     </form>
   );
