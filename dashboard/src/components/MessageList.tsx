@@ -130,6 +130,7 @@ function ListHeader({
               <button
                 type="button"
                 className={`g-button g-button-ghost address-chip ${copied ? "copied" : ""}`}
+                data-sound="none"
                 onClick={() => copy(mailbox.address)}
               >
                 <span className="mono">{mailbox.address}</span>

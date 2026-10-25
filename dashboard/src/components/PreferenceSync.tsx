@@ -14,6 +14,7 @@ import {
   unsyncedChanges,
   writeSynced,
 } from "../lib/preferences";
+import { setSounds, useSounds } from "../lib/sounds";
 import { georgTheme, useGeorgTheme } from "../lib/theme";
 
 /** Rapid changes (clicking through accents) become one save. */
@@ -23,6 +24,7 @@ export function PreferenceSync({ saved }: { saved: Preferences | null | undefine
   const { pref: theme, accent } = useGeorgTheme();
   const { locale, setLocale, clock, setClock } = useI18n();
   const avatars = useAvatarStyle();
+  const sounds = useSounds();
   const loaded = useRef(false);
   const lastSaved = useRef<Preferences>({});
 
@@ -42,7 +44,7 @@ export function PreferenceSync({ saved }: { saved: Preferences | null | undefine
   useEffect(() => {
     if (saved === undefined || loaded.current) return;
     loaded.current = true;
-    const current = { theme, accent, locale, clock, avatars };
+    const current = { theme, accent, locale, clock, avatars, sounds };
     if (!saved) {
       save(current);
       return;
@@ -54,6 +56,7 @@ export function PreferenceSync({ saved }: { saved: Preferences | null | undefine
     if (wanted.locale && wanted.locale !== locale) setLocale(wanted.locale);
     if (wanted.clock && wanted.clock !== clock) setClock(wanted.clock);
     if (wanted.avatars && wanted.avatars !== avatars) setAvatarStyle(wanted.avatars);
+    if (wanted.sounds && wanted.sounds !== sounds) setSounds(wanted.sounds);
     // Counted as saved, so the change effect does not send them again a moment later.
     lastSaved.current = wanted;
     if (isEmpty(unsynced)) writeSynced(saved);
@@ -64,11 +67,11 @@ export function PreferenceSync({ saved }: { saved: Preferences | null | undefine
   // biome-ignore lint/correctness/useExhaustiveDependencies: save only reads refs
   useEffect(() => {
     if (!loaded.current) return;
-    const changes = changedPreferences(lastSaved.current, { theme, accent, locale, clock, avatars });
+    const changes = changedPreferences(lastSaved.current, { theme, accent, locale, clock, avatars, sounds });
     if (isEmpty(changes)) return;
     const timer = setTimeout(() => save(changes), SAVE_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [theme, accent, locale, clock, avatars]);
+  }, [theme, accent, locale, clock, avatars, sounds]);
 
   return null;
 }

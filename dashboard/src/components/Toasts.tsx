@@ -1,6 +1,7 @@
 import { IconAlertTriangle, IconCheck, IconInfoCircle } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useRef, useState } from "react";
+import { play } from "../lib/sounds";
 
 type ToastKind = "success" | "info" | "error";
 
@@ -58,6 +59,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const show = useCallback(
     (text: string, { kind = "success", key, action }: ToastOptions = {}) => {
+      if (kind === "error") play("error");
       setToasts((current) => {
         const existing = key ? current.find((toast) => toast.key === key) : undefined;
         if (existing) {

@@ -27,6 +27,7 @@ export const es419: Translations = {
   "appearance.avatarFaces": "Caras",
   "appearance.avatarInitials": "Iniciales",
   "appearance.clock": "Formato de hora",
+  "appearance.sounds": "Sonidos de la interfaz",
   "appearance.clock24": "24 horas ({sample})",
   "appearance.clock12": "12 horas ({sample})",
 

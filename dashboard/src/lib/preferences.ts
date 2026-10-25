@@ -3,6 +3,7 @@
 import type { Locale } from "../i18n/translate";
 import type { AvatarStyle } from "./avatar-style";
 import type { Clock } from "./format";
+import type { SoundSetting } from "./sounds";
 import type { AccentName, ThemePref } from "./theme";
 
 export interface Preferences {
@@ -11,11 +12,12 @@ export interface Preferences {
   locale?: Locale;
   clock?: Clock;
   avatars?: AvatarStyle;
+  sounds?: SoundSetting;
 }
 
 export type CurrentPreferences = Required<Preferences>;
 
-const KEYS = ["theme", "accent", "locale", "clock", "avatars"] as const;
+const KEYS = ["theme", "accent", "locale", "clock", "avatars", "sounds"] as const;
 
 /** The preferences that differ from what was last saved: what a save needs to send. */
 export function changedPreferences(saved: Preferences, current: CurrentPreferences): Preferences {

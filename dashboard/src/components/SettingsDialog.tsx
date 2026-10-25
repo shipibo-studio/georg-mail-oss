@@ -7,7 +7,9 @@ import { LOCALE_NAMES, LOCALES, type Locale } from "../i18n/translate";
 import { AVATAR_STYLES, type AvatarStyle, setAvatarStyle, useAvatarStyle } from "../lib/avatar-style";
 import { CLOCKS, type Clock, sampleTime } from "../lib/format";
 import { isSwipeDown, useIsPhone } from "../lib/media";
+import { play, setSounds, useSounds } from "../lib/sounds";
 import { AliasSettings } from "./AliasSettings";
+import { Switch } from "./controls";
 import { AccentControl, ThemeControl } from "./Sidebar";
 import { UpdateSettings } from "./UpdateDialog";
 
@@ -26,6 +28,7 @@ export function SettingsDialog({
 }) {
   const { t, locale, setLocale, clock, setClock } = useI18n();
   const avatarStyle = useAvatarStyle();
+  const sounds = useSounds();
   const panel = useRef<HTMLDivElement>(null);
   const isPhone = useIsPhone();
 
@@ -143,6 +146,21 @@ export function SettingsDialog({
                 </option>
               ))}
             </select>
+          </div>
+          <div className="setting compact">
+            <label className="setting-text" htmlFor="sounds-switch">
+              {t("appearance.sounds")}
+            </label>
+            <Switch
+              id="sounds-switch"
+              label={t("appearance.sounds")}
+              checked={sounds === "on"}
+              onChange={(on) => {
+                setSounds(on ? "on" : "off");
+                // A sample of what was just switched on.
+                if (on) play("toggleOn");
+              }}
+            />
           </div>
         </section>
         <section className="settings-section">

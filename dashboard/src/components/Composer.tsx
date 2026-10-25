@@ -20,6 +20,7 @@ import { formatBytes } from "../lib/format";
 import { useIsPhone } from "../lib/media";
 import { isValidAddress, splitRecipients, uniqueRecipients } from "../lib/recipients";
 import type { Draft } from "../lib/reply";
+import { play } from "../lib/sounds";
 import { CHECK_ICON, SEND_ICON } from "./morph-icons";
 import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
@@ -362,10 +363,12 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
       });
       autosave.stop();
       setSent(true);
+      play("send");
       toast(t("toast.sent"));
       setTimeout(onSent, CLOSE_AFTER_SENT_MS);
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : t("error.generic"));
+      play("error");
       shake.start({ x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.36 } });
     }
   };
@@ -501,6 +504,8 @@ export function Composer({ state, mailbox, onChange, onClose, onDiscard, onSent 
           <motion.button
             type="button"
             className={`g-button g-button-primary send ${sent ? "sent" : ""}`}
+            // It sounds when the message leaves, or fails to.
+            data-sound="none"
             onClick={() => void submit()}
             disabled={send.isPending}
             whileTap={{ scale: 0.96 }}

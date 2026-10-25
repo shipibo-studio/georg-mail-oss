@@ -6,6 +6,7 @@ import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useStat
 import { avatarSeed, senderAvatarUri } from "../lib/avatar";
 import { useAvatarStyle } from "../lib/avatar-style";
 import { avatarHue, expiryLevel, initials } from "../lib/format";
+import { play } from "../lib/sounds";
 import { CHECK_ICON, COPY_ICON } from "./morph-icons";
 import { Tip } from "./Tooltip";
 
@@ -18,6 +19,7 @@ export function useCopy(onCopied?: () => void) {
   useEffect(() => () => clearTimeout(timer.current), []);
   const copy = (text: string) => {
     navigator.clipboard?.writeText(text).catch(() => {});
+    play("copy");
     setCopied(true);
     onCopied?.();
     clearTimeout(timer.current);
@@ -61,6 +63,7 @@ export function CopyButton({
       type="button"
       className={`${className} g-copy`}
       data-copied={copied || undefined}
+      data-sound="none"
       onClick={() => copy(text)}
     >
       <CopyIcon copied={copied} />
@@ -130,6 +133,7 @@ export function HoldButton({
     setHolding(true);
     timer.current = setTimeout(() => {
       setHolding(false);
+      play("remove");
       onConfirm();
     }, HOLD_TO_CONFIRM_MS);
   };
@@ -150,6 +154,8 @@ export function HoldButton({
         type="button"
         className={`${className} hold ${holding ? "holding" : ""}`}
         aria-label={label}
+        // The press only starts the hold; the sound comes when it completes.
+        data-sound="none"
         onPointerDown={start}
         onPointerUp={cancel}
         onPointerLeave={cancel}

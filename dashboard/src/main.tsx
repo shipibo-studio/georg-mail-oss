@@ -11,6 +11,7 @@ import { App } from "./components/App";
 import { ToastProvider } from "./components/Toasts";
 import { TooltipProvider } from "./components/Tooltip";
 import { I18nProvider } from "./i18n/I18nProvider";
+import { installClickSounds } from "./lib/sounds";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,6 +24,8 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+installClickSounds();
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Missing #root element");

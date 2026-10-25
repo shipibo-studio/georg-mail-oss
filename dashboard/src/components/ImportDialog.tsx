@@ -13,6 +13,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import type { MessageKey } from "../i18n/translate";
 import { formatBytes } from "../lib/format";
 import { type ArchiveMessage, collectMessages, isImportable, MAX_MESSAGE_BYTES } from "../lib/mail-archive";
+import { play } from "../lib/sounds";
 import { useNow } from "./controls";
 import { CHECK_ICON, DOWNLOAD_ICON, X_ICON } from "./morph-icons";
 
@@ -84,6 +85,10 @@ function ImportProgressView({
   const running = phase === "running";
   const finished = phase === "done";
   const troubled = Boolean(progress.stopped) || progress.failed > 0;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sounds once, when the import ends
+  useEffect(() => {
+    if (finished) play(troubled ? "warn" : "success");
+  }, [finished]);
   const tone = troubled ? "warn" : finished ? "done" : "running";
   const pauseSeconds =
     running && progress.pausedUntil ? Math.max(0, Math.ceil((progress.pausedUntil - now) / 1000)) : 0;

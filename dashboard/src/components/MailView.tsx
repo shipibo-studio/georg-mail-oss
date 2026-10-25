@@ -16,6 +16,7 @@ import { useDeleteMessage, useFolder, useMessage, useMoveMessage, useSearch } fr
 import type { FullMessage, MailBox, Mailbox, SenderVerdict } from "../api/types";
 import { useI18n } from "../i18n/I18nProvider";
 import type { Folder, Route } from "../lib/route";
+import { play } from "../lib/sounds";
 import { isTyping } from "./keyboard";
 import { MessageDetail } from "./MessageDetail";
 import { MessageList, SEARCH_FIELD_ID } from "./MessageList";
@@ -94,7 +95,10 @@ export function MailView({ route, mailbox, freshIds, shortcutsEnabled, navigate,
   const deleteMessage = useCallback(
     (id: string) => {
       remove.mutate(id, {
-        onSuccess: () => toast(t("toast.deleted")),
+        onSuccess: () => {
+          play("move");
+          toast(t("toast.deleted"));
+        },
         onError: () => toast(t("error.generic"), { kind: "error" }),
       });
       leave(id);
@@ -118,11 +122,13 @@ export function MailView({ route, mailbox, freshIds, shortcutsEnabled, navigate,
       move.mutate(
         { id: target.id, box, sender },
         {
-          onSuccess: (result) =>
+          onSuccess: (result) => {
+            play("move");
             toast(t(done ?? (box ? MOVED_TOAST[box] : "toast.restored")), {
               key: "move",
               action: { label: t("toast.undo"), run: () => undo(result.previousSender) },
-            }),
+            });
+          },
           onError: failed,
         },
       );

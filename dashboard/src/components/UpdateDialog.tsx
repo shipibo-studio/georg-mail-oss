@@ -10,6 +10,7 @@ import { ApiError, updatesApi } from "../api/client";
 import { keys, useUpdateStatus } from "../api/queries";
 import type { UpdateCommit, UpdatePlan } from "../api/types";
 import { useI18n } from "../i18n/I18nProvider";
+import { play } from "../lib/sounds";
 
 /** Where a hand update is explained (the open-source repository's guide). */
 const MANUAL_UPDATE_URL = "https://github.com/shipibo-studio/georg-mail-oss/blob/main/docs/self-hosting.md#upgrading";
@@ -134,8 +135,10 @@ export function UpdateDialog({ version, onClose }: { version: string; onClose():
       setPhase({ name: "committing", plan });
       const commit = await updatesApi.apply(plan.to, plan.head);
       setPhase({ name: "done", plan, commit });
+      play("success");
       client.invalidateQueries({ queryKey: keys.updates });
     } catch (error) {
+      play("error");
       setPhase({ name: "failed", message: error instanceof ApiError ? error.message : "" });
     }
   }

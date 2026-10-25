@@ -27,6 +27,7 @@ export const ptBR: Translations = {
   "appearance.avatarFaces": "Rostos",
   "appearance.avatarInitials": "Iniciais",
   "appearance.clock": "Formato de hora",
+  "appearance.sounds": "Sons da interface",
   "appearance.clock24": "24 horas ({sample})",
   "appearance.clock12": "12 horas ({sample})",
 

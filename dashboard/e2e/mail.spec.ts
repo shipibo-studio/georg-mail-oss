@@ -466,7 +466,8 @@ test("settings say what is shared, show who is signed in and offer to sign out",
   await page.getByRole("button", { name: "Settings" }).click();
   const dialog = page.getByRole("dialog", { name: "Settings" });
   await expect(dialog.locator(".label", { hasText: "Appearance" })).toContainText("Mail and workspace");
-  await expect(dialog.getByRole("switch")).toHaveCount(0);
+  // The forwarded copy lives in Notifications now; the only switch here is for sounds.
+  await expect(dialog.getByRole("switch")).toHaveAccessibleName("Interface sounds");
   await expect(dialog.getByText("Delivery")).toHaveCount(0);
   await expect(dialog.locator(".signed-in .registered-email")).toHaveText("owner@example.org");
   const signOut = dialog.getByRole("link", { name: "Sign out" });
@@ -883,4 +884,59 @@ test("without an update token, the notice leads to Settings and the hand update"
   await expect(settings.getByRole("link", { name: "How to update" })).toBeVisible();
   await expect(settings.getByRole("button", { name: "Update…" })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "Update Georg mail" })).toHaveCount(0);
+});
+
+/** Every interface sound the page plays, in order (lib/sounds.ts announces each one). */
+async function recordSounds(page: import("@playwright/test").Page) {
+  await page.addInitScript(() => {
+    const heard: string[] = [];
+    (window as unknown as { __sounds: string[] }).__sounds = heard;
+    window.addEventListener("georg:sound", (event) => heard.push((event as CustomEvent<string>).detail));
+  });
+  return () => page.evaluate(() => (window as unknown as { __sounds: string[] }).__sounds.slice());
+}
+
+test("presses and events make their sounds, and one switch in Settings silences them", async ({ page }) => {
+  const sounds = await recordSounds(page);
+  await openInbox(page);
+  await row(page, "Your verification code").click();
+  await page.locator(".code-card").getByRole("button", { name: "Copy" }).click();
+  await expect.poll(sounds).toEqual(["tick", "copy"]);
+
+  await page
+    .locator(".sidebar")
+    .getByRole("button", { name: /Compose/ })
+    .click();
+  const composer = page.getByRole("dialog", { name: "New message" });
+  await composer.locator(".chip-input input").first().fill("camila@estudio.cl,");
+  await composer.getByLabel("Subject").fill("Hola");
+  await composer.locator("textarea").fill("Saludos");
+  await composer.getByRole("button", { name: "Send" }).click();
+  await expect(composer).toBeHidden();
+  await expect.poll(sounds).toEqual(["tick", "copy", "press", "send"]);
+
+  await page.request.post("/dashboard/api/__mock/arrive");
+  await page.locator(".list").getByRole("button", { name: "Refresh" }).click();
+  await expect.poll(async () => (await sounds()).slice(-2)).toEqual(["tap", "arrive"]);
+
+  await page.getByRole("button", { name: "Settings" }).click();
+  const saved = page.waitForRequest(
+    (request) => request.url().endsWith("/dashboard/api/mailbox/preferences") && request.method() === "PUT",
+  );
+  const before = (await sounds()).length;
+  await page.getByRole("switch", { name: "Interface sounds" }).click();
+  expect((await saved).postDataJSON()).toMatchObject({ sounds: "off" });
+  await expect.poll(async () => (await sounds()).slice(before)).toEqual(["toggleOff"]);
+  await page.keyboard.press("Escape");
+  await page.locator(".sidebar").getByRole("button", { name: "Sent" }).click();
+  await page.waitForTimeout(200);
+  expect((await sounds()).slice(before)).toEqual(["toggleOff"]);
+
+  // Back on: a sample says so, and it is remembered after a reload.
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("switch", { name: "Interface sounds" }).click();
+  await expect.poll(async () => (await sounds()).at(-1)).toBe("toggleOn");
+  await page.reload();
+  await page.getByRole("button", { name: "Settings" }).click();
+  await expect(page.getByRole("switch", { name: "Interface sounds" })).toBeChecked();
 });

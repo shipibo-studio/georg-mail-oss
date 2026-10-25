@@ -227,3 +227,20 @@ test("a new release can be applied from the Settings sheet on a phone", async ({
   const box = await dialog.boundingBox();
   expect(box?.width).toBeLessThanOrEqual(page.viewportSize()?.width ?? 0);
 });
+
+test("taps sound on a phone, and the Settings sheet can silence them", async ({ page }) => {
+  await page.addInitScript(() => {
+    const heard: string[] = [];
+    (window as unknown as { __sounds: string[] }).__sounds = heard;
+    window.addEventListener("georg:sound", (event) => heard.push((event as CustomEvent<string>).detail));
+  });
+  const sounds = () => page.evaluate(() => (window as unknown as { __sounds: string[] }).__sounds.slice());
+  await openInbox(page);
+  await row(page, "Your verification code").tap();
+  await expect.poll(sounds).toContain("tick");
+  await page.getByRole("button", { name: "Back" }).tap();
+  await goTo(page, "Settings");
+  await page.getByRole("switch", { name: "Interface sounds" }).tap();
+  await expect.poll(async () => (await sounds()).at(-1)).toBe("toggleOff");
+  await expect(page.getByRole("switch", { name: "Interface sounds" })).not.toBeChecked();
+});

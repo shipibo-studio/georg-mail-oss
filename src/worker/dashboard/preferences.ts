@@ -1,5 +1,5 @@
-// Display preferences of one person who opens the dashboard: theme, accent, language, time format
-// and sender avatars. Kept in D1 so they follow the person to every device; the browser keeps a
+// Display preferences of one person who opens the dashboard: theme, accent, language, time format,
+// sender avatars and interface sounds. Kept in D1 so they follow the person to every device; the browser keeps a
 // copy in localStorage for the first paint. Only closed sets of values are accepted.
 import { eq } from "drizzle-orm";
 import { z } from "zod";
@@ -12,6 +12,7 @@ export const PREFERENCE_OPTIONS = {
   locale: ["en", "es-419", "pt-BR"],
   clock: ["24h", "12h"],
   avatars: ["faces", "initials"],
+  sounds: ["on", "off"],
 } as const;
 
 export const preferencesSchema = z
@@ -21,6 +22,7 @@ export const preferencesSchema = z
     locale: z.enum(PREFERENCE_OPTIONS.locale).optional(),
     clock: z.enum(PREFERENCE_OPTIONS.clock).optional(),
     avatars: z.enum(PREFERENCE_OPTIONS.avatars).optional(),
+    sounds: z.enum(PREFERENCE_OPTIONS.sounds).optional(),
   })
   .refine((body) => Object.keys(body).length > 0, "Send at least one preference.");
 

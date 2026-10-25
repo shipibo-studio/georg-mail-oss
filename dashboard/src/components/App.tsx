@@ -13,6 +13,7 @@ import { fromSavedDraft } from "../lib/drafts";
 import { formatFullDate } from "../lib/format";
 import { EMPTY_DRAFT, replyDraft } from "../lib/reply";
 import { hasSelection, parseRoute, type Route, routePath } from "../lib/route";
+import { play } from "../lib/sounds";
 import { CommandPalette } from "./CommandPalette";
 import { Composer, type ComposerState, newComposerState } from "./Composer";
 import { DraftsView } from "./DraftsView";
@@ -126,6 +127,7 @@ export function App() {
 
   const onArrival = useCallback(
     (arrived: MessageSummary[]) => {
+      play("arrive");
       const first = arrived[0];
       const sender = first?.from.name || first?.from.address || "";
       toast(arrived.length === 1 ? t("toast.newMail", { sender }) : t("toast.newMailMany", { count: arrived.length }), {

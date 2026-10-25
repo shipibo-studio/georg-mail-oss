@@ -2,7 +2,14 @@
 import { afterEach, describe, expect, test } from "vitest";
 import { changedPreferences, isEmpty, readSynced, unsyncedChanges, writeSynced } from "../src/lib/preferences";
 
-const CURRENT = { theme: "dark", accent: "green", locale: "es-419", clock: "12h", avatars: "initials" } as const;
+const CURRENT = {
+  theme: "dark",
+  accent: "green",
+  locale: "es-419",
+  clock: "12h",
+  avatars: "initials",
+  sounds: "off",
+} as const;
 
 describe("preference changes", () => {
   test("everything, when nothing was saved yet", () => {

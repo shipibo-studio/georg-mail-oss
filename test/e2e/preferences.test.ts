@@ -27,15 +27,25 @@ describe("display preferences", () => {
     expect(first.status).toBe(200);
     expect(await json(first)).toEqual({ theme: "dark", locale: "es-419" });
 
-    await dashboard(owner, "/preferences", { method: "PUT", body: { avatars: "initials", theme: "light" } });
+    await dashboard(owner, "/preferences", {
+      method: "PUT",
+      body: { avatars: "initials", theme: "light", sounds: "off" },
+    });
     expect(await json(await dashboard(owner, ""))).toMatchObject({
-      preferences: { theme: "light", locale: "es-419", avatars: "initials" },
+      preferences: { theme: "light", locale: "es-419", avatars: "initials", sounds: "off" },
     });
   });
 
   test("accept only known preferences and their values", async () => {
     const owner = await setupOwner();
-    for (const body of [{}, { theme: "neon" }, { locale: "fr" }, { accent: "constructor" }, { font: "comic" }]) {
+    for (const body of [
+      {},
+      { theme: "neon" },
+      { locale: "fr" },
+      { accent: "constructor" },
+      { font: "comic" },
+      { sounds: "loud" },
+    ]) {
       expect((await dashboard(owner, "/preferences", { method: "PUT", body })).status, JSON.stringify(body)).toBe(400);
     }
     expect(await json(await dashboard(owner, ""))).toMatchObject({ preferences: null });

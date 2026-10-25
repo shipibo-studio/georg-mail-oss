@@ -27,6 +27,7 @@ export const en = {
   "appearance.avatarFaces": "Faces",
   "appearance.avatarInitials": "Initials",
   "appearance.clock": "Time format",
+  "appearance.sounds": "Interface sounds",
   "appearance.clock24": "24-hour ({sample})",
   "appearance.clock12": "12-hour ({sample})",
 
