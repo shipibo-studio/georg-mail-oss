@@ -218,8 +218,6 @@ export const en = {
   "updates.notes": "Release notes",
   "updates.manual": "How to update",
   "updates.notice": "Version {version} is available",
-  "updates.check": "Check for updates",
-  "updates.upToDate": "Georg mail {version} is the latest version",
   "updates.repository": "Georg mail on GitHub",
   "updates.noticeManual": "Version {version} is out: how to update",
   "updates.title": "Update Georg mail",

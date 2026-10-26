@@ -179,7 +179,7 @@ To export from Zoho: **Settings → Import/Export → Export**, choose the folde
 
 ## Upgrading
 
-New versions are published as [releases](https://github.com/shipibo-studio/georg-mail-oss/releases) of this repository. The foot of the sidebar (the **More** sheet on a phone) shows the installed version, which links to this repository, and a **Check for updates** button. The app looks for a new release on its own at most every six hours, or right away when you press that button, and then says **Version X is available** there; the review that follows links to the release notes. Read them before updating: they say when a release needs a new variable or secret.
+New versions are published as [releases](https://github.com/shipibo-studio/georg-mail-oss/releases) of this repository. The foot of the sidebar (the **More** sheet on a phone) shows the installed version, which links to this repository. Each time you open the app it looks for a new release (the Worker asks GitHub at most once a minute) and, when there is one, says **Version X is available** there; the review that follows links to the release notes. Read them before updating: they say when a release needs a new variable or secret.
 
 ### From the app
 

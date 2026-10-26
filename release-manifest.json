@@ -58,7 +58,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "6a8dffb122c8faaa8a8e0efe142189b267def259",
+      "sha": "2ecf5338e41f9c5704bddc86df31c547a8f6fb38",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -66,7 +66,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/phone.spec.ts": {
-      "sha": "5bdd6860f59c19ad24b4b5e46dedd15cde77ff2b",
+      "sha": "993328aa694043a45c69f5632f93e0749edf10c4",
       "mode": "100644"
     },
     "dashboard/index.html": {
@@ -74,7 +74,7 @@
       "mode": "100644"
     },
     "dashboard/mock/mock-api.ts": {
-      "sha": "e9547411fe0884f8b04d45a58a54f1f188f73565",
+      "sha": "c58aaf2d112ef66ee431580455893fdd75409c76",
       "mode": "100644"
     },
     "dashboard/mock/mock-v1.ts": {
@@ -94,11 +94,11 @@
       "mode": "100644"
     },
     "dashboard/src/api/client.ts": {
-      "sha": "69aeb8a42e4e4ba99e8d8506bf90c259ee75be62",
+      "sha": "6cf26149ce6912436d3becc0d603bb50b8b81832",
       "mode": "100644"
     },
     "dashboard/src/api/queries.ts": {
-      "sha": "b627859951d24701c2f06fbd0ac26d374dd1b6df",
+      "sha": "91a89281d6b63cf83464f76322ec3894e6424326",
       "mode": "100644"
     },
     "dashboard/src/api/types.ts": {
@@ -182,7 +182,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/UpdateDialog.tsx": {
-      "sha": "63f573fe2871499f4a170625e1dffd35fc868af1",
+      "sha": "1575c8669400160af097d34d523c700eef0183e5",
       "mode": "100644"
     },
     "dashboard/src/components/controls.tsx": {
@@ -218,15 +218,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "e62723a64be5458d64294d740fd35727604e2e45",
+      "sha": "c5e8807ed908f8f4ab96fca890a57f7567b06db0",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "b5f8b6188b259379bf404a0008b543d7e4ce0999",
+      "sha": "d0adbef46646d59a34d8e0cf1212accf09e29836",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "fd0965211bd42b52beaef0c3b70c859ed83f4529",
+      "sha": "6ec8dc47e08c5fe57dffa0e5242e7406f16bafe3",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {
@@ -298,7 +298,7 @@
       "mode": "100644"
     },
     "dashboard/src/styles.css": {
-      "sha": "c668a799eeb0b5afb7e989f25317052744c0c171",
+      "sha": "db9cb3903782653b203f95d26d9c082a874777e1",
       "mode": "100644"
     },
     "dashboard/test/aliases-and-retry.test.ts": {
@@ -410,7 +410,7 @@
       "mode": "100644"
     },
     "docs/self-hosting.md": {
-      "sha": "1e381483e1247fe239c4804f7eac94036a1e7fb3",
+      "sha": "9796d9ea04f2b007a4b710456200ad598efd4345",
       "mode": "100644"
     },
     "drizzle.config.ts": {
@@ -718,7 +718,7 @@
       "mode": "100644"
     },
     "src/worker/config.ts": {
-      "sha": "90045362f90185974956839522d2342901021b38",
+      "sha": "5dbb16ef286bc8431a90fc60a09ef9b0102b2682",
       "mode": "100644"
     },
     "src/worker/crypto.ts": {
@@ -782,7 +782,7 @@
       "mode": "100644"
     },
     "src/worker/dashboard/update-routes.ts": {
-      "sha": "481e7585446b9e5a5928767aa0bc32fce0844fb0",
+      "sha": "44dc3b4958ccd86a48caa736530687f4156c4b3a",
       "mode": "100644"
     },
     "src/worker/db/client.ts": {
@@ -1014,7 +1014,7 @@
       "mode": "100644"
     },
     "test/e2e/updates.test.ts": {
-      "sha": "0854267b9451d2110f2e78ccae3f297343ff2531",
+      "sha": "b43577f7915bef92da23524d2cabd97be1c5281b",
       "mode": "100644"
     },
     "test/env.d.ts": {

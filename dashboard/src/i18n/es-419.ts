@@ -220,8 +220,6 @@ export const es419: Translations = {
   "updates.notes": "Notas de la versión",
   "updates.manual": "Cómo actualizar",
   "updates.notice": "Versión {version} disponible",
-  "updates.check": "Buscar actualizaciones",
-  "updates.upToDate": "Georg mail {version} es la versión más reciente",
   "updates.repository": "Georg mail en GitHub",
   "updates.noticeManual": "Salió la versión {version}: cómo actualizar",
   "updates.title": "Actualizar Georg mail",

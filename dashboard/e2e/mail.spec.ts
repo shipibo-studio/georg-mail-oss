@@ -912,33 +912,32 @@ test("the import form: a drop zone reachable from the keyboard, chosen files as 
   await expect(start).toBeEnabled();
 });
 
-test("the sidebar shows the version, links to the repository and checks for updates", async ({ page }) => {
+test("the sidebar shows the version and links to the repository; a new release shows up when the app opens", async ({
+  page,
+}) => {
+  let looks = 0;
+  page.on("request", (request) => {
+    if (request.url().endsWith("/dashboard/api/updates")) looks += 1;
+  });
   await openInbox(page);
   const panel = page.locator(".sidebar .version-panel");
   await expect(panel.locator(".update-notice")).toHaveCount(0);
   const repository = panel.getByRole("link", { name: /Georg mail 0\.1\.0/ });
   await expect(repository).toHaveAttribute("href", "https://github.com/shipibo-studio/georg-mail-oss");
   await expect(repository).toHaveAttribute("target", "_blank");
+  // No button to check: opening the app is the check, once per visit.
+  await expect(panel.getByRole("button")).toHaveCount(0);
+  await page.getByRole("button", { name: "Sent" }).first().click();
+  await page.getByRole("button", { name: "Inbox" }).first().click();
+  expect(looks).toBe(1);
   // Settings no longer carries the version: it lives here.
   await page.getByRole("button", { name: "Settings" }).click();
   await expect((await openMailboxTab(page)).getByText(/up to date/)).toHaveCount(0);
-  await page.keyboard.press("Escape");
 
-  // Nothing new: a check says so.
-  const check = panel.getByRole("button", { name: "Check for updates" });
-  await check.click();
-  await expect(page.locator(".toast", { hasText: "Georg mail 0.1.0 is the latest version" })).toBeVisible();
-
-  // A release published since the last look shows up as soon as the owner checks.
-  await page.request.post("/dashboard/api/__mock/update-unseen");
-  await page.route("**/dashboard/api/updates/check", async (route) => {
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    await route.fallback();
-  });
-  await check.click();
-  await expect(check).toHaveAttribute("aria-busy", "true");
+  // A release published since: the next time the app opens, the notice is there.
+  await page.request.post("/dashboard/api/__mock/update-available");
+  await page.reload();
   await expect(panel.getByRole("button", { name: "Version 0.2.0 is available" })).toBeVisible();
-  await expect(check).not.toHaveAttribute("aria-busy");
 });
 
 test("a new release: the notice opens the review, which asks first, then copies the files and commits", async ({

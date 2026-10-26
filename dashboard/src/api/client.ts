@@ -179,8 +179,6 @@ export const updatesApi = {
       if (error instanceof ApiError && error.status === 404) return null;
       throw error;
     }),
-  /** Asks GitHub now instead of within six hours (the Worker allows one look a minute). */
-  check: () => apiRequest<UpdateStatus>(`${UPDATES_API}/check`, { method: "POST", body: {} }),
   plan: (version: string) => apiRequest<UpdatePlan>(`${UPDATES_API}/plan`, { method: "POST", body: { version } }),
   stage: (version: string, paths: string[]) =>
     apiRequest<{ staged: number }>(`${UPDATES_API}/stage`, { method: "POST", body: { version, paths } }),

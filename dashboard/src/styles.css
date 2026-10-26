@@ -2898,20 +2898,14 @@ select:focus-visible {
 .version-panel .update-notice {
   text-decoration: none;
 }
-.version-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 0 8px 0 14px;
-  color: var(--text-3);
-  font-size: var(--text-xs);
-}
 .version-link {
   display: inline-flex;
   align-items: center;
+  justify-self: start;
   gap: 6px;
-  color: inherit;
+  padding: 2px 14px;
+  color: var(--text-3);
+  font-size: var(--text-xs);
   text-decoration: none;
   transition: color var(--dur-1);
 }

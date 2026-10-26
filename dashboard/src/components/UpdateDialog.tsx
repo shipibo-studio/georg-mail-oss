@@ -16,12 +16,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ApiError, updatesApi } from "../api/client";
-import { keys, useCheckForUpdates, useUpdateStatus } from "../api/queries";
+import { keys, useUpdateStatus } from "../api/queries";
 import type { UpdateCommit, UpdatePlan } from "../api/types";
 import { useI18n } from "../i18n/I18nProvider";
 import { play } from "../lib/sounds";
-import { BusyLabel, ButtonSpinner, busyButton } from "./controls";
-import { useToast } from "./Toasts";
 import { Tip } from "./Tooltip";
 
 /** Where a hand update is explained (the open-source repository's guide). */
@@ -49,28 +47,15 @@ function ExternalLink({ href, children }: { href: string; children: React.ReactN
 const REPOSITORY_URL = "https://github.com/shipibo-studio/georg-mail-oss";
 
 /**
- * At the foot of the sidebar (and of the More sheet on phones): the installed version with a link to
- * the repository, a button that checks for a new release now, and the update once one is out. With
- * no repository to commit to, the update links to the guide for updating by hand.
+ * At the foot of the sidebar (and of the More sheet on phones): the installed version, which links
+ * to the repository, and the update once a newer release is out, found when the app opens. With no
+ * repository to commit to, the update links to the guide for updating by hand.
  */
 export function VersionPanel({ onUpdate }: { onUpdate(): void }) {
   const { t } = useI18n();
-  const toast = useToast();
   const status = useUpdateStatus().data;
-  const check = useCheckForUpdates();
   if (!status) return null;
   const latest = status.available ? status.latest : null;
-
-  const checkNow = () =>
-    check.mutate(undefined, {
-      onSuccess: (next) => {
-        if (next.checkFailed) toast(t("updates.checkFailed"), { kind: "error" });
-        // A newer release shows itself in the panel; only "nothing new" needs saying.
-        else if (!next.available) toast(t("updates.upToDate", { version: next.installed }), { kind: "info" });
-      },
-      onError: () => toast(t("updates.checkFailed"), { kind: "error" }),
-    });
-
   return (
     <div className="version-panel">
       {latest &&
@@ -85,30 +70,14 @@ export function VersionPanel({ onUpdate }: { onUpdate(): void }) {
             {t("updates.noticeManual", { version: latest.version })}
           </a>
         ))}
-      <div className="version-row">
-        <Tip label={t("updates.repository")}>
-          <a className="version-link" href={REPOSITORY_URL} target="_blank" rel="noreferrer noopener">
-            <IconBrandGithub size={14} stroke={1.5} aria-hidden="true" />
-            <span>
-              Georg mail <span className="mono">{status.installed}</span>
-            </span>
-          </a>
-        </Tip>
-        <Tip label={t("updates.check")}>
-          <button
-            type="button"
-            className="g-button g-button-ghost g-button-icon g-button-small"
-            aria-label={t("updates.check")}
-            {...busyButton(check.isPending)}
-            onClick={checkNow}
-          >
-            <ButtonSpinner />
-            <BusyLabel>
-              <IconRefresh size={14} stroke={1.5} />
-            </BusyLabel>
-          </button>
-        </Tip>
-      </div>
+      <Tip label={t("updates.repository")}>
+        <a className="version-link" href={REPOSITORY_URL} target="_blank" rel="noreferrer noopener">
+          <IconBrandGithub size={14} stroke={1.5} aria-hidden="true" />
+          <span>
+            Georg mail <span className="mono">{status.installed}</span>
+          </span>
+        </a>
+      </Tip>
     </div>
   );
 }

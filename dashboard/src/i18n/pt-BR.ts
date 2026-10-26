@@ -220,8 +220,6 @@ export const ptBR: Translations = {
   "updates.notes": "Notas da versão",
   "updates.manual": "Como atualizar",
   "updates.notice": "Versão {version} disponível",
-  "updates.check": "Procurar atualizações",
-  "updates.upToDate": "Georg mail {version} é a versão mais recente",
   "updates.repository": "Georg mail no GitHub",
   "updates.noticeManual": "Saiu a versão {version}: como atualizar",
   "updates.title": "Atualizar o Georg mail",

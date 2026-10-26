@@ -16,24 +16,16 @@ export const keys = {
 };
 
 /** The Worker asks GitHub at most every few hours; the dashboard asks the Worker once an hour. */
-const UPDATE_STATUS_STALE_MS = 60 * 60 * 1000;
 
 /** Null where in-app updates do not exist (the hosted product). */
 export function useUpdateStatus() {
   return useQuery({
     queryKey: keys.updates,
     queryFn: updatesApi.status,
-    staleTime: UPDATE_STATUS_STALE_MS,
+    // Once per visit: opening the mail client is when it looks for a new release.
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnWindowFocus: false,
     retry: false,
-  });
-}
-
-/** "Check for updates": the answer replaces the status every view shows. */
-export function useCheckForUpdates() {
-  const client = useQueryClient();
-  return useMutation({
-    mutationFn: updatesApi.check,
-    onSuccess: (status) => client.setQueryData(keys.updates, status),
   });
 }
 

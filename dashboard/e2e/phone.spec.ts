@@ -240,7 +240,6 @@ test("a new release can be applied from the More sheet on a phone, which shows t
   await page.locator(".mobile-nav").getByRole("button", { name: "More" }).tap();
   const more = page.getByRole("dialog", { name: "More" });
   await expect(more.getByRole("link", { name: /Georg mail 0\.1\.0/ })).toBeVisible();
-  await expect(more.getByRole("button", { name: "Check for updates" })).toBeVisible();
   await more.getByRole("button", { name: "Version 0.2.0 is available" }).tap();
   await expect(more).toHaveCount(0);
   const dialog = page.getByRole("dialog", { name: "Update Georg mail" });
