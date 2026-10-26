@@ -38,7 +38,7 @@
       "mode": "100644"
     },
     "README.md": {
-      "sha": "ee3f1b669ba2cfc47581ee5f19d535e28384c54a",
+      "sha": "6bd470ef701cce5d3992c977a9b974e94b5a129f",
       "mode": "100644"
     },
     "SECURITY.md": {
@@ -407,6 +407,18 @@
     },
     "docs/images/install/09-mailbox.png": {
       "sha": "69f1ce8f638dfecd3005aeb4e4d123242a618e1d",
+      "mode": "100644"
+    },
+    "docs/images/screenshots/01-inbox-dark.png": {
+      "sha": "052746a8bf476c9023b974559c70c87266e83a3a",
+      "mode": "100644"
+    },
+    "docs/images/screenshots/02-settings-dark.png": {
+      "sha": "0bf05649d6fc369e9d8af977ff9379dffd4e31cf",
+      "mode": "100644"
+    },
+    "docs/images/screenshots/03-compose-light.png": {
+      "sha": "6bf2026996cfa11f66205cd8036435296efd4fcc",
       "mode": "100644"
     },
     "docs/self-hosting.md": {

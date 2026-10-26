@@ -6,6 +6,8 @@ A mail client for your own domain that you host on your Cloudflare account, and 
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/shipibo-studio/georg-mail-oss)
 
+![Georg mail in dark mode: the inbox, and a phishing email open with a High risk warning, an unverified sender and its link marked](docs/images/screenshots/01-inbox-dark.png)
+
 ## What it does
 
 - **Inbox, Sent, Drafts, Archive, Spam and Trash**, with keyboard shortcuts (J/K to move, E to archive, ! to report spam, C to compose, ⌘K for everything else).
@@ -20,6 +22,14 @@ A mail client for your own domain that you host on your Cloudflare account, and 
 - Light and dark themes, accent colors, and display preferences that follow you to every device, in English, Spanish (Latin America) and Portuguese (Brazil).
 
 It keeps one mailbox for its owner. It is not a multi-user mail server.
+
+## Screenshots
+
+All with example data.
+
+![Settings, Appearance: theme, accent color, language, sender avatars, time format and interface sounds](docs/images/screenshots/02-settings-dark.png)
+
+![Light mode with a green accent: a verification email with its detected code, and a new message being written](docs/images/screenshots/03-compose-light.png)
 
 ## What you need
 
