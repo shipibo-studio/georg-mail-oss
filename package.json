@@ -1,6 +1,6 @@
 {
   "name": "georg-mail-oss",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "A self-hosted mail client for your own domain, on Cloudflare Workers Free",
   "license": "MIT",
