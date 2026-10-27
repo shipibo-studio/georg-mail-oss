@@ -1,0 +1,29 @@
+{
+  "source": "src/georg.css",
+  "products": {
+    "georg": {
+      "name": "Georg",
+      "accent": "purple",
+      "light": "#8f00f5",
+      "dark": "#c06aff"
+    },
+    "mail": {
+      "name": "Georg mail",
+      "accent": "fuchsia",
+      "light": "#c40062",
+      "dark": "#ff2e88"
+    },
+    "use": {
+      "name": "Georg use",
+      "accent": "green",
+      "light": "#007527",
+      "dark": "#7cff00"
+    },
+    "port": {
+      "name": "Georg port",
+      "accent": "blue",
+      "light": "#005edb",
+      "dark": "#00e5ff"
+    }
+  }
+}

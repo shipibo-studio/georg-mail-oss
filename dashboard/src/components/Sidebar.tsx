@@ -8,6 +8,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import type { MessageKey } from "../i18n/translate";
 import type { Route } from "../lib/route";
 import { type AccentName, georgTheme, type ThemePref, useGeorgTheme } from "../lib/theme";
+import { Brand } from "./Brand";
 import { CountBadge, OwnerAvatar } from "./controls";
 import { DESKTOP_ICON, MOON_ICON, SUN_ICON } from "./morph-icons";
 import { ACCOUNT_ITEMS, MAIL_ITEMS, type NavItem } from "./nav-items";
@@ -145,12 +146,7 @@ export function Sidebar({ mailbox, route, navigate, onCompose, onSettings, onSea
   const unread = mailbox?.unread ?? 0;
   return (
     <aside className="sidebar">
-      <div className="brand">
-        <div className="logo">g</div>
-        <div className="brand-name">
-          Georg <span>mail</span>
-        </div>
-      </div>
+      <Brand />
 
       <button type="button" className="search-trigger" onClick={onSearch}>
         <IconSearch size={16} stroke={1.5} />

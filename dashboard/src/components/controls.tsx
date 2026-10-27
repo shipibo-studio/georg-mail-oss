@@ -8,7 +8,7 @@ import { type KeyboardEvent, type MouseEvent, type ReactNode, useEffect, useMemo
 import { avatarSeed, senderAvatarUri } from "../lib/avatar";
 import { useAvatarStyle } from "../lib/avatar-style";
 import { avatarHue, expiryLevel, initials } from "../lib/format";
-import { play } from "../lib/sounds";
+import { play, type Sound } from "../lib/sounds";
 import { CHECK_ICON, COPY_ICON } from "./morph-icons";
 import { Tip } from "./Tooltip";
 
@@ -146,11 +146,14 @@ export function HoldButton({
   label,
   children,
   className = "g-button g-button-ghost g-button-icon",
+  sound = "remove",
 }: {
   onConfirm(): void;
   label: string;
   children: ReactNode;
   className?: string;
+  /** What it sounds like once confirmed: most holds delete, a reply sends. */
+  sound?: Sound;
 }) {
   const [holding, setHolding] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -161,7 +164,7 @@ export function HoldButton({
     setHolding(true);
     timer.current = setTimeout(() => {
       setHolding(false);
-      play("remove");
+      play(sound);
       onConfirm();
     }, HOLD_TO_CONFIRM_MS);
   };

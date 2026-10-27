@@ -122,17 +122,19 @@ svg {
   gap: 9px;
   padding: 16px 14px 12px;
 }
+/* georg-ds's symbol: the g in the text color, its square always georg mail's fuchsia (brand rule),
+   whatever accent the person picks. */
 .logo {
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  background: var(--text);
-  color: var(--bg);
   display: grid;
   place-items: center;
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 13px;
+  width: 24px;
+  height: 24px;
+  color: var(--text);
+  --georg-symbol-accent: var(--accent-fuchsia);
+}
+.logo svg {
+  width: auto;
+  height: 24px;
 }
 .brand-name {
   font-family: var(--font-display);
@@ -2566,11 +2568,6 @@ button.row:hover {
   border-color: color-mix(in srgb, var(--on-accent) 30%, transparent);
   color: color-mix(in srgb, var(--on-accent) 75%, transparent);
 }
-.logo {
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow: var(--accent-glow);
-}
 .folder.active,
 .palette-item.selected,
 .tab.active {
@@ -3086,4 +3083,42 @@ p.update-blocked {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* A trusted domain's DNS proof: the TXT record to publish, under its row. */
+.domain-proof {
+  display: grid;
+  gap: 8px;
+  padding: 0 12px 12px 44px;
+  overflow: hidden;
+}
+
+/* Replies agents proposed, under a test inbox, waiting for a person (ReplyApprovals). */
+.reply-approvals {
+  display: grid;
+  gap: 8px;
+  margin: 4px 0 12px;
+}
+.draft-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+.draft-head {
+  display: grid;
+  gap: 2px;
+}
+.draft-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  color: var(--warn);
+}
+.draft-text {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  font: inherit;
+  line-height: 1.5;
 }

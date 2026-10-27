@@ -96,16 +96,20 @@ test("a list that reloads with mail on screen dims under a busy line instead of 
   await openInbox(page);
   const pane = page.locator(".list .messages-pane");
   await expect(pane).not.toHaveAttribute("aria-busy");
+  // Long enough for the dim to settle after georg-ds's 300 ms delay and its transition.
   await page.route("**/dashboard/api/mailbox/messages?*", async (route) => {
-    await new Promise((resolve) => setTimeout(resolve, 900));
+    await new Promise((resolve) => setTimeout(resolve, 1_500));
     await route.fallback();
   });
   await page.locator(".list").getByRole("button", { name: "Refresh" }).click();
   await expect(pane).toHaveAttribute("aria-busy", "true");
   await expect(page.locator("button.msg").first()).toBeVisible();
   // georg-ds dims the content after its 300 ms delay, so a quick reload never flashes.
+  // Polled often: the steady dim only lasts while the reload is in flight.
   await expect
-    .poll(() => pane.locator(".messages").evaluate((element) => getComputedStyle(element).opacity))
+    .poll(() => pane.locator(".messages").evaluate((element) => getComputedStyle(element).opacity), {
+      intervals: [100],
+    })
     .toBe("0.6");
   await expect(pane).not.toHaveAttribute("aria-busy");
 });
@@ -910,6 +914,45 @@ test("the import form: a drop zone reachable from the keyboard, chosen files as 
   await dialog.getByRole("button", { name: "Remove inbox.zip" }).click();
   await expect(chosen).toHaveText([/old\.mbox/]);
   await expect(start).toBeEnabled();
+});
+
+test("the georg mail mark: its favicons, and a symbol whose square stays fuchsia whatever the accent", async ({
+  page,
+}) => {
+  await openInbox(page);
+  for (const [selector, type] of [
+    ['link[rel="icon"][type="image/svg+xml"]', "image/svg+xml"],
+    ['link[rel="icon"][type="image/png"]', "image/png"],
+    ['link[rel="apple-touch-icon"]', "image/png"],
+  ] as const) {
+    const href = await page.locator(selector).getAttribute("href");
+    expect(href).toMatch(/^\/dashboard\/brand\/mail-/);
+    const response = await page.request.get(href ?? "");
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain(type);
+  }
+
+  const square = page.locator(".sidebar .logo .georg-symbol-square");
+  await expect(square).toHaveCount(1);
+  // The mark is decoration beside the product's name, which screen readers read.
+  await expect(page.locator(".sidebar .logo")).toHaveAttribute("aria-hidden", "true");
+  const fuchsia = () =>
+    page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(--accent-fuchsia)";
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+  const fill = () => square.evaluate((element) => getComputedStyle(element).fill);
+  expect(await fill()).toBe(await fuchsia());
+
+  // Another accent changes the interface, never the mark.
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("radio", { name: /green/i }).click();
+  await page.keyboard.press("Escape");
+  expect(await fill()).toBe(await fuchsia());
 });
 
 test("the sidebar shows the version and links to the repository; a new release shows up when the app opens", async ({

@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-26
+
+### Added
+
+- **The georg logo**: a lowercase g (outlined from Stack Sans Notch Bold) with a rounded square whose color is the product's accent. Georg and the website use purple, Georg mail fuchsia, Georg use (formerly Georg spendia) green and Georg port blue; orange is reserved for the next product.
+  - `npm run brand` (part of `npm run generate`) builds `src/brand/` from the drawing in `docs/brand/g.pdf` and the accent tokens, so the logo always matches `georg.css`. The files are exported as `@shipibo-studio/georg-ds/brand/<file>`:
+    - per product: a symbol for light and for dark, a favicon that follows `prefers-color-scheme`, and a 1024 app icon for each theme;
+    - per product, for toolchains that need raster files (`npm run brand:png` renders them in Chromium):
+      - a macOS icon with Apple's rounded square and shadow already applied, as SVG and as a 1024 PNG, for tinyjs, which makes `.icns` from one PNG without masking it;
+      - a 180 px `apple-touch-icon`;
+      - a 32 px PNG favicon;
+    - for the family: a themable `symbol.svg` for inline use and `symbol-mono.svg` for menu bar template images. `symbol.svg` has no inline styles, so a strict Content-Security-Policy allows it; its square takes the product's color from the new `.georg-symbol-square` rule in `components.css`;
+    - `products.json` with the product-to-accent map.
+  - Unit tests check that the files are fresh, that each square uses its product's token, and contrast: 3:1 for the square and 4.5:1 for the g in both themes. End-to-end tests check the favicons in both color schemes, that every PNG still matches its SVG, and that the dashboard symbol keeps fuchsia whatever accent the person picks.
+  - The demo pages use the new favicons, and the dashboard header shows the georg mail symbol.
+  - [Brand identity](docs/brand-identity.md) has the usage guide: files, products, construction, rules, and React and SwiftUI recipes. The g-monocle concepts are retired.
+  - Consumer impact:
+    - **georg-mail** can replace its logo and favicon with the `mail-*` files.
+    - **Georg use** can use `use-icon-macos-1024.png` as `assets/icon.png` and `symbol-mono.svg` as its menu bar template image.
+    - **Georg port** can use `port-icon-*` and the `port-symbol-*` files in its asset catalog.
+    - **georg-app** and **georg-website** use the `georg-*` files; the website gets the PNG favicon and `apple-touch-icon` too.
+
 ## [0.8.0] - 2026-10-25
 
 ### Added
@@ -188,7 +210,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Bridge for Tailwind CSS v4 and shadcn/ui.
 - Interactive demo based on the georg-mail dashboard.
 
-[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/shipibo-studio/georg-ds/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/shipibo-studio/georg-ds/compare/v0.5.0...v0.6.0

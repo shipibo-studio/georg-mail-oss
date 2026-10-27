@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { ApiError, setupApi } from "../api/client";
 import { useI18n } from "../i18n/I18nProvider";
+import { Brand } from "./Brand";
 import { ButtonSpinner, busyButton, Switch } from "./controls";
 
 const MAX_DISPLAY_NAME_LENGTH = 100;
@@ -129,12 +130,7 @@ export function SetupGate({ fallback, onDone }: { fallback: ReactNode; onDone():
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: EASE_OUT }}
       >
-        <div className="brand">
-          <div className="logo">g</div>
-          <div className="brand-name">
-            Georg <span>mail</span>
-          </div>
-        </div>
+        <Brand />
         <h1 id="setup-title">{t("setup.title")}</h1>
         <p className="muted">{t("setup.intro", { email: status.data.email })}</p>
         <SetupForm

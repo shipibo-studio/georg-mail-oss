@@ -31,6 +31,9 @@ export const AUDIT_ACTIONS = [
   "notification_channel_updated",
   "ai_extraction_updated",
   "message_replied",
+  "trusted_domain_proved",
+  "reply_draft_proposed",
+  "reply_draft_discarded",
 ] as const;
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
 
@@ -83,6 +86,9 @@ export const plans = sqliteTable("plans", {
   hooksEnabled: integer("hooks_enabled", { mode: "boolean" }).notNull().default(false),
   // Replies to trusted senders: the one way an agent's email leaves Georg mail, so a paid feature.
   repliesEnabled: integer("replies_enabled", { mode: "boolean" }).notNull().default(false),
+  // Replies an agent proposes for a person to approve (sending/reply-draft-routes.ts). Built but off
+  // on every plan until the product decides to offer it: turning it on is an UPDATE, not a deploy.
+  replyDraftsEnabled: integer("reply_drafts_enabled", { mode: "boolean" }).notNull().default(false),
 });
 
 export const accounts = sqliteTable("accounts", {
@@ -426,6 +432,11 @@ export const trustedSenders = sqliteTable(
     verificationTokenHash: text("verification_token_hash"),
     verificationExpiresAt: integer("verification_expires_at"),
     verificationSentAt: integer("verification_sent_at"),
+    // Domains only: the owner proves control with a TXT record (dns-proof.ts). Replies to a sender
+    // trusted by its domain need that proof; an address is proved by its verification email.
+    dnsToken: text("dns_token"),
+    dnsVerifiedAt: integer("dns_verified_at"),
+    dnsCheckedAt: integer("dns_checked_at"),
     locale: text("locale", { enum: ["en", "es-419", "pt-BR"] })
       .notNull()
       .default("en"),
@@ -615,6 +626,44 @@ export const mailUploads = sqliteTable(
 );
 
 // One row per send request: the idempotency record and the unit of the daily sending cap.
+export const REPLY_DRAFT_STATUSES = ["pending", "sent", "discarded"] as const;
+export type ReplyDraftStatus = (typeof REPLY_DRAFT_STATUSES)[number];
+
+// Replies an agent proposes and a person approves in the dashboard before anything is sent
+// (sending/reply-draft-routes.ts). The server fixes the recipient and subject when the draft is made.
+export const replyDrafts = sqliteTable(
+  "reply_drafts",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("account_id")
+      .notNull()
+      .references(() => accounts.id, { onDelete: "cascade" }),
+    inboxId: text("inbox_id")
+      .notNull()
+      .references(() => inboxes.id, { onDelete: "cascade" }),
+    messageId: text("message_id")
+      .notNull()
+      .references(() => messages.id, { onDelete: "cascade" }),
+    // The key that proposed it; kept as an id only, like the audit trail.
+    apiKeyId: text("api_key_id"),
+    recipient: text("recipient").notNull(),
+    subject: text("subject").notNull(),
+    text: text("text").notNull(),
+    status: text("status", { enum: REPLY_DRAFT_STATUSES }).notNull().default("pending"),
+    // The reply sent once approved (outbound_messages.id).
+    outboundId: text("outbound_id"),
+    createdAt: integer("created_at").notNull(),
+    expiresAt: integer("expires_at").notNull(),
+    decidedAt: integer("decided_at"),
+  },
+  (table) => [
+    index("reply_drafts_inbox_status_idx").on(table.inboxId, table.status),
+    index("reply_drafts_account_created_idx").on(table.accountId, table.createdAt),
+  ],
+);
+
+export type ReplyDraft = typeof replyDrafts.$inferSelect;
+
 export const outboundMessages = sqliteTable(
   "outbound_messages",
   {

@@ -19,7 +19,8 @@ export type IdPrefix =
   | "upl"
   | "nhk"
   | "ndl"
-  | "drf";
+  | "drf"
+  | "rdr";
 
 /** Cryptographically random string over the alphabet, using rejection sampling to avoid modulo bias. */
 function randomFrom(alphabet: string, length: number): string {

@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "files": {
     ".dev.vars.example": {
       "sha": "61d5cc29e956c6899fb6bc45e4b89a7596da81aa",
@@ -26,7 +26,7 @@
       "mode": "100644"
     },
     ".gitignore": {
-      "sha": "4703ed0a5f3463fa5c559f3f1be49ddad427a814",
+      "sha": "06d2a7660f68aa6f0e414b2a93cae3e8a6dd2721",
       "mode": "100644"
     },
     ".nvmrc": {
@@ -38,7 +38,7 @@
       "mode": "100644"
     },
     "README.md": {
-      "sha": "6bd470ef701cce5d3992c977a9b974e94b5a129f",
+      "sha": "b6e7f8900acfdb6e225d355c35a554410aa0c1cd",
       "mode": "100644"
     },
     "SECURITY.md": {
@@ -58,7 +58,7 @@
       "mode": "100644"
     },
     "dashboard/e2e/mail.spec.ts": {
-      "sha": "2ecf5338e41f9c5704bddc86df31c547a8f6fb38",
+      "sha": "4a0656cde6b3087c937a4662dc499c56515a41d7",
       "mode": "100644"
     },
     "dashboard/e2e/phone-edition.spec.ts": {
@@ -70,7 +70,7 @@
       "mode": "100644"
     },
     "dashboard/index.html": {
-      "sha": "d865931f45bb2b11528e3e5b61626b0ba3fdd83d",
+      "sha": "11c762f51107ddc0ed8059efc9f6ea031234dcce",
       "mode": "100644"
     },
     "dashboard/mock/mock-api.ts": {
@@ -87,10 +87,6 @@
     },
     "dashboard/public/avatar-georg.svg": {
       "sha": "8c3d24a9fb675a5a75bc740fc8cda06e59dfd1fe",
-      "mode": "100644"
-    },
-    "dashboard/public/favicon.svg": {
-      "sha": "bcb9dfb01c4183f1b219ccf0e6888569b2fabb3e",
       "mode": "100644"
     },
     "dashboard/src/api/client.ts": {
@@ -111,6 +107,10 @@
     },
     "dashboard/src/components/App.tsx": {
       "sha": "8a910467565feffe1a66856e19e7438edaf63d6c",
+      "mode": "100644"
+    },
+    "dashboard/src/components/Brand.tsx": {
+      "sha": "a6f2b907a6c582def3a7234af0fb82b79239439c",
       "mode": "100644"
     },
     "dashboard/src/components/CommandPalette.tsx": {
@@ -166,11 +166,11 @@
       "mode": "100644"
     },
     "dashboard/src/components/SetupView.tsx": {
-      "sha": "31debb2a9a1a38288d552be9ee02721cedb0fcb0",
+      "sha": "1170ee9121446a80c7a5febaf77d563e54455578",
       "mode": "100644"
     },
     "dashboard/src/components/Sidebar.tsx": {
-      "sha": "1dc96284f40b3c7db402879ea74f0b0d7c4e7264",
+      "sha": "0ebc2134cf7d58bc42d2f84be07b08d6a2970c77",
       "mode": "100644"
     },
     "dashboard/src/components/Toasts.tsx": {
@@ -186,7 +186,7 @@
       "mode": "100644"
     },
     "dashboard/src/components/controls.tsx": {
-      "sha": "4d8d98a2a6272c7d3e7a22f8ceb8262845753952",
+      "sha": "485d8f0e198d95d7cdec03169c348e2d7d43b0e2",
       "mode": "100644"
     },
     "dashboard/src/components/keyboard.ts": {
@@ -218,15 +218,15 @@
       "mode": "100644"
     },
     "dashboard/src/i18n/en.ts": {
-      "sha": "c5e8807ed908f8f4ab96fca890a57f7567b06db0",
+      "sha": "50e7b2eda49feddde237836a6d536e6639e041fb",
       "mode": "100644"
     },
     "dashboard/src/i18n/es-419.ts": {
-      "sha": "d0adbef46646d59a34d8e0cf1212accf09e29836",
+      "sha": "54885728b3d6b66ddfe4349840f00fbde40e0343",
       "mode": "100644"
     },
     "dashboard/src/i18n/pt-BR.ts": {
-      "sha": "6ec8dc47e08c5fe57dffa0e5242e7406f16bafe3",
+      "sha": "fc4bfd9e7f30bc4daa24e3268cde0bd902205449",
       "mode": "100644"
     },
     "dashboard/src/i18n/translate.ts": {
@@ -298,7 +298,7 @@
       "mode": "100644"
     },
     "dashboard/src/styles.css": {
-      "sha": "db9cb3903782653b203f95d26d9c082a874777e1",
+      "sha": "3c78be84e902181ea9b58c0afa28ef5ab58a5884",
       "mode": "100644"
     },
     "dashboard/test/aliases-and-retry.test.ts": {
@@ -370,7 +370,7 @@
       "mode": "100644"
     },
     "dashboard/vite.config.ts": {
-      "sha": "65d61242a3c6bb8be8e342df97c2505f332a042f",
+      "sha": "b38ac2e84ce2ae5ba23690bcf505e32a9f9e58cf",
       "mode": "100644"
     },
     "docs/images/install/01-deploy-project.png": {
@@ -569,6 +569,18 @@
       "sha": "9747a519fd4d91e05d1254fee6c327ca2d4b7c2f",
       "mode": "100644"
     },
+    "migrations/0034_trusted_domain_dns_proof.sql": {
+      "sha": "ecbad5d258a4f409ea87be5b7125fc9143511731",
+      "mode": "100644"
+    },
+    "migrations/0035_reply_drafts.sql": {
+      "sha": "67b8f25c5d95e91f1fbcc3bee1368937a44e096f",
+      "mode": "100644"
+    },
+    "migrations/0036_reply_drafts_off.sql": {
+      "sha": "85681effe2da2a90b876787433101d81e0d5fa9e",
+      "mode": "100644"
+    },
     "migrations/meta/0000_snapshot.json": {
       "sha": "89751bfed61254d9d16e5852814fa115f063819c",
       "mode": "100644"
@@ -705,16 +717,28 @@
       "sha": "3936185378f057079a5e47357840144fd5d055bf",
       "mode": "100644"
     },
+    "migrations/meta/0034_snapshot.json": {
+      "sha": "912231d4039058c99ebeb28d747b846407f33d49",
+      "mode": "100644"
+    },
+    "migrations/meta/0035_snapshot.json": {
+      "sha": "6095c0feb978f2e877c687ea80ef535ba92d268f",
+      "mode": "100644"
+    },
+    "migrations/meta/0036_snapshot.json": {
+      "sha": "d23a674e0b952c0c31f1bc45d1d2a2265f3a2ef0",
+      "mode": "100644"
+    },
     "migrations/meta/_journal.json": {
-      "sha": "6b9a92dc6d7cb5f9ba27c03f4b2d1a95d0a86188",
+      "sha": "c156b12a0ede2a214a4acf68a5c067f7f99c3f20",
       "mode": "100644"
     },
     "package.json": {
-      "sha": "4da79164c72c3181b1de409895126ada3c06f334",
+      "sha": "a07eca687ed52a1f3808ee602a7ccfb819a2f99a",
       "mode": "100644"
     },
     "pnpm-lock.yaml": {
-      "sha": "2a2edbc50774746cef22052a5936a3484f26d1d2",
+      "sha": "14a2bde894998e8fc09d5f20fe0306dc5a84ec67",
       "mode": "100644"
     },
     "pnpm-workspace.yaml": {
@@ -730,7 +754,7 @@
       "mode": "100644"
     },
     "src/worker/config.ts": {
-      "sha": "5dbb16ef286bc8431a90fc60a09ef9b0102b2682",
+      "sha": "f52148efdb69267b932d535a4a15544a55de4df2",
       "mode": "100644"
     },
     "src/worker/crypto.ts": {
@@ -802,7 +826,7 @@
       "mode": "100644"
     },
     "src/worker/db/schema.ts": {
-      "sha": "38784a25d433cedccc3141dd1260868a25ebcc08",
+      "sha": "23081bbdb39f4f9882d2c63f344b24efb56d216c",
       "mode": "100644"
     },
     "src/worker/docs-url.ts": {
@@ -910,7 +934,7 @@
       "mode": "100644"
     },
     "src/worker/ids.ts": {
-      "sha": "0cd5fd7eb7668127e5c4422c0dc02cf276731c16",
+      "sha": "2c113e623f25c28d6b371492333bf88c62c3efd7",
       "mode": "100644"
     },
     "src/worker/mail-app.ts": {
@@ -1118,7 +1142,7 @@
       "mode": "100644"
     },
     "test/unit/sender-trust.test.ts": {
-      "sha": "e7bf5d5592d9655f45c8501f3147e81b0e844481",
+      "sha": "8b494c639185555f394394c5a3029f0af2ab4028",
       "mode": "100644"
     },
     "test/unit/setup.test.ts": {
@@ -1146,7 +1170,7 @@
       "mode": "100644"
     },
     "vendor/georg-ds/CHANGELOG.md": {
-      "sha": "15536b2a821f5eab45762a00a3cfa5706537f803",
+      "sha": "4814953358f059b86a59c92afeaa044474d9fa8d",
       "mode": "100644"
     },
     "vendor/georg-ds/LICENSE": {
@@ -1154,15 +1178,171 @@
       "mode": "100644"
     },
     "vendor/georg-ds/README.md": {
-      "sha": "384a46241957314f76f27d041f3a2d1d730fbba1",
+      "sha": "1059775ffee36a62445083ba6e116d5d9c140495",
       "mode": "100644"
     },
     "vendor/georg-ds/package.json": {
-      "sha": "52f7f1f191f8904eb549bdb648d7f6616e3a0103",
+      "sha": "3be51c3c9da8ee0bdc7ab416953bf40e45d9c495",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-apple-touch-icon.png": {
+      "sha": "b279c19eaf83a293a657de17d4da044ae8891426",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-favicon-32.png": {
+      "sha": "5bd41e1259e13b541c58f5a66f5188b1fdd8a38f",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-favicon.svg": {
+      "sha": "419ab081b561150e602c335c50f8ddb12e7ec0cd",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-icon-dark.svg": {
+      "sha": "c65d7b059ae5a299995aee10ac1778a43e4eac40",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-icon-light.svg": {
+      "sha": "19db2582183f3d3b82889e9be05920fe83e280e8",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-icon-macos-1024.png": {
+      "sha": "9f2b8899e657a4c16582091caed916802194c73c",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-icon-macos.svg": {
+      "sha": "3e8e735d46add985e29c59bfb72494b582ae3ba8",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-symbol-dark.svg": {
+      "sha": "b62294ad03aa236376e49d0449a602ae81ec2214",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/georg-symbol-light.svg": {
+      "sha": "223230577d657d5c47dac6deeded73a14c737e1e",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-apple-touch-icon.png": {
+      "sha": "8e4e1bbc29f3e721371ab77423103fc74a695eea",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-favicon-32.png": {
+      "sha": "97d30f8b621898c1b8650c190e028537f7024aef",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-favicon.svg": {
+      "sha": "9b078c4e8bcca9f331bd3d4308d5656f9f975ed2",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-icon-dark.svg": {
+      "sha": "fea1d4c52c61f31a456543891611465cd9338b4b",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-icon-light.svg": {
+      "sha": "60ea0db07d4d2f77cab34a421a2df17e15f73221",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-icon-macos-1024.png": {
+      "sha": "5d3b3ecbab68018fc7566ae1bc3b2d182474ff0a",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-icon-macos.svg": {
+      "sha": "789ff0936220be8911125932f65b3b92db463495",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-symbol-dark.svg": {
+      "sha": "45cb820e1664ff9807851bbdeddedadcad268d70",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/mail-symbol-light.svg": {
+      "sha": "cbd0303be3b25159f5ee3281709bb5f4963f5d83",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-apple-touch-icon.png": {
+      "sha": "69928f15c97315621a5987325c2ef0efc45c3d34",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-favicon-32.png": {
+      "sha": "2f29c545291a4d44625dd2d62290d685db311b70",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-favicon.svg": {
+      "sha": "4be6cacf33dd1d1bded6932dadd210c21b51b3a2",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-icon-dark.svg": {
+      "sha": "34e4cc8d82381d43835350ce31d74cdf6d7b0c94",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-icon-light.svg": {
+      "sha": "133b4d01a8db8884df37c3cf0e8d2057be00af9b",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-icon-macos-1024.png": {
+      "sha": "8b90f0ef52eae64e149aa475b5d72a79b5512a28",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-icon-macos.svg": {
+      "sha": "0acc4784b837c7e950396c4f23eaf6f6952a69a2",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-symbol-dark.svg": {
+      "sha": "a8649222fc3baa351dcd6354722c5aec5fcfdc30",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/port-symbol-light.svg": {
+      "sha": "0dbab6893784030d16f402a05d2ef1d5d68044c2",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/products.json": {
+      "sha": "e4a98ac41e3ffe2879c52f42655feb390b13b944",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/symbol-mono.svg": {
+      "sha": "0bdcef0bebba3b56d81784ea0ab97f8a802dd9dd",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/symbol.svg": {
+      "sha": "bb014659ad894613d744e16294fc9a31ca0fac4a",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-apple-touch-icon.png": {
+      "sha": "e1718493158d1ceff11849d8e433d47306f2de7c",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-favicon-32.png": {
+      "sha": "1168edaa54cd6fb86a903865fb3cd7cb7f2da905",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-favicon.svg": {
+      "sha": "24b7d6814dbaf95a93478559094561da10d6cf21",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-icon-dark.svg": {
+      "sha": "d93b736c3153e7712cbd9afaa69e7c407e0f7302",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-icon-light.svg": {
+      "sha": "71c4b9b3b192374ac673e96cbd3de02ea03cf09f",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-icon-macos-1024.png": {
+      "sha": "a6a156a2a5239ba76f5258645fbbc7c5a6bdfb10",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-icon-macos.svg": {
+      "sha": "f6960c191b5804689c9abcef8c1c8272d232372b",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-symbol-dark.svg": {
+      "sha": "53d120a1b2f575d0057c58b0afc902e336e40d73",
+      "mode": "100644"
+    },
+    "vendor/georg-ds/src/brand/use-symbol-light.svg": {
+      "sha": "fbfe622781d5a79ce4fdb405d2181dde7c4fb9e5",
       "mode": "100644"
     },
     "vendor/georg-ds/src/components.css": {
-      "sha": "a67ddfc721810f84694714bc88e6f4aa941c9d21",
+      "sha": "1fb8af1964320e68d3906f577e4b3a0ef7f26d7a",
       "mode": "100644"
     },
     "vendor/georg-ds/src/fonts.css": {
@@ -1210,7 +1390,7 @@
       "mode": "100644"
     },
     "vendor/georg-ds/src/tokens.json": {
-      "sha": "c57da034de545a8d811ed95418c9c210db6aaf09",
+      "sha": "e8fc987f33e0fc2c6ca5426af2aa3ef16242bf6a",
       "mode": "100644"
     },
     "vitest.config.ts": {

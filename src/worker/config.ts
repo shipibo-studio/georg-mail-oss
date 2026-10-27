@@ -144,6 +144,24 @@ export const MAX_VERIFICATION_EMAILS_PER_RECIPIENT_PER_DAY = 3;
 export const VERIFICATION_RESEND_COOLDOWN_MS = 60 * 60 * 1000;
 export const VERIFICATION_LINK_TTL_MS = 24 * 60 * 60 * 1000;
 
+/** Replies awaiting a person's approval per inbox: an agent cannot bury the owner in proposals. */
+export const MAX_PENDING_REPLY_DRAFTS_PER_INBOX = 20;
+/** A proposed reply nobody approved in this time can no longer be sent. */
+export const REPLY_DRAFT_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+/** Proposed replies, decided or not, are deleted after this long. */
+export const REPLY_DRAFT_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** Where Georg mail looks up a domain's proof: Cloudflare's DNS-over-HTTPS resolver (JSON API). */
+export const DNS_OVER_HTTPS_URL = "https://cloudflare-dns.com/dns-query";
+/** Each DNS-over-HTTPS lookup; a slow resolver must not hold the request. */
+export const DNS_LOOKUP_TIMEOUT_MS = 5_000;
+/** One check of a domain's TXT record per this interval, however often it is asked for. */
+export const DNS_CHECK_COOLDOWN_MS = 30 * 1000;
+/** A proved domain is looked up again this often, so removing the record withdraws the proof. */
+export const DNS_RECHECK_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
+/** Proved domains re-checked per cron run, within Workers Free's subrequest limit. */
+export const DNS_RECHECK_BATCH = 5;
+
 /** Audit events are kept this long, then removed by the purge job. */
 export const AUDIT_RETENTION_DAYS = 90;
 

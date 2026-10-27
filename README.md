@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="vendor/georg-ds/src/brand/mail-symbol-dark.svg">
+  <img src="vendor/georg-ds/src/brand/mail-symbol-light.svg" alt="Georg mail" height="56">
+</picture>
+
 # Georg mail
 
 [![CI](https://github.com/shipibo-studio/georg-mail-oss/actions/workflows/ci.yml/badge.svg)](https://github.com/shipibo-studio/georg-mail-oss/actions/workflows/ci.yml)

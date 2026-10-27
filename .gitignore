@@ -11,3 +11,4 @@ test-results/
 playwright-report/
 # Copied from the georg-ds package by dashboard/vite.config.ts
 dashboard/public/georg-theme.js
+dashboard/public/brand/

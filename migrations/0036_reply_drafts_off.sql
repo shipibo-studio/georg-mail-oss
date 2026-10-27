@@ -1,0 +1,1 @@
+ALTER TABLE `plans` ADD `reply_drafts_enabled` integer DEFAULT false NOT NULL;

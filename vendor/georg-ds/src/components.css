@@ -618,6 +618,11 @@ textarea.g-input { min-height: 72px; resize: vertical; line-height: 1.45; }
   color: color-mix(in srgb, var(--bg) 75%, var(--text));
 }
 
+/* ── Brand symbol ────────────────────────────────────────── */
+/* The inline symbol (src/brand/symbol.svg): the g is currentColor; the square takes the product's accent
+   from --georg-symbol-accent (for example var(--accent-fuchsia) in georg mail), else the active accent. */
+.georg-symbol-square { fill: var(--georg-symbol-accent, var(--accent)); }
+
 /* ── Copy button ─────────────────────────────────────────── */
 /* .g-button.g-copy with .g-copy-idle and .g-copy-done children (a label, an icon, or both). georg-copy.js
    writes data-copy or the data-copy-target text to the clipboard, then sets data-copied for 1.6 s: the
