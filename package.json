@@ -46,7 +46,7 @@
     "dompurify": "3.4.17",
     "drizzle-orm": "0.45.4",
     "fflate": "0.8.3",
-    "hono": "4.13.13",
+    "hono": "4.13.16",
     "jose": "6.2.12",
     "morphicons": "2.0.0",
     "motion": "14.3.0",
